@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Footy AI — Match summary</title>
+  <meta name="description" content="Turn a football match video into a named score sheet and scorer list.">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <!--
+  THESIS: Match analysis should feel like reviewing the team sheet, not configuring computer vision; hex inputs never enter the user journey.
+  OWN-WORLD: Daylight analyst desk—ink navy, paper white, turf green, precise rules, generous flat fields, and compact match notation.
+  STORY: Add footage, verify two player-based team samples, then read the named score and scorer identities.
+  FIRST VIEWPORT: Product mark and three-step rail lead into one dominant upload workspace with the primary action at its foot.
+  FORM: A focused Operate workflow, staged as a progressive match sheet; directly shaped from the user's required sequence.
+  -->
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="Footy AI home">
+      <span class="brand-mark" aria-hidden="true">F</span>
+      <span>Footy AI</span>
+    </a>
+    <span class="service-state"><i aria-hidden="true"></i> Analysis desk online</span>
+  </header>
+
+  <main class="shell">
+    <aside class="intro">
+      <p class="kicker">Match intelligence</p>
+      <h1>From final whistle to a clear score sheet.</h1>
+      <p class="lede">Upload the full match. We find the two kits, you name the teams from real player images, and Footy AI builds the result.</p>
+
+      <ol class="step-rail" aria-label="Processing steps">
+        <li class="is-active" data-step="upload"><span>1</span><div><b>Add footage</b><small>MP4, MOV, AVI or MKV</small></div></li>
+        <li data-step="teams"><span>2</span><div><b>Name the teams</b><small>Confirm from player images</small></div></li>
+        <li data-step="results"><span>3</span><div><b>Read the result</b><small>Score, number and name</small></div></li>
+      </ol>
+    </aside>
+
+    <section class="workspace" aria-live="polite">
+      <section id="upload-view" class="view">
+        <div class="view-heading">
+          <div><p class="section-label">New analysis</p><h2>Add your match video</h2></div>
+          <span class="limit-note">Up to 2 GB</span>
+        </div>
+
+        <div class="source-tabs" role="tablist" aria-label="Video source">
+          <button class="source-tab is-selected" id="file-tab" role="tab" aria-selected="true" aria-controls="file-panel">Upload file</button>
+          <button class="source-tab" id="url-tab" role="tab" aria-selected="false" aria-controls="url-panel">Use video URL</button>
+        </div>
+
+        <form id="file-panel" class="source-panel" role="tabpanel" aria-labelledby="file-tab">
+          <label class="dropzone" for="video-file">
+            <input id="video-file" name="video" type="file" accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska" required>
+            <span class="drop-icon" aria-hidden="true">↑</span>
+            <strong>Choose a match video</strong>
+            <span id="file-note">or drop it in this area</span>
+          </label>
+          <button class="primary-action" type="submit">Detect the teams <span aria-hidden="true">→</span></button>
+        </form>
+
+        <form id="url-panel" class="source-panel" role="tabpanel" aria-labelledby="url-tab" hidden>
+          <label class="field"><span>Direct video URL</span><input id="video-url" type="url" placeholder="https://example.com/match.mp4" autocomplete="url"></label>
+          <button class="primary-action" type="submit">Detect the teams <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="form-error" id="upload-error" role="alert" hidden></p>
+      </section>
+
+      <section id="progress-view" class="view processing-view" hidden>
+        <div class="analysis-pulse" aria-hidden="true"><span></span></div>
+        <p class="section-label">Video analysis</p>
+        <h2 id="progress-title">Finding representative players</h2>
+        <p id="progress-copy">We’re sampling clear frames and separating the two playing kits. You can keep this page open.</p>
+        <div class="progress-track"><span id="progress-bar"></span></div>
+        <div class="progress-meta"><span id="progress-percent">8%</span><span>Models running locally</span></div>
+      </section>
+
+      <section id="teams-view" class="view" hidden>
+        <div class="view-heading">
+          <div><p class="section-label">Visual confirmation</p><h2>Which team is each kit?</h2></div>
+        </div>
+        <p class="helper-copy">Use the player images—not a color code—to name the teams. The names you enter will appear in the score sheet.</p>
+        <form id="teams-form">
+          <div id="team-candidates" class="team-candidates"></div>
+          <p class="form-error" id="teams-error" role="alert" hidden></p>
+          <button class="primary-action" type="submit">Confirm teams &amp; finish analysis <span aria-hidden="true">→</span></button>
+        </form>
+      </section>
+
+      <section id="results-view" class="view results-view" hidden>
+        <div class="result-topline"><div><p class="section-label">Analysis complete</p><h2>Full-time result</h2></div><button id="new-analysis" class="text-action" type="button">Analyse another match</button></div>
+        <div id="score-sheet" class="score-sheet" aria-label="Final score"></div>
+        <div class="result-rule"><span>Goals &amp; players</span></div>
+        <div id="player-results" class="player-results"></div>
+        <a id="annotated-video" class="secondary-action" href="#" download>Download annotated video</a>
+      </section>
+    </section>
+  </main>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

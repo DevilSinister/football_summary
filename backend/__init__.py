@@ -1,0 +1,1 @@
+"""Footy AI FastAPI backend."""

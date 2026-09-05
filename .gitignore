@@ -1,3 +1,10 @@
 *__pycahce__*
 *.pyc
 .worktrees/
+.idea/
+.impeccable/
+__pycache__/
+.cache/
+.venv/
+graphify-out/
+output_videos/ocr_debug/

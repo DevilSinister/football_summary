@@ -1,0 +1,16 @@
+numpy
+opencv-python
+pandas
+scikit-learn
+torch
+ultralytics
+supervision
+paddlepaddle>=3.0
+paddleocr>=3.0
+fastapi
+uvicorn[standard]
+sqlalchemy
+pyodbc
+python-multipart
+bcrypt
+email-validator

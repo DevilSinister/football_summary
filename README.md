@@ -28,3 +28,50 @@ To run this project, you need to have the following requirements installed:
 - NumPy
 - Matplotlib
 - Pandas
+
+Install the complete environment, including PaddleOCR for jersey reading, with:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+## Scorer identification
+
+The scorer pipeline uses the last tracked player in possession before a confirmed
+goal. It then reads the best torso crops from several frames and accepts a jersey
+number or shirt name only when repeated OCR results agree. The command-line entry
+point still accepts explicit kit colors for advanced and automated use:
+
+```powershell
+python main.py input_videos/test.mp4 `
+  --team-a-name "Team A" --team-a-color "#D71920" `
+  --team-b-name "Team B" --team-b-color "#1D428A" `
+  --no-display
+```
+
+If the shirt name cannot be read, the result is still reported as, for example,
+`GOAL — Team A — #7 scored`. When the number also lacks repeated evidence, the
+summary says that the scorer number is unavailable instead of guessing. Enhanced
+OCR crops are retained under `output_videos/ocr_debug/` by default.
+
+## Web app and SQL Server API
+
+The unified FastAPI backend stores users and processed match summaries in the
+local `FootballDB` SQL Server Express database and runs video jobs through the
+same CV pipeline. Start it with:
+
+```powershell
+.venv\Scripts\python.exe -m uvicorn backend.app:app --host 0.0.0.0 --port 8000
+```
+
+Open `http://localhost:8000` for the user-facing workflow. It does not ask for
+hex colors: after upload, the backend calculates two kit clusters from the video
+and returns a representative player image for each. The user names those two
+visual teams, then processing resumes and returns the named score sheet plus the
+detected scorer image, shirt number, and shirt name when OCR evidence is strong.
+
+Interactive API documentation remains available at `http://localhost:8000/docs`.
+The processing API follows the same two-stage flow: submit a file or URL, poll
+the job until `awaiting_team_confirmation`, then call
+`POST /api/processing/confirm-teams/{job_id}` with `team_1_name` and
+`team_2_name`.
