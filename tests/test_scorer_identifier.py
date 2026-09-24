@@ -33,16 +33,50 @@ class JerseyConsensusTests(unittest.TestCase):
         self.assertEqual(result.jersey_number, 7)
         self.assertIsNone(result.player_name)
 
-    def test_name_requires_agreement_across_frames(self):
+    def test_shirt_names_are_never_read(self):
+        """Names come from the roster, not from the shirt.
+
+        At the resolutions this pipeline sees, shirt text is a few pixels tall,
+        and the old free-text path voted sponsor and advertising-board wording
+        into the player field.
+        """
         result = self.reader.fuse_candidates(
             [
                 OcrCandidate("MESSI", 0.88, 20, 0.9),
                 OcrCandidate("MESSI", 0.82, 23, 0.8),
+                OcrCandidate("FLY EMIRATES", 0.95, 24, 0.9),
             ]
         )
 
-        self.assertEqual(result.player_name, "MESSI")
+        self.assertIsNone(result.player_name)
         self.assertIsNone(result.jersey_number)
+
+    def test_letters_inside_a_number_do_not_vote(self):
+        """A shirt read as R0NALD0 used to cast two votes for jersey #0.
+
+        The number regex ran over the raw string before letters were stripped.
+        """
+        result = self.reader.fuse_candidates(
+            [
+                OcrCandidate("R0NALD0", 0.91, 30, 0.9),
+                OcrCandidate("R0NALD0", 0.90, 33, 0.9),
+            ]
+        )
+
+        self.assertIsNone(result.jersey_number)
+
+    def test_common_digit_confusions_are_repaired(self):
+        """A 1O reading is shirt 10, but a bare letter must not become a number."""
+        result = self.reader.fuse_candidates(
+            [
+                OcrCandidate("1O", 0.90, 40, 0.9),
+                OcrCandidate("1O", 0.88, 43, 0.9),
+                OcrCandidate("O", 0.99, 44, 0.9),
+                OcrCandidate("S", 0.99, 45, 0.9),
+            ]
+        )
+
+        self.assertEqual(result.jersey_number, 10)
 
     def test_close_conflicting_numbers_are_rejected(self):
         result = self.reader.fuse_candidates(

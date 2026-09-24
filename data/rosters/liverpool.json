@@ -1,0 +1,28 @@
+{
+  "team_name": "Liverpool",
+  "short_code": "LIV",
+  "aliases": ["liverpool fc", "lfc", "liv", "the reds"],
+  "season": "2025-26",
+  "source": "authored from model knowledge (cutoff May 2026) - verify before trusting",
+  "needs_review": true,
+  "players": [
+    { "jersey_no": 1,  "name": "Alisson Becker",     "position": "GK" },
+    { "jersey_no": 3,  "name": "Wataru Endo",        "position": "MF" },
+    { "jersey_no": 4,  "name": "Virgil van Dijk",    "position": "DF" },
+    { "jersey_no": 5,  "name": "Ibrahima Konate",    "position": "DF" },
+    { "jersey_no": 6,  "name": "Milos Kerkez",       "position": "DF" },
+    { "jersey_no": 7,  "name": "Florian Wirtz",      "position": "MF" },
+    { "jersey_no": 8,  "name": "Dominik Szoboszlai", "position": "MF" },
+    { "jersey_no": 9,  "name": "Alexander Isak",     "position": "FW" },
+    { "jersey_no": 10, "name": "Alexis Mac Allister","position": "MF" },
+    { "jersey_no": 11, "name": "Mohamed Salah",      "position": "FW" },
+    { "jersey_no": 14, "name": "Federico Chiesa",    "position": "FW" },
+    { "jersey_no": 17, "name": "Curtis Jones",       "position": "MF" },
+    { "jersey_no": 18, "name": "Cody Gakpo",         "position": "FW" },
+    { "jersey_no": 22, "name": "Hugo Ekitike",       "position": "FW" },
+    { "jersey_no": 26, "name": "Andrew Robertson",   "position": "DF" },
+    { "jersey_no": 38, "name": "Ryan Gravenberch",   "position": "MF" },
+    { "jersey_no": 78, "name": "Jarell Quansah",     "position": "DF" },
+    { "jersey_no": 84, "name": "Conor Bradley",      "position": "DF" }
+  ]
+}

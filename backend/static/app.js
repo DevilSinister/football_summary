@@ -171,7 +171,61 @@ function renderResults(result) {
       players.appendChild(row);
     });
   }
-  document.getElementById("annotated-video").href = result.annotated_video;
+  renderHighlights(result);
+}
+
+const EVENT_LABELS = {
+  goal: "Goal",
+  shot: "Shot",
+  save: "Save",
+  cross: "Cross",
+  penalty: "Penalty",
+  foul: "Foul",
+  yellow_card: "Yellow card",
+  red_card: "Red card",
+};
+
+function renderHighlights(result) {
+  const container = document.getElementById("highlights");
+  container.replaceChildren();
+  const clips = (result.clips || []).filter((clip) => clip.url);
+  if (!clips.length) {
+    container.innerHTML = '<p class="empty-result">No highlight clips were cut for this match.</p>';
+    return;
+  }
+  if (result.reel?.url) {
+    container.appendChild(highlightCard(result.reel.url, "Match highlight reel", `${clips.length} clips joined`, true));
+  }
+  clips.forEach((clip) => {
+    // A goal and the shot before it share one clip; name each kind once.
+    const title = [...new Set(clip.event_types)].map((type) => EVENT_LABELS[type] || type).join(" · ");
+    const span = `${formatTime(clip.start_seconds)}–${formatTime(clip.end_seconds)}`;
+    container.appendChild(highlightCard(clip.url, title, span, false));
+  });
+}
+
+function highlightCard(url, title, meta, isReel) {
+  const article = document.createElement("article");
+  article.className = isReel ? "highlight-clip is-reel" : "highlight-clip";
+  const video = document.createElement("video");
+  video.controls = true;
+  video.preload = "metadata";
+  video.playsInline = true;
+  video.src = url;
+  video.setAttribute("aria-label", title);
+  const caption = document.createElement("div");
+  caption.className = "highlight-caption";
+  const heading = document.createElement("strong");
+  heading.textContent = title;
+  const detail = document.createElement("span");
+  detail.textContent = meta;
+  const download = document.createElement("a");
+  download.href = url;
+  download.download = "";
+  download.textContent = "Download";
+  caption.append(heading, detail, download);
+  article.append(video, caption);
+  return article;
 }
 
 function escapeHtml(value) {

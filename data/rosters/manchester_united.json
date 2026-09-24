@@ -1,0 +1,26 @@
+{
+  "team_name": "Manchester United",
+  "short_code": "MUN",
+  "aliases": ["man utd", "man united", "mufc", "mun", "manchester united fc", "the red devils"],
+  "season": "2025-26",
+  "source": "authored from model knowledge (cutoff May 2026) - verify before trusting",
+  "needs_review": true,
+  "players": [
+    { "jersey_no": 1,  "name": "Andre Onana",        "position": "GK" },
+    { "jersey_no": 4,  "name": "Matthijs de Ligt",   "position": "DF" },
+    { "jersey_no": 5,  "name": "Harry Maguire",      "position": "DF" },
+    { "jersey_no": 6,  "name": "Lisandro Martinez",  "position": "DF" },
+    { "jersey_no": 7,  "name": "Mason Mount",        "position": "MF" },
+    { "jersey_no": 8,  "name": "Bruno Fernandes",    "position": "MF" },
+    { "jersey_no": 9,  "name": "Rasmus Hojlund",     "position": "FW" },
+    { "jersey_no": 10, "name": "Matheus Cunha",      "position": "FW" },
+    { "jersey_no": 14, "name": "Christian Eriksen",  "position": "MF" },
+    { "jersey_no": 17, "name": "Alejandro Garnacho", "position": "FW" },
+    { "jersey_no": 18, "name": "Casemiro",           "position": "MF" },
+    { "jersey_no": 19, "name": "Benjamin Sesko",     "position": "FW" },
+    { "jersey_no": 20, "name": "Diogo Dalot",        "position": "DF" },
+    { "jersey_no": 22, "name": "Tom Heaton",         "position": "GK" },
+    { "jersey_no": 23, "name": "Luke Shaw",          "position": "DF" },
+    { "jersey_no": 37, "name": "Kobbie Mainoo",      "position": "MF" }
+  ]
+}

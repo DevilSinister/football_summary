@@ -1,0 +1,33 @@
+{
+  "team_name": "Atletico Madrid",
+  "short_code": "ATM",
+  "aliases": ["atletico", "atletico de madrid", "club atletico de madrid", "atleti", "atm", "athletico madrid"],
+  "season": "2025-26",
+  "source": "authored from model knowledge (cutoff May 2026) - several 2025 signings' numbers are uncertain; verify before trusting",
+  "needs_review": true,
+  "players": [
+    { "jersey_no": 1,  "name": "Juan Musso",           "position": "GK" },
+    { "jersey_no": 13, "name": "Jan Oblak",            "position": "GK" },
+    { "jersey_no": 2,  "name": "Jose Maria Gimenez",   "position": "DF" },
+    { "jersey_no": 3,  "name": "Matteo Ruggeri",       "position": "DF" },
+    { "jersey_no": 15, "name": "Clement Lenglet",      "position": "DF" },
+    { "jersey_no": 16, "name": "Nahuel Molina",        "position": "DF" },
+    { "jersey_no": 17, "name": "David Hancko",         "position": "DF" },
+    { "jersey_no": 18, "name": "Marc Pubill",          "position": "DF" },
+    { "jersey_no": 21, "name": "Javi Galan",           "position": "DF" },
+    { "jersey_no": 24, "name": "Robin Le Normand",     "position": "DF" },
+    { "jersey_no": 4,  "name": "Conor Gallagher",      "position": "MF" },
+    { "jersey_no": 5,  "name": "Johnny Cardoso",       "position": "MF" },
+    { "jersey_no": 6,  "name": "Koke",                 "position": "MF" },
+    { "jersey_no": 8,  "name": "Pablo Barrios",        "position": "MF" },
+    { "jersey_no": 10, "name": "Alex Baena",           "position": "MF" },
+    { "jersey_no": 11, "name": "Thiago Almada",        "position": "MF" },
+    { "jersey_no": 14, "name": "Marcos Llorente",      "position": "MF" },
+    { "jersey_no": 7,  "name": "Antoine Griezmann",    "position": "FW" },
+    { "jersey_no": 9,  "name": "Alexander Sorloth",    "position": "FW" },
+    { "jersey_no": 19, "name": "Julian Alvarez",       "position": "FW" },
+    { "jersey_no": 20, "name": "Giuliano Simeone",     "position": "FW" },
+    { "jersey_no": 22, "name": "Giacomo Raspadori",    "position": "FW" },
+    { "jersey_no": 23, "name": "Nicolas Gonzalez",     "position": "FW" }
+  ]
+}

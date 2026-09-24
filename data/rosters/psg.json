@@ -1,0 +1,26 @@
+{
+  "team_name": "Paris Saint-Germain",
+  "short_code": "PSG",
+  "aliases": ["psg", "paris sg", "paris saint germain", "paris"],
+  "season": "2025-26",
+  "source": "authored from model knowledge (cutoff May 2026) - verify before trusting",
+  "needs_review": true,
+  "players": [
+    { "jersey_no": 2,  "name": "Achraf Hakimi",      "position": "DF" },
+    { "jersey_no": 4,  "name": "Manuel Ugarte",      "position": "MF" },
+    { "jersey_no": 5,  "name": "Marquinhos",         "position": "DF" },
+    { "jersey_no": 7,  "name": "Kvicha Kvaratskhelia","position": "FW" },
+    { "jersey_no": 8,  "name": "Fabian Ruiz",        "position": "MF" },
+    { "jersey_no": 9,  "name": "Goncalo Ramos",      "position": "FW" },
+    { "jersey_no": 10, "name": "Ousmane Dembele",    "position": "FW" },
+    { "jersey_no": 14, "name": "Desire Doue",        "position": "FW" },
+    { "jersey_no": 17, "name": "Vitinha",            "position": "MF" },
+    { "jersey_no": 19, "name": "Lee Kang-in",        "position": "MF" },
+    { "jersey_no": 21, "name": "Lucas Hernandez",    "position": "DF" },
+    { "jersey_no": 25, "name": "Nuno Mendes",        "position": "DF" },
+    { "jersey_no": 29, "name": "Bradley Barcola",    "position": "FW" },
+    { "jersey_no": 33, "name": "Warren Zaire-Emery", "position": "MF" },
+    { "jersey_no": 39, "name": "Matvey Safonov",     "position": "GK" },
+    { "jersey_no": 51, "name": "Willian Pacho",      "position": "DF" }
+  ]
+}

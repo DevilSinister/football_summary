@@ -1,0 +1,22 @@
+{
+  "team_name": "FC Porto",
+  "short_code": "POR",
+  "aliases": ["porto", "fc porto", "futebol clube do porto", "fcp", "por", "dragoes"],
+  "season": "2025-26",
+  "source": "authored from model knowledge (cutoff May 2026) - partial squad, numbers uncertain; verify before trusting",
+  "needs_review": true,
+  "players": [
+    { "jersey_no": 99, "name": "Diogo Costa",        "position": "GK" },
+    { "jersey_no": 4,  "name": "Jakub Kiwior",       "position": "DF" },
+    { "jersey_no": 5,  "name": "Jan Bednarek",       "position": "DF" },
+    { "jersey_no": 20, "name": "Alberto Costa",      "position": "DF" },
+    { "jersey_no": 52, "name": "Martim Fernandes",   "position": "DF" },
+    { "jersey_no": 8,  "name": "Victor Froholdt",    "position": "MF" },
+    { "jersey_no": 10, "name": "Gabri Veiga",        "position": "MF" },
+    { "jersey_no": 22, "name": "Alan Varela",        "position": "MF" },
+    { "jersey_no": 7,  "name": "William Gomes",      "position": "FW" },
+    { "jersey_no": 9,  "name": "Samu Aghehowa",      "position": "FW" },
+    { "jersey_no": 11, "name": "Pepe",               "position": "FW" },
+    { "jersey_no": 17, "name": "Borja Sainz",        "position": "FW" }
+  ]
+}

@@ -28,9 +28,34 @@ class Team(Base):
     team_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     team_name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     primary_color: Mapped[str | None] = mapped_column(String(7), nullable=True)
+    # Three-letter code shown on broadcast score graphics (RMA, MCI). Not
+    # unique: clubs in different leagues can share one. Added to existing
+    # databases by backend/schema.py.
+    short_code: Mapped[str | None] = mapped_column(String(3), nullable=True, index=True)
 
     players: Mapped[list["Player"]] = relationship(back_populates="team")
     plays: Mapped[list["Play"]] = relationship(back_populates="team")
+    aliases: Mapped[list["TeamAlias"]] = relationship(
+        back_populates="team", cascade="all, delete-orphan"
+    )
+
+
+class TeamAlias(Base):
+    """A spelling of a team name that resolves to one team row.
+
+    Team names are typed by hand per job, so "Real Madrid", "real madrid cf"
+    and "RMA" would otherwise each create their own team and fragment the
+    roster. Every alias stored here is already normalised by
+    team_naming.normalise_team_name, so lookups compare like with like.
+    """
+
+    __tablename__ = "team_aliases"
+
+    alias_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    alias: Mapped[str] = mapped_column(String(100), nullable=False, unique=True, index=True)
+    team_id: Mapped[int] = mapped_column(ForeignKey("teams.team_id"), nullable=False)
+
+    team: Mapped["Team"] = relationship(back_populates="aliases")
 
 
 class Player(Base):
@@ -89,6 +114,9 @@ class Event(Base):
     description: Mapped[str | None] = mapped_column(String(500), nullable=True)
     video_path: Mapped[str | None] = mapped_column(String(500), nullable=True)
     time_seconds: Mapped[float | None] = mapped_column(Float, nullable=True)
+    # Highlight clip bounds in the source video; added by backend.schema.
+    clip_start_seconds: Mapped[float | None] = mapped_column(Float, nullable=True)
+    clip_end_seconds: Mapped[float | None] = mapped_column(Float, nullable=True)
 
     match: Mapped[Match] = relationship(back_populates="events")
     occurrences: Mapped[list["Occurrence"]] = relationship(back_populates="event")

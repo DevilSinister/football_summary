@@ -8,3 +8,16 @@ __pycache__/
 .venv/
 graphify-out/
 output_videos/ocr_debug/
+
+# Runtime media written by the API and the CLI (never commit)
+backend/uploads/
+backend/static/clips/
+backend/static/ocr_debug/
+backend/static/outputs/
+backend/static/player_images/
+backend/static/team_samples/
+output_videos/player_images/
+# Model weights and match footage stay local; models/best.pt and
+# input_videos/test.mp4 were committed before this rule and remain tracked.
+models/*.pt
+input_videos/*.mp4

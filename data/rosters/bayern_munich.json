@@ -1,0 +1,26 @@
+{
+  "team_name": "Bayern Munich",
+  "short_code": "BAY",
+  "aliases": ["bayern munchen", "bayern", "fc bayern munchen", "bay"],
+  "season": "2025-26",
+  "source": "authored from model knowledge (cutoff May 2026) - verify before trusting",
+  "needs_review": true,
+  "players": [
+    { "jersey_no": 1,  "name": "Manuel Neuer",       "position": "GK" },
+    { "jersey_no": 2,  "name": "Dayot Upamecano",    "position": "DF" },
+    { "jersey_no": 4,  "name": "Jonathan Tah",       "position": "DF" },
+    { "jersey_no": 6,  "name": "Joshua Kimmich",     "position": "MF" },
+    { "jersey_no": 7,  "name": "Serge Gnabry",       "position": "FW" },
+    { "jersey_no": 9,  "name": "Harry Kane",         "position": "FW" },
+    { "jersey_no": 10, "name": "Jamal Musiala",      "position": "MF" },
+    { "jersey_no": 14, "name": "Luis Diaz",          "position": "FW" },
+    { "jersey_no": 17, "name": "Michael Olise",      "position": "FW" },
+    { "jersey_no": 19, "name": "Alphonso Davies",    "position": "DF" },
+    { "jersey_no": 21, "name": "Sacha Boey",         "position": "DF" },
+    { "jersey_no": 22, "name": "Raphael Guerreiro",  "position": "DF" },
+    { "jersey_no": 24, "name": "Sven Ulreich",       "position": "GK" },
+    { "jersey_no": 27, "name": "Konrad Laimer",      "position": "MF" },
+    { "jersey_no": 42, "name": "Aleksandar Pavlovic","position": "MF" },
+    { "jersey_no": 45, "name": "Nicolas Jackson",    "position": "FW" }
+  ]
+}

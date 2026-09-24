@@ -1,0 +1,28 @@
+{
+  "team_name": "Barcelona",
+  "short_code": "BAR",
+  "aliases": ["fc barcelona", "barca", "fcb", "barcelona fc"],
+  "season": "2025-26",
+  "source": "authored from model knowledge (cutoff May 2026) - verify before trusting",
+  "needs_review": true,
+  "players": [
+    { "jersey_no": 1,  "name": "Marc-Andre ter Stegen", "position": "GK" },
+    { "jersey_no": 3,  "name": "Alejandro Balde",    "position": "DF" },
+    { "jersey_no": 4,  "name": "Ronald Araujo",      "position": "DF" },
+    { "jersey_no": 5,  "name": "Inigo Martinez",     "position": "DF" },
+    { "jersey_no": 6,  "name": "Gavi",               "position": "MF" },
+    { "jersey_no": 7,  "name": "Ferran Torres",      "position": "FW" },
+    { "jersey_no": 8,  "name": "Dani Olmo",          "position": "MF" },
+    { "jersey_no": 9,  "name": "Robert Lewandowski", "position": "FW" },
+    { "jersey_no": 10, "name": "Lamine Yamal",       "position": "FW" },
+    { "jersey_no": 14, "name": "Marcus Rashford",    "position": "FW" },
+    { "jersey_no": 15, "name": "Andreas Christensen","position": "DF" },
+    { "jersey_no": 16, "name": "Fermin Lopez",       "position": "MF" },
+    { "jersey_no": 17, "name": "Marc Casado",        "position": "MF" },
+    { "jersey_no": 19, "name": "Roony Bardghji",     "position": "FW" },
+    { "jersey_no": 21, "name": "Frenkie de Jong",    "position": "MF" },
+    { "jersey_no": 22, "name": "Raphinha",           "position": "FW" },
+    { "jersey_no": 23, "name": "Jules Kounde",       "position": "DF" },
+    { "jersey_no": 25, "name": "Wojciech Szczesny",  "position": "GK" }
+  ]
+}

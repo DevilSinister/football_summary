@@ -1,0 +1,12 @@
+{
+  "team_name": "My Local Team",
+  "short_code": "MLT",
+  "aliases": ["my local team fc", "mlt"],
+  "season": "2025-26",
+  "source": "hand-entered",
+  "needs_review": false,
+  "players": [
+    { "jersey_no": 1, "name": "Example Keeper", "position": "GK" },
+    { "jersey_no": 9, "name": "Example Forward", "position": "FW" }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "team_name": "Arsenal",
+  "short_code": "ARS",
+  "aliases": ["arsenal fc", "ars", "the gunners", "gunners"],
+  "season": "2025-26",
+  "source": "authored from model knowledge (cutoff May 2026) - verify before trusting",
+  "needs_review": true,
+  "players": [
+    { "jersey_no": 1,  "name": "David Raya",         "position": "GK" },
+    { "jersey_no": 2,  "name": "William Saliba",     "position": "DF" },
+    { "jersey_no": 4,  "name": "Ben White",          "position": "DF" },
+    { "jersey_no": 5,  "name": "Thomas Partey",      "position": "MF" },
+    { "jersey_no": 6,  "name": "Gabriel Magalhaes",  "position": "DF" },
+    { "jersey_no": 7,  "name": "Bukayo Saka",        "position": "FW" },
+    { "jersey_no": 8,  "name": "Martin Odegaard",    "position": "MF" },
+    { "jersey_no": 9,  "name": "Gabriel Jesus",      "position": "FW" },
+    { "jersey_no": 11, "name": "Gabriel Martinelli", "position": "FW" },
+    { "jersey_no": 14, "name": "Viktor Gyokeres",    "position": "FW" },
+    { "jersey_no": 15, "name": "Jakub Kiwior",       "position": "DF" },
+    { "jersey_no": 17, "name": "Noni Madueke",       "position": "FW" },
+    { "jersey_no": 19, "name": "Leandro Trossard",   "position": "FW" },
+    { "jersey_no": 20, "name": "Jorginho",           "position": "MF" },
+    { "jersey_no": 23, "name": "Mikel Merino",       "position": "MF" },
+    { "jersey_no": 29, "name": "Kai Havertz",        "position": "FW" },
+    { "jersey_no": 33, "name": "Riccardo Calafiori", "position": "DF" },
+    { "jersey_no": 41, "name": "Declan Rice",        "position": "MF" },
+    { "jersey_no": 56, "name": "Myles Lewis-Skelly", "position": "DF" }
+  ]
+}
