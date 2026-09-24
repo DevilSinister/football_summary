@@ -38,9 +38,10 @@ app.include_router(processing.router)
 
 
 @app.on_event("startup")
-def apply_media_retention() -> None:
+def delete_stale_uploads() -> None:
     # A restart empties the in-memory job table, so an upload left by a job
     # that was running is only reclaimed here, once it is old enough.
+    # Highlights (clips, reels, player images) are never deleted.
     processing.sweep_media()
 
 

@@ -61,14 +61,39 @@ class PlanClipsTests(unittest.TestCase):
         clips = plan_clips([{"event": "shot", "frame": 500}], FPS, 5000, [cut(560)])
         self.assertEqual(clips[0].end, 559)
 
-    def test_goal_clip_runs_on_through_the_replay(self):
-        # Live goal at 20 s, celebration from 24 s, replay 30-38 s, play resumes at 38 s.
+    def test_goal_clip_keeps_the_celebration_but_not_the_replay(self):
+        # Live goal at 20 s, celebration from 24 s, replay 30-38 s. The owner's
+        # 10 s cap ends the clip at the first cut inside the goal's 3-5 s tail.
         clips = plan_clips([{"event": "goal", "frame": 500}], FPS, 5000, [cut(600), cut(750), cut(950)])
-        self.assertEqual(clips[0].end, 949)
+        self.assertEqual(clips[0].end, 599)
+        self.assertLessEqual(clips[0].frame_count, 10 * FPS)
 
     def test_without_cuts_the_default_window_is_used(self):
         clips = plan_clips([{"event": "goal", "frame": 500}], FPS, 5000)
-        self.assertEqual((clips[0].start, clips[0].end), (375, 800))
+        self.assertEqual((clips[0].start, clips[0].end), (375, 600))
+
+    def test_no_clip_is_longer_than_ten_seconds(self):
+        # A long event (the ball stayed loose for 8 s) and a dense run of play.
+        events = [{"event": "shot", "frame": 500, "end_frame": 700}]
+        events += [{"event": kind, "frame": frame} for kind, frame in
+                   [("cross", 900), ("foul", 960), ("shot", 1010), ("goal", 1060), ("yellow_card", 1150)]]
+        clips = plan_clips(events, FPS, 5000)
+        for clip in clips:
+            self.assertLessEqual(clip.frame_count, 10 * FPS)
+        # Every clip-worthy event is on film, and nothing is written twice.
+        self.assertEqual(sorted(i for c in clips for i in c.event_indices), list(range(len(events))))
+        for earlier, later in zip(clips, clips[1:]):
+            self.assertGreater(later.start, earlier.end)
+
+    def test_a_goal_gets_its_full_window_before_lesser_events(self):
+        # The cross is earlier but the goal is placed first, so its lead and
+        # tail are never cut short to make room for the cross.
+        events = [{"event": "cross", "frame": 300}, {"event": "goal", "frame": 450}]
+        goal_window = event_window(events[1], FPS, 5000)
+        clips = plan_clips(events, FPS, 5000)
+        goal_clip = next(c for c in clips if 1 in c.event_indices)
+        self.assertLessEqual(goal_clip.start, goal_window[0])
+        self.assertGreaterEqual(goal_clip.end, goal_window[1])
 
     def test_distant_events_stay_separate(self):
         clips = plan_clips([{"event": "shot", "frame": 500}, {"event": "foul", "frame": 2000}], FPS, 5000)
@@ -85,7 +110,7 @@ class PlanClipsTests(unittest.TestCase):
         for earlier, later in zip(clips, clips[1:]):
             self.assertGreater(later.start, earlier.end)
         for clip in clips:
-            self.assertLessEqual(clip.frame_count, 60 * FPS)
+            self.assertLessEqual(clip.frame_count, 10 * FPS)
         self.assertEqual(sorted(i for c in clips for i in c.event_indices), list(range(len(events))))
 
     def test_clips_from_events_lists_each_clip_once(self):
@@ -158,10 +183,12 @@ class FfmpegExportTests(unittest.TestCase):
             )
             self.assertEqual(summary["encoder"], "ffmpeg")
             self.assertEqual([c["file_name"] for c in summary["clips"]], ["shot-01.mp4", "foul-02.mp4"])
-            # Clip 1 runs to the end of its camera shot; clip 2 opens on the cut at 293.
+            # Clip 1: the cut at 200 is 6.8 s after the shot, beyond the 4 s
+            # tail limit, so it ends 3 s after the shot (frame 105). Clip 2
+            # opens on the cut at 293.
             self.assertEqual(
                 [(c["start_seconds"], c["end_seconds"]) for c in summary["clips"]],
-                [(0.0, 8.0), (11.72, 15.4)],
+                [(0.0, 4.24), (11.72, 15.4)],
             )
             self.assertEqual(events[0]["clip_url"], "/api/processing/clips/job/shot-01.mp4")
             self.assertEqual(events[1]["clip_offset_seconds"], round(360 / FPS - 11.72, 3))

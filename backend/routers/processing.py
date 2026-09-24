@@ -11,7 +11,7 @@ import httpx
 import numpy as np
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
-from sqlalchemy import func, select, update
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from highlights import REEL_FILE_NAME, clips_from_events
@@ -103,45 +103,23 @@ def _job_snapshot(job_id: str) -> dict[str, Any] | None:
         return dict(job) if job else None
 
 
-def _forget_clips(job_ids: list[str]) -> None:
-    """Clear stored links to clips the retention sweep deleted, so the app
-    shows "no clip" instead of a player that 404s."""
-    if not job_ids:
-        return
-    try:
-        with SessionLocal() as db:
-            for job_id in job_ids:
-                db.execute(
-                    update(Event)
-                    .where(Event.video_path.like(f"/api/processing/clips/{job_id}/%"))
-                    .values(video_path=None)
-                )
-            db.commit()
-    except Exception as exc:
-        print(f"Could not clear expired clip links: {exc}")
-
-
 def sweep_media() -> None:
-    """Apply the retention rule in backend.cleanup; running jobs are skipped."""
+    """Delete stale uploaded source videos (backend.cleanup).
+
+    Highlights are never deleted: clips, reels and player images under
+    backend/static stay so old matches can still show them.
+    """
     with _jobs_lock:
         active = [
             job for job in _jobs.values() if job.get("status") not in ("completed", "failed")
         ]
     try:
-        report = cleanup.sweep(
-            UPLOAD_DIR,
-            [CLIP_DIR, PLAYER_IMAGE_DIR, OCR_DIR],
-            team_sample_dir=TEAM_SAMPLE_DIR,
-            clip_dir=CLIP_DIR,
-            active_job_ids=[job["job_id"] for job in active],
-            active_uploads=[job.get("video_path") for job in active],
-        )
+        report = cleanup.sweep(UPLOAD_DIR, active_uploads=[job.get("video_path") for job in active])
     except OSError as exc:
-        print(f"Media retention sweep failed: {exc}")
+        print(f"Upload clean-up failed: {exc}")
         return
-    _forget_clips(report.expired_jobs)
-    if report.deleted_uploads or report.expired_jobs or report.freed_bytes:
-        print(f"Media retention: {report.describe()}")
+    if report.deleted_uploads:
+        print(f"Upload clean-up: {report.describe()}")
 
 
 def _release_job_files(job_id: str) -> None:
@@ -383,6 +361,10 @@ def _persist_match(job: dict[str, Any], events: list[dict], fps: float) -> int:
                 team_name = _clean_team_name(actor.get("team_name"))
                 team = teams_by_name.get(team_name) if team_name else None
                 player = _roster_player(db, team, actor.get("jersey_number"))
+                if actor.get("unconfirmed"):
+                    # Goal scorer evidence too thin to name (goal_scorer.fuse_scorer):
+                    # keep the number, attach no roster player or name.
+                    player = None
                 actor["player_name"] = player.name if player is not None else None
                 resolved.append((actor, player, team, team_name))
 
@@ -549,14 +531,21 @@ def _process_job(job_id: str) -> None:
         from track_events import summarise_passes
 
         event_counts: dict[str, int] = {}
+        # Shots on target per team. Stored in the events table like every
+        # other event; the app's summary page does not list them.
+        shots_on_target: dict[str, int] = {}
         for event in events:
             key = str(event.get("event", "event")).lower()
             event_counts[key] = event_counts.get(key, 0) + 1
+            if key == "shot" and (event.get("details") or {}).get("on_target", True):
+                team = _clean_team_name(event.get("team_name")) or "unknown team"
+                shots_on_target[team] = shots_on_target.get(team, 0) + 1
         result = {
             "db_response": {"success": True, "matchId": match_id},
             "match_id": match_id,
             "events": events,
             "event_counts": event_counts,
+            "shots_on_target": shots_on_target,
             "pass_summary": summarise_passes(events),
             "score_sheet": [
                 {"team_name": team_names[team_id], "score": score}

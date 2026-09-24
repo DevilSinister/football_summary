@@ -1,3 +1,12 @@
+from .goal_scorer import (
+    ScorerCandidate,
+    celebration_candidates,
+    fuse_scorer,
+    live_candidate,
+    match_caption,
+    read_caption_candidates,
+    squad_for,
+)
 from .identity import (
     PlayerIdentityStore,
     PossessionHistory,
@@ -12,7 +21,14 @@ __all__ = [
     "OcrCandidate",
     "PlayerIdentityStore",
     "PossessionHistory",
+    "ScorerCandidate",
     "ScorerIdentifier",
     "TrackedCrop",
+    "celebration_candidates",
     "format_goal_event",
+    "fuse_scorer",
+    "live_candidate",
+    "match_caption",
+    "read_caption_candidates",
+    "squad_for",
 ]

@@ -19,6 +19,8 @@ Events and how they are judged:
            penalty-spot's distance away and everyone else standing off, followed
            by a kick towards the keeper.
 * cards  - see track_events.cards.
+* foul   - see track_events.fouls: opponents in contact near the ball, then a
+           player down or play stopped; every card also implies a foul.
 
 These are rule-based approximations and are reported with a confidence and
 ``"source": "tracks"`` so the caller can decide what to store or show.
@@ -35,6 +37,7 @@ from pitch import layout as pitch_layout
 from player_ball_assigner import PlayerBallAssigner
 
 from .cards import CardDetector
+from .fouls import FoulDetector
 
 
 # Possession
@@ -77,7 +80,11 @@ GOAL_CONFIRM_WINDOW_FRAMES = 4
 GOAL_APPROACH_SECONDS = 2.0
 GOAL_APPROACH_DISTANCE_M = 25.0
 
-EVENT_COOLDOWN_SECONDS = {"shot": 1.0, "save": 1.0, "penalty": 10.0, "cross": 0.5, "goal": 30.0}
+EVENT_COOLDOWN_SECONDS = {"shot": 1.0, "save": 1.0, "penalty": 10.0, "cross": 0.5, "goal": 30.0, "foul": 3.0}
+
+# A card is tied to a foul recorded at most this long before it.
+CARD_FOUL_LOOKBACK_SECONDS = 60.0
+CARD_ONLY_FOUL_CONFIDENCE = 0.6
 
 
 @dataclass
@@ -160,11 +167,13 @@ class TrackEventDetector:
         frame_size: Optional[Tuple[int, int]] = None,
         ball_assigner: Optional[PlayerBallAssigner] = None,
         detect_cards: bool = True,
+        detect_fouls: bool = True,
     ) -> None:
         self.fps = max(float(fps), 1.0)
         self.frame_size = frame_size
         self.ball_assigner = ball_assigner or PlayerBallAssigner()
         self.card_detector = CardDetector(self.fps) if detect_cards else None
+        self.foul_detector = FoulDetector(self.fps) if detect_fouls else None
 
         self._heights: Deque[float] = deque(maxlen=400)
         self._scale = 0.0
@@ -237,10 +246,17 @@ class TrackEventDetector:
         confidence: float,
         participants: Sequence[Participant],
         details: Optional[dict] = None,
+        check_cooldown: bool = True,
     ) -> Optional[dict]:
-        if not self._cooldown_ok(event_type, frame):
+        if check_cooldown and not self._cooldown_ok(event_type, frame):
             return None
         team = next((p for p in participants if p.team_id != 0), None)
+        details = dict(details or {})
+        if event_type == "shot":
+            # Every shot rule above needs the ball heading at the keeper (or,
+            # calibrated, at the goal mouth), so a recorded shot is a shot on
+            # target. Recorded and counted; the app does not list them.
+            details.setdefault("on_target", True)
         event = {
             "event": event_type,
             "frame": int(frame),
@@ -250,9 +266,9 @@ class TrackEventDetector:
             "team_name": team.team_name if team else "unknown_team",
             "source": "tracks",
             "participants": [asdict(p) for p in participants],
-            "details": details or {},
+            "details": details,
         }
-        self._last_event_frame[event_type] = int(frame)
+        self._last_event_frame[event_type] = max(int(frame), self._last_event_frame.get(event_type, int(frame)))
         self.events.append(event)
         if event_type in ("pass", "cross"):
             self.pass_count[event["team_id"]] = self.pass_count.get(event["team_id"], 0) + 1
@@ -339,13 +355,20 @@ class TrackEventDetector:
         emitted.extend(self._update_possession(frame_number, players, holder, ball_centre))
         emitted.extend(self._update_penalty(frame_number, players, ball_centre))
         emitted.extend(self._update_goal_line(frame_number))
-
-        if self.card_detector is not None and frame is not None and referees:
+        if self.foul_detector is not None:
             emitted.extend(
-                self._collect(
-                    self.card_detector.update(frame_number, frame, referees, players, self._scale)
+                self._foul_events(
+                    self.foul_detector.update(frame_number, players, ball_centre, holder, self._scale)
                 )
             )
+
+        if self.card_detector is not None and frame is not None and referees:
+            cards = self._collect(
+                self.card_detector.update(frame_number, frame, referees, players, self._scale)
+            )
+            emitted.extend(cards)
+            for card in cards:
+                emitted.extend(self._foul_for_card(card, frame_number))
         return emitted
 
     def _collect(self, events: List[dict]) -> List[dict]:
@@ -353,6 +376,73 @@ class TrackEventDetector:
             self._last_event_frame[event["event"]] = event["frame"]
             self.events.append(event)
         return events
+
+    # ------------------------------------------------------------------ fouls
+    def _foul_events(self, proposals: List[dict], check_cooldown: bool = True) -> List[dict]:
+        emitted: List[dict] = []
+        for proposal in proposals:
+            participants = [
+                Participant(role, int(track_id), team["team_id"], team["team_name"], team["team_confidence"])
+                for role, track_id, team in proposal["participants"]
+            ]
+            event = self._emit(
+                "foul",
+                proposal["frame"],
+                proposal["end_frame"],
+                proposal["confidence"],
+                participants,
+                proposal["details"],
+                check_cooldown=check_cooldown,
+            )
+            if event:
+                emitted.append(event)
+        return emitted
+
+    def _foul_for_card(self, card: dict, frame_number: int) -> List[dict]:
+        """Every card is for a foul (or misconduct); make sure one is recorded.
+
+        Already recorded in the lookback: nothing to add. Else the latest
+        contact involving the booked player becomes the foul, with him as the
+        fouler. Else a foul is recorded at the card itself.
+        """
+        card_frame = int(card.get("frame", frame_number))
+        lookback = CARD_FOUL_LOOKBACK_SECONDS * self.fps
+        if any(
+            e.get("event") == "foul" and 0 <= card_frame - int(e.get("frame", 0)) <= lookback
+            for e in self.events
+        ):
+            return []
+        booked = next((p for p in card.get("participants") or [] if p.get("role") == "player"), None)
+        booked_track = int(booked["track_id"]) if booked is not None else None
+        contact = (
+            self.foul_detector.contact_for_card(card_frame, booked_track)
+            if self.foul_detector is not None
+            else None
+        )
+        if contact is not None:
+            proposal = self.foul_detector.proposal_for_card(contact, booked_track, frame_number)
+            return self._foul_events([proposal], check_cooldown=False)
+        participants = []
+        if booked is not None:
+            participants.append(
+                Participant(
+                    "fouler",
+                    booked_track,
+                    int(booked.get("team_id", 0) or 0),
+                    str(booked.get("team_name") or "unknown_team"),
+                    float(booked.get("team_confidence", 0.0) or 0.0),
+                )
+            )
+        event = self._emit(
+            "foul",
+            card_frame,
+            card_frame,
+            CARD_ONLY_FOUL_CONFIDENCE,
+            participants,
+            {"rule": f"inferred from the {card.get('event', 'card').replace('_', ' ')}", "roles_certain": booked is not None},
+            check_cooldown=False,
+        )
+        return [event] if event else []
 
     # -------------------------------------------------------------- possession
     def _update_possession(
@@ -887,6 +977,8 @@ class TrackEventDetector:
             emitted.extend(self._on_release_without_receiver(self.current, frame_number))
             self._last_segment = self.current
             self.current = None
+        if self.foul_detector is not None:
+            emitted.extend(self._foul_events(self.foul_detector.reset_scene(frame_number)))
         self._candidate = None
         self._frames_without_holder = 0
         self._ball.clear()
@@ -909,6 +1001,8 @@ class TrackEventDetector:
         if self.current is not None:
             emitted.extend(self._on_release_without_receiver(self.current, frame_number))
             self.current = None
+        if self.foul_detector is not None:
+            emitted.extend(self._foul_events(self.foul_detector.finish(frame_number)))
         return emitted
 
 

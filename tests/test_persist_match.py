@@ -148,6 +148,28 @@ class PersistMatchTests(unittest.TestCase):
             self.assertIsNone(occurrence.detected_team_name)
             self.assertIsNone(occurrence.player_id)
 
+    def test_unconfirmed_scorer_keeps_the_number_but_no_roster_name(self):
+        scorer = {
+            "role": "scorer", "track_id": 3, "team_id": 1, "team_name": "Real Madrid",
+            "jersey_number": 7, "jersey_confidence": 0.5, "unconfirmed": True, "player_name": None,
+        }
+        events = [
+            {
+                "event": "goal", "frame": 250, "end_frame": 250, "team_id": 1, "team_name": "Real Madrid",
+                "source": "scoreboard", "participants": [dict(scorer)], "actors": [dict(scorer)],
+                "scorer": dict(scorer),
+            }
+        ]
+        match_id = processing._persist_match(self._job(), events, fps=25.0)
+        with _fake_database.SessionLocal() as db:
+            event = db.scalar(select(models.Event).where(models.Event.match_id == match_id))
+            self.assertEqual(event.description, "GOAL — Real Madrid — #7 (unconfirmed) scored")
+            occurrence = db.scalar(select(models.Occurrence).where(models.Occurrence.event_id == event.event_id))
+            # Roster #7 is "Vinicius", but the evidence was too thin to name him.
+            self.assertEqual(occurrence.detected_jersey_no, 7)
+            self.assertIsNone(occurrence.detected_player_name)
+            self.assertIsNone(occurrence.player_id)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 from collections import deque
 from dataclasses import dataclass, field
-from typing import Deque, Dict, Iterable, List, Optional
+from typing import Deque, Dict, Iterable, List, Optional, Tuple
 
 import cv2
 import numpy as np
@@ -21,6 +21,11 @@ class PlayerIdentity:
     jersey_confidence: float = 0.0
     player_name: Optional[str] = None
     name_confidence: float = 0.0
+    # (frame, box height) whenever the box was big enough for its number to be
+    # read. Only readable-size boxes are kept, so a full match in wide shots
+    # stays small; the goal scorer's celebration close-ups are what it is for
+    # (scorer_identifier.goal_scorer.celebration_candidates).
+    sightings: List[Tuple[int, float]] = field(default_factory=list)
 
     def snapshot(self) -> Dict[str, object]:
         return {
@@ -133,6 +138,7 @@ class PlayerIdentityStore:
         bbox = player["bbox"]
         box_height = float(bbox[3]) - float(bbox[1])
         if frame_number % self.crop_stride == 0 and box_height >= self.min_box_height:
+            state.sightings.append((int(frame_number), box_height))
             crop = self._crop_jersey_region(frame, bbox)
             if crop is not None:
                 rear_score = player.get("rear_facing_score")
@@ -335,7 +341,12 @@ def format_goal_event(event: Dict[str, object]) -> str:
     jersey_number = scorer.get("jersey_number")
     player_name = scorer.get("player_name")
     if jersey_number is None:
+        if player_name:
+            return f"GOAL — {team_name} — {player_name} scored"
         return f"GOAL — {team_name} — scorer number unavailable"
+    if scorer.get("unconfirmed"):
+        # The evidence was too thin to put a name to (goal_scorer.fuse_scorer).
+        return f"GOAL — {team_name} — #{jersey_number} (unconfirmed) scored"
     if player_name:
         return f"GOAL — {team_name} — #{jersey_number} {player_name} scored"
     return f"GOAL — {team_name} — #{jersey_number} scored"

@@ -6,7 +6,17 @@ import cv2
 from highlights import CLIP_EVENT_TYPES, export_highlights, open_mp4_writer
 from match_config import MatchConfig
 from player_ball_assigner import PlayerBallAssigner
-from scorer_identifier import JerseyReader, ScorerIdentifier, format_goal_event
+from scorer_identifier import (
+    JerseyReader,
+    ScorerIdentifier,
+    celebration_candidates,
+    format_goal_event,
+    fuse_scorer,
+    live_candidate,
+    read_caption_candidates,
+    squad_for,
+)
+from scorer_identifier.goal_scorer import CELEBRATION_SECONDS
 from team_assigner import TeamAssigner, kit_color_bgr, safe_player_crop
 from track_events import TrackEventDetector, summarise_passes
 from scene import SceneTimeline, detect_scene_boundaries
@@ -37,6 +47,13 @@ FRAME_BATCH_SIZE = 16
 CALIBRATION_MIN_FRAMES = 24
 CALIBRATION_MAX_FRAMES = 60
 
+# Extra shirt-number OCR calls each goal may spend on its celebration close-ups,
+# on top of JerseyReader's whole-job budget.
+GOAL_SCORER_OCR_ALLOWANCE = 48
+# The celebration window also runs this long past the score change on the
+# graphic, which often comes after the replay.
+CELEBRATION_AFTER_SCOREBOARD_SECONDS = 10.0
+
 # Which participant of a track-derived event is "the" player for the summary.
 PRIMARY_ROLE = {
     "pass": "passer",
@@ -44,6 +61,7 @@ PRIMARY_ROLE = {
     "shot": "shooter",
     "save": "goalkeeper",
     "penalty": "taker",
+    "foul": "fouler",
     "yellow_card": "player",
     "red_card": "player",
 }
@@ -115,6 +133,11 @@ def build_parser():
         help="seconds between reads of the score graphic once it is found",
     )
     parser.add_argument(
+        "--no-scorer-captions",
+        action="store_true",
+        help="do not read the broadcast's scorer caption after a goal (saves a few OCR passes per goal)",
+    )
+    parser.add_argument(
         "--no-ocr",
         action="store_true",
         help="skip shirt-number OCR (faster; players are reported by track id only)",
@@ -155,6 +178,25 @@ def _drop_model_goals_near_pitch_goals(events, fps, window_seconds=5.0):
             event.get("event") == "goal"
             and event.get("source") != "pitch"
             and any(abs(int(event.get("frame", 0)) - frame) <= window for frame in pitch_goals)
+        )
+    ]
+
+
+def _drop_model_fouls_near_track_fouls(events, fps, window_seconds=5.0):
+    """The learned model's foul adds nothing where the tracks already saw one."""
+    track_fouls = [
+        int(event.get("frame", 0))
+        for event in events
+        if event.get("event") == "foul" and event.get("source") == "tracks"
+    ]
+    window = window_seconds * max(float(fps), 1.0)
+    return [
+        event
+        for event in events
+        if not (
+            event.get("event") == "foul"
+            and event.get("source") != "tracks"
+            and any(abs(int(event.get("frame", 0)) - frame) <= window for frame in track_fouls)
         )
     ]
 
@@ -310,43 +352,78 @@ def _resolve_identities(scorer_identifier, event, image_dir, url_prefix):
         _save_scorer_image(scorer_identifier, scorer, image_dir, url_prefix)
 
 
-_ROSTER_NAMES = None
-
-
 def _roster_name(team_name, jersey_number):
     """Player name from data/rosters for display, or None.
 
     The API resolves names from the players table instead; this is only for
     the command-line summary, which runs without SQL Server.
     """
-    global _ROSTER_NAMES
     if not team_name or jersey_number is None:
         return None
-    if _ROSTER_NAMES is None:
-        import json
-        from pathlib import Path
+    return next(
+        (p["name"] for p in squad_for(team_name) if int(p["jersey_no"]) == int(jersey_number)),
+        None,
+    )
 
-        from backend.team_naming import normalise_team_name
 
-        _ROSTER_NAMES = {}
-        roster_dir = Path(__file__).resolve().parent / "data" / "rosters"
-        for path in sorted(roster_dir.glob("*.json")) if roster_dir.is_dir() else []:
-            if path.name.startswith("_"):
-                continue
-            try:
-                payload = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, ValueError):
-                continue
-            keys = {normalise_team_name(payload.get("team_name"))}
-            keys.update(normalise_team_name(alias) for alias in payload.get("aliases") or [])
-            for entry in payload.get("players") or []:
-                if entry.get("jersey_no") is None or not entry.get("name"):
-                    continue
-                for key in keys:
-                    _ROSTER_NAMES[(key, int(entry["jersey_no"]))] = entry["name"]
-    from backend.team_naming import normalise_team_name
+def _improve_goal_scorers(events, scorer_identifier, video_path, fps, frame_height, ocr_fn=None):
+    """Re-decide every goal's scorer from all the evidence, not one shirt read.
 
-    return _ROSTER_NAMES.get((normalise_team_name(team_name), int(jersey_number)))
+    Sources and weights are in scorer_identifier/goal_scorer.py: the broadcast
+    caption naming the scorer (``ocr_fn`` None skips it), the shirt numbers of
+    the scoring team's players in the celebration close-ups, and the live read
+    of the shooter. The result replaces ``scorer`` (and the scorer actor) with
+    the fused shirt number, a confidence, and a name only when confirmed.
+    """
+    fps = max(float(fps), 1.0)
+    for event in events:
+        if str(event.get("event", "")).lower() != "goal":
+            continue
+        details = event.setdefault("details", {})
+        team_id = int(event.get("team_id", 0) or 0)
+        squad = squad_for(event.get("team_name"))
+        scorer = dict(event.get("scorer") or {})
+        moment = int(event.get("frame", 0) or 0)
+        board_frame = int(details.get("scoreboard_frame") or moment)
+
+        candidates = live_candidate(scorer, str(details.get("attribution") or ""))
+        if ocr_fn is not None:
+            candidates += read_caption_candidates(video_path, moment, fps, ocr_fn, squad)
+        scorer_identifier.jersey_reader.max_ocr_calls += GOAL_SCORER_OCR_ALLOWANCE
+        celebration_end = int(
+            max(moment + CELEBRATION_SECONDS * fps, board_frame + CELEBRATION_AFTER_SCOREBOARD_SECONDS * fps)
+        )
+        candidates += celebration_candidates(
+            scorer_identifier.identity_store,
+            scorer_identifier.identify_track,
+            team_id,
+            moment,
+            celebration_end,
+            frame_height,
+        )
+        details["scorer_evidence"] = [
+            {
+                "source": c.source,
+                "jersey_number": c.jersey_number,
+                "player_name": c.player_name,
+                "weight": round(c.weight, 3),
+            }
+            for c in candidates
+        ]
+        fused = fuse_scorer(candidates, squad)
+        if fused is None:
+            continue
+
+        changed = fused["jersey_number"] != scorer.get("jersey_number")
+        for record in [scorer, *[a for a in event.get("actors") or [] if a.get("role") == "scorer"]]:
+            record.update(fused)
+            record.setdefault("team_id", team_id)
+            record.setdefault("team_name", event.get("team_name"))
+            if changed:
+                # The photo is of the tracked shooter, who is not the fused scorer.
+                record.pop("player_image", None)
+                record["jersey_confidence"] = fused["scorer_confidence"]
+        event["scorer"] = scorer
 
 
 def _actor_label(actor):
@@ -364,7 +441,7 @@ def describe_event(event):
     event_type = str(event.get("event", "event")).lower()
     if event_type == "goal":
         scorer = dict(event.get("scorer") or {})
-        if not scorer.get("player_name"):
+        if not scorer.get("player_name") and not scorer.get("unconfirmed"):
             scorer["player_name"] = _roster_name(scorer.get("team_name"), scorer.get("jersey_number"))
         text = format_goal_event({**event, "scorer": scorer})
         score_after = (event.get("details") or {}).get("score_after")
@@ -390,6 +467,11 @@ def describe_event(event):
     if event_type in ("yellow_card", "red_card"):
         colour = event_type.split("_")[0].upper()
         return f"{colour} CARD — {team} — {_actor_label(actors.get('player'))}"
+    if event_type == "foul" and actors.get("fouler"):
+        text = f"FOUL — {team} — {_actor_label(actors.get('fouler'))}"
+        if actors.get("fouled"):
+            text += f" on {_actor_label(actors.get('fouled'))}"
+        return text
     return f"{event_type.upper()} — {team}"
 
 
@@ -589,6 +671,7 @@ def process_video(args, progress_cb=None):
             cv2.destroyAllWindows()
 
     pending_events.extend(track_events.finish(frame_number))
+    pending_events = _drop_model_fouls_near_track_fouls(pending_events, fps)
     if scoreboard_reader is not None and scoreboard_reader.active:
         # The score graphic is the authority on goals while it can be read:
         # every other goal proposal is either confirmed by a score change (and
@@ -638,12 +721,24 @@ def process_video(args, progress_cb=None):
     # Highlight-worthy events are resolved first so they get the OCR budget.
     image_dir = getattr(args, "player_image_dir", None)
     url_prefix = getattr(args, "player_image_url_prefix", None)
-    ordered = sorted(
-        pending_events,
-        key=lambda event: 0 if str(event.get("event", "")).lower() in CLIP_EVENT_TYPES else 1,
-    )
+    def resolution_order(event):
+        kind = str(event.get("event", "")).lower()
+        return 0 if kind == "goal" else 1 if kind in CLIP_EVENT_TYPES else 2
+
+    ordered = sorted(pending_events, key=resolution_order)
     for event in ordered:
         _resolve_identities(scorer_identifier, event, image_dir, url_prefix)
+
+    # Goals: fuse the caption, the celebration close-ups and the live read.
+    caption_ocr = None
+    if (
+        not getattr(args, "no_ocr", False)
+        and not getattr(args, "no_scorer_captions", False)
+        and jersey_reader._ensure_engine()
+    ):
+        caption_ocr = paddle_ocr_fn(jersey_reader.engine)
+    _improve_goal_scorers(pending_events, scorer_identifier, args.video, fps, height, caption_ocr)
+    for event in pending_events:
         event["description"] = describe_event(event)
 
     # One clip per passage of play, cut at the camera shots, with the source
