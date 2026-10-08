@@ -16,7 +16,8 @@ class EventLogic:
     probability above 0.2 and fired "foul" on the opening frames of two of them.
     Its proposals are therefore only accepted when the tracks agree: a goal
     needs a recent shot towards the goalkeeper, a foul needs two opponents in
-    contact near the ball.
+    contact near the ball. A goal does not need the ball in the judged frame:
+    by then it is usually in the net, behind a body or outside the shot.
     """
 
     def __init__(self, cooldown_frames=60, fps=25.0):
@@ -39,11 +40,7 @@ class EventLogic:
             event_type = event.get("event")
             confidence = float(event.get("confidence", 0.0))
             if event_type == "goal":
-                if (
-                    confidence >= 0.5
-                    and self._goal_condition(tracks)
-                    and self._recent_shot(track_events, event_frame)
-                ):
+                if confidence >= 0.5 and self._recent_shot(track_events, event_frame):
                     self._confirm(event, event_frame, confirmed)
             elif event_type == "foul":
                 if confidence >= 0.7 and self._foul_condition(tracks, track_events):
@@ -58,11 +55,6 @@ class EventLogic:
         self.confirmed_events.append(event)
         confirmed.append(event)
         self.last_event_frame = frame_num
-
-    @staticmethod
-    def _goal_condition(tracks):
-        ball_tracks = tracks.get("ball", [])
-        return bool(ball_tracks and ball_tracks[-1])
 
     def _recent_shot(self, track_events, frame_num):
         if track_events is None:

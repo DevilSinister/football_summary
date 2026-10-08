@@ -10,7 +10,15 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from scoreboard import ScoreboardReader, ScoreTracker, Token, attribute_goals, map_codes_to_teams, parse_tokens
+from scoreboard import (
+    ScoreboardReader,
+    ScoreTracker,
+    Token,
+    attribute_goals,
+    map_codes_to_teams,
+    merge_board_goals,
+    parse_tokens,
+)
 from scoreboard.parser import as_code, find_codes
 from scoreboard.reader import ScoreGoal
 from scoreboard.teams import code_spells_name, expected_codes_for
@@ -215,6 +223,79 @@ class AttributionTests(unittest.TestCase):
         goals, _ = attribute_goals([self.GOAL], self.CODES, {"MCI": 2}, self.NAMES, [], 25.0, samples)
         self.assertEqual(goals[0]["participants"][0]["track_id"], 9)
         self.assertEqual(goals[0]["frame"], 260)
+        self.assertFalse(goals[0]["details"]["detected_goal"])
+
+    def test_a_detected_goal_is_confirmed_and_the_live_one_wins_over_its_replay(self):
+        live = {"event": "goal", "frame": 60, "source": "tracks", "team_id": 2,
+                "participants": [{"role": "scorer", "track_id": 7, "team_id": 2}]}
+        replay = {**live, "frame": 140, "participants": [{"role": "scorer", "track_id": 55, "team_id": 2}]}
+        goals, _ = attribute_goals([self.GOAL], self.CODES, {"MCI": 2, "POR": 1}, self.NAMES,
+                                   [replay, live, self.shot(174, 2, 31)], 25.0)
+        self.assertEqual(goals[0]["frame"], 60)
+        self.assertEqual(goals[0]["participants"][0]["track_id"], 7)
+        self.assertTrue(goals[0]["details"]["detected_goal"])
+        self.assertEqual(goals[0]["details"]["detected_by"], "tracks")
+
+    def test_a_score_change_takes_any_shot_but_does_not_name_a_confident_opponent(self):
+        # The FC clip's goal shot was read as the other team with confidence.
+        shot = self.shot(200, 1, 12)
+        shot["participants"][0]["team_confidence"] = 0.9
+        goals, evidence = attribute_goals([self.GOAL], self.CODES, {"MCI": 2, "POR": 1}, self.NAMES, [shot], 25.0)
+        self.assertEqual(goals[0]["frame"], 200)
+        self.assertEqual(goals[0]["team_id"], 2)
+        self.assertEqual(goals[0]["participants"], [])
+        self.assertFalse(goals[0]["details"]["detected_goal"])
+        self.assertEqual(shot["details"]["outcome"], "goal")
+        self.assertEqual(evidence, [shot])
+
+
+class MergeBoardGoalsTests(unittest.TestCase):
+    FPS = 25.0
+
+    @staticmethod
+    def board(scoreboard_frame, window_start):
+        return {"event": "goal", "frame": scoreboard_frame - 20, "source": "scoreboard",
+                "details": {"scoreboard_frame": scoreboard_frame, "window_start_frame": window_start}}
+
+    @staticmethod
+    def proposal(frame, source="model"):
+        return {"event": "goal", "frame": frame, "source": source}
+
+    def test_a_proposal_inside_the_score_change_window_is_the_same_goal(self):
+        board = self.board(350, 50)
+        merged, duplicates = merge_board_goals([self.proposal(200, "pitch")], [board], self.FPS)
+        self.assertEqual(merged, [board])
+        self.assertEqual([e["frame"] for e in duplicates], [200])
+
+    def test_a_goal_the_graphic_never_showed_is_kept(self):
+        # Regression: every non-scoreboard goal used to be deleted once a score
+        # had been read, so a change hidden by replays lost the goal entirely.
+        board = self.board(350, 50)
+        late = self.proposal(2000)
+        merged, duplicates = merge_board_goals([late], [board], self.FPS)
+        self.assertIn(late, merged)
+        self.assertIn(board, merged)
+        self.assertEqual(duplicates, [])
+        self.assertEqual(late["details"]["scoreboard"], "not confirmed")
+
+    def test_goals_are_kept_when_the_score_never_changed(self):
+        goal = self.proposal(400, "pitch")
+        merged, duplicates = merge_board_goals([goal], [], self.FPS)
+        self.assertEqual(merged, [goal])
+        self.assertEqual(duplicates, [])
+
+    def test_other_events_pass_through(self):
+        shot = {"event": "shot", "frame": 200}
+        merged, _ = merge_board_goals([shot], [self.board(350, 50)], self.FPS)
+        self.assertIn(shot, merged)
+
+    def test_an_unread_old_score_falls_back_to_the_lookback(self):
+        board = self.board(2000, None)  # window is 60 s (1500 frames) back from 2000
+        merged, duplicates = merge_board_goals(
+            [self.proposal(400), self.proposal(1000)], [board], self.FPS
+        )
+        self.assertEqual([e["frame"] for e in duplicates], [1000])
+        self.assertIn(400, [e["frame"] for e in merged])
 
 
 if __name__ == "__main__":

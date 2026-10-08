@@ -38,6 +38,7 @@ from player_ball_assigner import PlayerBallAssigner
 
 from .cards import CardDetector
 from .fouls import FoulDetector
+from .goal_mouth import find_goal_mouth, in_mouth, mouth_height
 
 
 # Possession
@@ -79,6 +80,22 @@ GOAL_CONFIRM_SAMPLES = 2               # consecutive ball positions in the net
 GOAL_CONFIRM_WINDOW_FRAMES = 4
 GOAL_APPROACH_SECONDS = 2.0
 GOAL_APPROACH_DISTANCE_M = 25.0
+
+# Goal from a shot, without pitch calibration: where did the ball end up?
+# The goal frame is looked for near the keeper while the ball is close to him,
+# and every shot is judged once its follow-up window has passed (or the camera
+# cut, or the video ended): the ball entered the goal mouth, never came back
+# out, nobody held it, and it then vanished (lost in the net, or the director
+# cut away) or came to rest there.
+GOAL_JUDGE_SECONDS = 2.5
+GOAL_VANISH_SECONDS = 0.6
+GOAL_REST_SECONDS = 0.4
+GOAL_REST_SPREAD = 0.3          # mouth heights the resting ball may wander
+GOAL_OUT_MARGIN = 0.6           # mouth heights outside the frame that count as "came back out"
+GOAL_HOLD_SECONDS = 0.5         # a player holding it this long caught or cleared it
+MOUTH_SEARCH_HEIGHTS = 8.0      # player heights between ball and keeper to look for the goal
+MOUTH_MAX_AGE_SECONDS = 1.0     # how long a found goal frame is trusted
+MOUTH_EVERY_SECONDS = 0.08
 
 EVENT_COOLDOWN_SECONDS = {"shot": 1.0, "save": 1.0, "penalty": 10.0, "cross": 0.5, "goal": 30.0, "foul": 3.0}
 
@@ -194,6 +211,13 @@ class TrackEventDetector:
         self._still_anchor: Optional[Tuple[int, float, float]] = None
         self._penalty_setup: Optional[dict] = None
 
+        # Goal frames found near the keeper, who held the ball each frame, and
+        # shots still waiting for their goal judgement.
+        self._mouths: Deque[Tuple[int, tuple]] = deque(maxlen=int(self.fps * 6))
+        self._holders: Deque[Tuple[int, int]] = deque(maxlen=int(self.fps * 6))
+        self._last_mouth_search = -10**9
+        self._goal_checks: List[dict] = []
+
         self._last_event_frame: Dict[str, int] = {}
         self._team_names: Dict[int, str] = {}
         self.scene_resets = 0
@@ -270,6 +294,10 @@ class TrackEventDetector:
         }
         self._last_event_frame[event_type] = max(int(frame), self._last_event_frame.get(event_type, int(frame)))
         self.events.append(event)
+        if event_type == "shot":
+            self._goal_checks.append(
+                {"shot": event, "release": int(frame), "deadline": int(frame + GOAL_JUDGE_SECONDS * self.fps)}
+            )
         if event_type in ("pass", "cross"):
             self.pass_count[event["team_id"]] = self.pass_count.get(event["team_id"], 0) + 1
         return event
@@ -294,7 +322,10 @@ class TrackEventDetector:
 
     def _keeper_near(self, frame: int, point: Optional[Tuple[float, float]] = None) -> Optional[_Keeper]:
         memory = int(KEEPER_MEMORY_SECONDS * self.fps)
-        candidates = [k for k in self._keepers.values() if 0 <= frame - k.frame <= memory or 0 <= k.frame - frame <= memory]
+        # Seen shortly before the frame, or at any time since: a shot whose ball
+        # is lost is only judged when possession times out, by which time a
+        # keeper who stayed in view was last seen "now", well after the release.
+        candidates = [k for k in self._keepers.values() if k.frame >= frame - memory]
         if not candidates:
             return None
         if point is None:
@@ -351,6 +382,9 @@ class TrackEventDetector:
                 holder = int(self.ball_assigner.assign_ball_to_player(players, ball_bbox))
                 if holder >= 0:
                     players[holder]["has_ball"] = True
+        self._holders.append((frame_number, holder))
+        if frame is not None:
+            self._search_goal_mouth(frame_number, frame, players)
 
         emitted.extend(self._update_possession(frame_number, players, holder, ball_centre))
         emitted.extend(self._update_penalty(frame_number, players, ball_centre))
@@ -369,6 +403,7 @@ class TrackEventDetector:
             emitted.extend(cards)
             for card in cards:
                 emitted.extend(self._foul_for_card(card, frame_number))
+        emitted.extend(self._judge_goal_checks(frame_number))
         return emitted
 
     def _collect(self, events: List[dict]) -> List[dict]:
@@ -962,6 +997,127 @@ class TrackEventDetector:
         return emitted
 
     # ------------------------------------------------------------ shot cuts
+    # ------------------------------------------------------------ goal from shot
+    def _search_goal_mouth(self, frame_number: int, frame: np.ndarray, players: Dict[int, dict]) -> None:
+        """Look for the goal frame near the keeper while the ball is close to him."""
+        if frame_number - self._last_mouth_search < MOUTH_EVERY_SECONDS * self.fps or self._scale <= 0:
+            return
+        keepers = [p["bbox"] for p in players.values() if p.get("role") == "goalkeeper"]
+        recent = [s for s in self._ball if frame_number - s[0] <= 0.5 * self.fps]
+        if not keepers or not recent:
+            return
+        ball = (recent[-1][1], recent[-1][2])
+        bbox = min(keepers, key=lambda b: _distance(_foot(b), ball))
+        if _distance(_foot(bbox), ball) / self._scale > MOUTH_SEARCH_HEIGHTS:
+            return
+        self._last_mouth_search = frame_number
+        quad = find_goal_mouth(frame, bbox)
+        if quad is not None:
+            self._mouths.append((frame_number, quad))
+
+    def _mouth_at(self, frame_number: int):
+        best = None
+        for found_at, quad in self._mouths:
+            age = abs(frame_number - found_at)
+            if age <= MOUTH_MAX_AGE_SECONDS * self.fps and (best is None or age < best[0]):
+                best = (age, quad)
+        return None if best is None else best[1]
+
+    def _judge_goal_checks(self, frame_number: int, scene_ended: bool = False) -> List[dict]:
+        emitted: List[dict] = []
+        waiting: List[dict] = []
+        for check in self._goal_checks:
+            if not scene_ended and frame_number < check["deadline"]:
+                waiting.append(check)
+                continue
+            event = self._judge_goal(check, frame_number, scene_ended)
+            if event is not None:
+                emitted.append(event)
+        self._goal_checks = waiting
+        return emitted
+
+    def _judge_goal(self, check: dict, frame_number: int, scene_ended: bool) -> Optional[dict]:
+        """Did the ball of this shot end up in the goal?"""
+        release = check["release"]
+        end = min(frame_number, check["deadline"])
+        samples = [s for s in self._ball if release < s[0] <= end]
+        inside = [
+            i for i, s in enumerate(samples)
+            if (quad := self._mouth_at(s[0])) is not None and in_mouth(quad, (s[1], s[2]))
+        ]
+        if not inside:
+            return None
+        entered = samples[inside[0]]
+        # Follow the ball from where it went in. Once it has been lost in the
+        # goal long enough, the outcome is decided: anything seen later (a
+        # stray detection, the ball fetched for the kick-off) is the restart.
+        gap = GOAL_VANISH_SECONDS * self.fps
+        after = [entered]
+        lost_in_goal = False
+        for s in samples[inside[0] + 1:]:
+            if s[0] - after[-1][0] >= gap:
+                lost_in_goal = True
+                break
+            quad = self._mouth_at(s[0])
+            if quad is not None and not in_mouth(quad, (s[1], s[2]), margin_heights=GOAL_OUT_MARGIN):
+                return None  # came back out: a save, a rebound, the post
+            after.append(s)
+        last = after[-1]
+        decided_at = last[0] + gap if lost_in_goal else end
+        # Held for a while after it went in: a catch (or a clearance off the line).
+        longest_hold, run, last_holder = 0, 0, -1
+        for f, holder in self._holders:
+            if f < entered[0] or f > decided_at:
+                continue
+            run = run + 1 if holder >= 0 and holder == last_holder else (1 if holder >= 0 else 0)
+            last_holder = holder
+            longest_hold = max(longest_hold, run)
+        if longest_hold >= GOAL_HOLD_SECONDS * self.fps:
+            return None
+
+        quad = self._mouth_at(last[0]) or self._mouth_at(entered[0])
+        vanished = lost_in_goal or scene_ended or (end - last[0]) >= gap
+        resting = False
+        tail = [s for s in after if last[0] - s[0] <= GOAL_REST_SECONDS * self.fps]
+        if quad is not None and len(tail) >= 3 and last[0] - tail[0][0] >= 0.75 * GOAL_REST_SECONDS * self.fps:
+            spread = max(_distance((s[1], s[2]), (last[1], last[2])) for s in tail)
+            resting = spread <= GOAL_REST_SPREAD * mouth_height(quad)
+        if not (vanished or resting):
+            return None
+
+        shot = check["shot"]
+        people = [Participant(**p) for p in shot.get("participants") or []]
+        shooter = next((p for p in people if p.role == "shooter"), None)
+        keeper = next((p for p in people if p.role == "goalkeeper"), None)
+        participants = []
+        if shooter is not None:
+            scorer = Participant("scorer", shooter.track_id, shooter.team_id, shooter.team_name, shooter.team_confidence)
+            if scorer.team_id == 0 and keeper is not None and keeper.team_id in (1, 2):
+                # Kit unread: the goal belongs to the side the keeper does not play for.
+                scorer.team_id = 2 if keeper.team_id == 1 else 1
+                scorer.team_name = self._team_names.get(scorer.team_id, f"team_{scorer.team_id}")
+            participants.append(scorer)
+        if keeper is not None:
+            participants.append(keeper)
+        event = self._emit(
+            "goal",
+            entered[0],
+            last[0],
+            0.6,
+            participants,
+            {
+                "rule": "ball into the goal mouth after the shot",
+                "shot_frame": int(release),
+                "ball_fate": "at rest in the goal" if resting else (
+                    "lost from view in the goal" if not scene_ended or (end - last[0]) >= GOAL_VANISH_SECONDS * self.fps
+                    else "camera cut away"
+                ),
+            },
+        )
+        if event is not None:
+            shot.setdefault("details", {})["outcome"] = "goal"
+        return event
+
     def reset_scene(self, frame_number: int) -> List[dict]:
         """A new camera shot begins at ``frame_number``.
 
@@ -979,6 +1135,11 @@ class TrackEventDetector:
             self.current = None
         if self.foul_detector is not None:
             emitted.extend(self._foul_events(self.foul_detector.reset_scene(frame_number)))
+        # A cut right after the ball goes in is the usual broadcast grammar:
+        # judge open shots on what this camera shot showed, then forget it.
+        emitted.extend(self._judge_goal_checks(frame_number, scene_ended=True))
+        self._mouths.clear()
+        self._holders.clear()
         self._candidate = None
         self._frames_without_holder = 0
         self._ball.clear()
@@ -1003,6 +1164,7 @@ class TrackEventDetector:
             self.current = None
         if self.foul_detector is not None:
             emitted.extend(self._foul_events(self.foul_detector.finish(frame_number)))
+        emitted.extend(self._judge_goal_checks(frame_number, scene_ended=True))
         return emitted
 
 

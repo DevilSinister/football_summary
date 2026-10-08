@@ -101,7 +101,10 @@ class ConfidentOpponentIsNotTheScorerTests(unittest.TestCase):
                                           {1: "Porto", 2: "Man City"}, [block], 25.0)
         self.assertEqual(goals[0]["team_id"], 2)
         self.assertEqual(goals[0]["participants"], [])
-        self.assertEqual(evidence, [])
+        # Owner rule 2026-10-08: a score change after a shot means that shot
+        # was the goal, so it gives the moment - but the defender is not named.
+        self.assertEqual(goals[0]["frame"], 174)
+        self.assertEqual(evidence, [block])
 
 
 if __name__ == "__main__":

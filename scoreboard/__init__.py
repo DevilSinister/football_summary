@@ -1,4 +1,4 @@
-from .attribution import attribute_goals
+from .attribution import attribute_goals, merge_board_goals
 from .parser import ScoreReading, Token, parse_tokens
 from .reader import ScoreboardReader, ScoreGoal, ScoreTracker, paddle_ocr_fn
 from .teams import combined_expected, expected_codes_for, map_codes_to_teams, parse_code_option
@@ -13,6 +13,7 @@ __all__ = [
     "combined_expected",
     "expected_codes_for",
     "map_codes_to_teams",
+    "merge_board_goals",
     "paddle_ocr_fn",
     "parse_code_option",
     "parse_tokens",

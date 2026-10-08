@@ -18,7 +18,12 @@ from scorer_identifier import (
 )
 from scorer_identifier.goal_scorer import CELEBRATION_SECONDS
 from team_assigner import TeamAssigner, kit_color_bgr, safe_player_crop
-from track_events import TrackEventDetector, summarise_passes
+from track_events import (
+    TrackEventDetector,
+    drop_replayed_goals,
+    summarise_passes,
+    withdraw_saves_of_goals,
+)
 from scene import SceneTimeline, detect_scene_boundaries
 from scoreboard import (
     ScoreboardReader,
@@ -26,6 +31,7 @@ from scoreboard import (
     combined_expected,
     expected_codes_for,
     map_codes_to_teams,
+    merge_board_goals,
     paddle_ocr_fn,
     parse_code_option,
 )
@@ -672,10 +678,13 @@ def process_video(args, progress_cb=None):
 
     pending_events.extend(track_events.finish(frame_number))
     pending_events = _drop_model_fouls_near_track_fouls(pending_events, fps)
+    pending_events = _drop_model_goals_near_pitch_goals(pending_events, fps)
     if scoreboard_reader is not None and scoreboard_reader.active:
-        # The score graphic is the authority on goals while it can be read:
-        # every other goal proposal is either confirmed by a score change (and
-        # becomes its moment and scorer) or dropped.
+        # Score-graphic goals are added to the track, pitch and model goals,
+        # not substituted for them: a proposal inside a score change's window
+        # is that same goal and gives way; any other proposal is kept, because
+        # the graphic misses changes it cannot see (hidden during replays,
+        # other codes, a single unconfirmed read).
         codes = scoreboard_reader.tracker.codes
         code_to_team = map_codes_to_teams(codes, team_names, known_codes)
         board_goals, _evidence = attribute_goals(
@@ -687,24 +696,38 @@ def process_video(args, progress_cb=None):
             fps,
             scorer_identifier.possession_history.samples,
         )
-        dropped = [event for event in pending_events if event.get("event") == "goal"]
-        pending_events = [event for event in pending_events if event.get("event") != "goal"] + board_goals
+        pending_events, duplicates = merge_board_goals(pending_events, board_goals, fps)
+        other_goals = sum(
+            1 for event in pending_events if event.get("event") == "goal" and event.get("source") != "scoreboard"
+        )
         summary = scoreboard_reader.summary()
         print(
             f"Scoreboard: codes {summary['codes']} -> teams {code_to_team}; "
             f"{summary['confirmed_readings']} readings in {summary['ocr_calls']} OCR calls; "
             f"score timeline {summary['timeline']}; {len(board_goals)} goal(s); "
-            f"{len(dropped)} other goal proposal(s) replaced"
+            f"{len(duplicates)} other proposal(s) were the same goal; "
+            f"{other_goals} goal(s) the graphic did not show kept"
         )
         for frame, reason in summary["rejected"]:
             print(f"  scoreboard note at frame {frame}: {reason}")
+        for goal in board_goals:
+            if not goal["details"]["detected_goal"]:
+                # The score changed but the video rules saw no goal: a gap in
+                # detection worth knowing about, not just a scorer to fill in.
+                print(
+                    f"  score changed at frame {goal['details']['scoreboard_frame']} with no goal "
+                    f"detected from the video; placed at frame {goal['frame']} "
+                    f"({goal['details']['attribution']})"
+                )
     else:
         if scoreboard_reader is not None:
             print(
                 f"Scoreboard: no score graphic read ({scoreboard_reader.ocr_calls} OCR calls); "
                 "goals come from the track and pitch rules"
             )
-        pending_events = _drop_model_goals_near_pitch_goals(pending_events, fps)
+    # One goal is shown live and again in replays; a shot that went in was not saved.
+    pending_events = drop_replayed_goals(pending_events, fps)
+    pending_events = withdraw_saves_of_goals(pending_events)
     pending_events.sort(key=lambda event: int(event.get("frame", 0)))
 
     print(f"Ball selected in {frames_with_ball} of {frame_number} frames")
