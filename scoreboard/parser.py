@@ -147,6 +147,10 @@ def find_codes(tokens: Sequence[Token], expected: Optional[Iterable[str]] = None
 
 def parse_one_line(token: Token, expected: Optional[Iterable[str]] = None) -> Optional[ScoreReading]:
     text = _LEADING_CLOCK.sub("", token.text.strip().upper())
+    # Paddle frequently wraps a compact graphic in stray parentheses, e.g.
+    # ``(POR(1-0)EGY)``. They carry no score meaning and should not make an
+    # otherwise exact read fail.
+    text = re.sub(r"[()\[\]{}]", "", text)
     match = _ONE_LINE.match(text)
     if not match:
         return None

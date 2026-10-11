@@ -2,6 +2,7 @@ from collections import deque
 import os
 import pickle
 import sys
+from time import perf_counter
 
 import cv2
 import numpy as np
@@ -226,11 +227,17 @@ class Tracker:
         image_size=None,
         ball_model_path=None,
         ball_image_size=None,
+        model=None,
+        ball_model=None,
     ):
-        self.model = YOLO(model_path)
+        self.model = model if model is not None else YOLO(model_path)
         # Optional single-class ball detector. When present it is the only
         # source of ball candidates; the main model then detects people only.
-        self.ball_model = YOLO(ball_model_path) if ball_model_path else None
+        self.ball_model = ball_model if ball_model is not None else (YOLO(ball_model_path) if ball_model_path else None)
+        self.person_inference_seconds = 0.0
+        self.ball_inference_seconds = 0.0
+        self.person_inference_frames = 0
+        self.ball_inference_frames = 0
         self.frame_rate = float(frame_rate) if frame_rate else 25.0
         self.image_size = int(image_size) if image_size else None
         self.ball_image_size = int(ball_image_size) if ball_image_size else None
@@ -337,12 +344,15 @@ class Tracker:
             self.ball_image_size = choose_ball_image_size(width, height)
         candidates = []
         for i in range(0, len(frames), DETECT_BATCH_SIZE):
+            started = perf_counter()
             results = self.ball_model.predict(
                 frames[i:i + DETECT_BATCH_SIZE],
                 conf=BALL_MODEL_CONFIDENCE,
                 imgsz=self.ball_image_size,
                 verbose=False,
             )
+            self.ball_inference_seconds += perf_counter() - started
+            self.ball_inference_frames += len(frames[i:i + DETECT_BATCH_SIZE])
             for result in results:
                 candidates.append(
                     [
@@ -367,9 +377,12 @@ class Tracker:
             # The model runs at the ball's low threshold; people are filtered back
             # up to DETECT_CONFIDENCE in get_object_tracks. verbose defaults to
             # True and printed one line per frame.
+            started = perf_counter()
             detections_batch = self.model.predict(
                 batch, conf=conf, imgsz=size, verbose=False
             )
+            self.person_inference_seconds += perf_counter() - started
+            self.person_inference_frames += len(batch)
             detections += detections_batch
 
         return detections

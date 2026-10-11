@@ -280,13 +280,14 @@ class JerseyReader:
         if self.debug_dir:
             self.debug_dir.mkdir(parents=True, exist_ok=True)
 
-        for crop_index, crop in enumerate(selected):
-            variants = self._enhance_crop(crop.image)
-            for variant_index, image in enumerate(variants):
+        prepared = [(crop, self._enhance_crop(crop.image)) for crop in selected]
+
+        def read_variant(crop_index, crop, variant_index, image):
+                nonlocal candidates
                 # A whole-job budget, so a match with many goals cannot turn into
                 # thousands of CPU OCR passes.
                 if self._ocr_calls >= self.max_ocr_calls:
-                    return self.fuse_candidates(candidates)
+                    return False
                 if self.debug_dir:
                     path = self.debug_dir / (
                         f"track_{track_id}_frame_{crop.frame_number}_"
@@ -306,6 +307,22 @@ class JerseyReader:
                             )
                         )
                 except Exception:
-                    continue
+                    pass
+                return True
+
+        # First spend one OCR call on each of the four strongest crops. Only
+        # expand to enhanced variants when those independent frames disagree or
+        # remain unreadable.
+        for crop_index, (crop, variants) in enumerate(prepared):
+            if variants and not read_variant(crop_index, crop, 0, variants[0]):
+                return self.fuse_candidates(candidates)
+        initial = self.fuse_candidates(candidates)
+        if initial.jersey_number is not None:
+            return initial
+
+        for crop_index, (crop, variants) in enumerate(prepared):
+            for variant_index, image in enumerate(variants[1:], start=1):
+                if not read_variant(crop_index, crop, variant_index, image):
+                    return self.fuse_candidates(candidates)
 
         return self.fuse_candidates(candidates)

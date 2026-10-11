@@ -1,0 +1,35 @@
+[
+  {
+    "file": "football_1 (2).mp4",
+    "team_codes": ["RMA", "ATM"],
+    "final_score": [0, 0],
+    "goal_count": 0,
+    "goals": []
+  },
+  {
+    "file": "test.mp4",
+    "team_codes": ["POR", "EGY"],
+    "final_score": [1, 0],
+    "goal_count": 1,
+    "goals": [
+      {
+        "approximate_clip_second": 12.0,
+        "scorer": null,
+        "note": "The scoring player is not unambiguously visible in the clip."
+      }
+    ]
+  },
+  {
+    "file": "videoplayback (2).mp4",
+    "team_codes": ["POR", "MCI"],
+    "final_score": [0, 1],
+    "goal_count": 1,
+    "goals": [
+      {
+        "approximate_clip_second": 12.0,
+        "scorer": null,
+        "note": "The scoring player is not unambiguously visible in the clip."
+      }
+    ]
+  }
+]

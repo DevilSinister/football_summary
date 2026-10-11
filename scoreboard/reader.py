@@ -12,6 +12,7 @@ else (a 0 read as 8, both scores moving at once) is logged, not reported.
 
 from dataclasses import dataclass, field
 from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple
+from time import perf_counter
 
 import cv2
 import numpy as np
@@ -151,12 +152,18 @@ class ScoreboardReader:
         scan_every_seconds: float = 2.0,
         lost_after_seconds: float = 60.0,
         confirm_reads: int = 2,
+        burst_every_seconds: float = 0.5,
+        burst_duration_seconds: float = 8.0,
+        permissive_after_misses: int = 3,
     ) -> None:
         self.ocr_fn = ocr_fn
         self.fps = max(float(fps), 1.0)
         self.height, self.width = int(frame_shape[0]), int(frame_shape[1])
         self.expected = sorted({code.upper() for code in expected_codes}) if expected_codes else None
         self.read_every = max(1, int(round(read_every_seconds * self.fps)))
+        self.burst_every = max(1, int(round(burst_every_seconds * self.fps)))
+        self.burst_duration = max(1, int(round(burst_duration_seconds * self.fps)))
+        self.permissive_after_misses = max(1, int(permissive_after_misses))
         self.scan_every = max(1, int(round(scan_every_seconds * self.fps)))
         self.lost_after = int(round(lost_after_seconds * self.fps))
         self.scale = upscale_for(self.height)
@@ -169,6 +176,12 @@ class ScoreboardReader:
         self._next_frame = 0
         self.ocr_calls = 0
         self.scans = 0
+        self.scan_misses = 0
+        self.burst_until = -1
+        self.ocr_seconds = 0.0
+        self.scan_regions: List[Tuple[int, int, int, int]] = []
+        self.rejected_tokens: List[dict] = []
+        self._last_tokens: List[Token] = []
 
     # ------------------------------------------------------------------ OCR
     def _tokens(self, image: np.ndarray, offset: Tuple[int, int], scale: float) -> List[Token]:
@@ -176,7 +189,10 @@ class ScoreboardReader:
             image = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
         self.ocr_calls += 1
         tokens = []
-        for text, confidence, (x1, y1, x2, y2) in self.ocr_fn(image):
+        started = perf_counter()
+        raw_tokens = self.ocr_fn(image)
+        self.ocr_seconds += perf_counter() - started
+        for text, confidence, (x1, y1, x2, y2) in raw_tokens:
             if confidence < MIN_TOKEN_CONFIDENCE:
                 continue
             tokens.append(
@@ -186,23 +202,57 @@ class ScoreboardReader:
                     (x1 / scale + offset[0], y1 / scale + offset[1], x2 / scale + offset[0], y2 / scale + offset[1]),
                 )
             )
+        self._last_tokens = tokens
         return tokens
 
+    def _log_rejected_tokens(self, frame_number: int, region: str) -> None:
+        if not self._last_tokens:
+            return
+        self.rejected_tokens.append(
+            {
+                "frame": int(frame_number),
+                "region": region,
+                "tokens": [
+                    {"text": token.text, "confidence": round(token.confidence, 3)}
+                    for token in self._last_tokens
+                ],
+            }
+        )
+        del self.rejected_tokens[:-100]
+
     def _scan(self, frame: np.ndarray):
-        """(reading, codes) from the top and bottom strips; either may be None."""
+        """(reading, codes) from likely graphic corners; either may be None.
+
+        OCR cost is driven by crop area. Broadcast graphics occupy one corner,
+        so scanning full-width strips repeatedly is both slower and noisier.
+        """
         self.scans += 1
-        strips = (
-            (0, int(self.height * TOP_STRIP)),
-            (int(self.height * (1.0 - BOTTOM_STRIP)), self.height),
+        scan_width = int(self.width * 0.62)
+        top_bottom = int(self.height * TOP_STRIP)
+        bottom_top = int(self.height * (1.0 - BOTTOM_STRIP))
+        regions = (
+            (0, 0, scan_width, top_bottom),
+            (self.width - scan_width, 0, self.width, top_bottom),
+            (0, bottom_top, scan_width, self.height),
+            (self.width - scan_width, bottom_top, self.width, self.height),
         )
         codes_only = None
-        for top, bottom in strips:
-            tokens = self._tokens(frame[top:bottom], (0, top), self.scale)
-            reading = parse_tokens(tokens, self.expected)
+        for left, top, right, bottom in regions:
+            self.scan_regions.append((left, top, right, bottom))
+            tokens = self._tokens(frame[top:bottom, left:right], (left, top), self.scale)
+            expected = self.expected if self.scan_misses < self.permissive_after_misses else None
+            reading = parse_tokens(tokens, expected)
             if reading is not None:
+                self.scan_misses = 0
                 return reading, None
             if codes_only is None:
-                codes_only = find_codes(tokens, self.expected)
+                codes_only = find_codes(tokens, expected)
+                if codes_only is not None:
+                    # Expected team codes are strong enough to lock the region;
+                    # do not OCR the other three corners as well.
+                    self.scan_misses = 0
+                    return None, codes_only
+        self.scan_misses += 1
         return None, codes_only
 
     def _read_region(self, frame: np.ndarray) -> Optional[ScoreReading]:
@@ -228,6 +278,11 @@ class ScoreboardReader:
         self.last_seen = None
 
     # --------------------------------------------------------------- update
+    def trigger_burst(self, frame_number: int) -> None:
+        """Temporarily read the locked graphic at 0.5 s cadence after a shot."""
+        self.burst_until = max(self.burst_until, int(frame_number) + self.burst_duration)
+        self._next_frame = min(self._next_frame, int(frame_number) + self.burst_every)
+
     def update(self, frame_number: int, frame: np.ndarray) -> Optional[List[ScoreGoal]]:
         if frame_number < self._next_frame:
             return None
@@ -245,11 +300,14 @@ class ScoreboardReader:
                 self._next_frame = frame_number + 1
                 return None
             else:
+                self._log_rejected_tokens(frame_number, "scan")
                 return None
         else:
-            self._next_frame = frame_number + self.read_every
+            cadence = self.burst_every if frame_number <= self.burst_until else self.read_every
+            self._next_frame = frame_number + cadence
             reading = self._read_region(frame)
             if reading is None:
+                self._log_rejected_tokens(frame_number, "locked")
                 if self.last_seen is None:
                     if frame_number - self.locked_at > CODES_ONLY_GRACE_SECONDS * self.fps:
                         self.region, self.layout = None, None
@@ -270,6 +328,9 @@ class ScoreboardReader:
             "confirmed_readings": self.tracker.readings,
             "ocr_calls": self.ocr_calls,
             "scans": self.scans,
+            "ocr_seconds": round(self.ocr_seconds, 3),
+            "scan_regions": list(self.scan_regions[-12:]),
+            "rejected_tokens": list(self.rejected_tokens),
             "timeline": [(frame, dict(score)) for frame, score in self.tracker.timeline],
             "goals": [
                 {"code": goal.code, "frame": goal.frame, "window_start": goal.window_start}

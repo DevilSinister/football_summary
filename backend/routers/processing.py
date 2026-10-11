@@ -5,6 +5,7 @@ from typing import Any
 from uuid import uuid4
 import re
 import threading
+from time import perf_counter
 
 import cv2
 import httpx
@@ -27,6 +28,7 @@ from team_assigner import (
 )
 
 from .. import cleanup
+from ..pipeline_runtime import job_queue, model_cache
 from ..database import SessionLocal, get_db
 from ..models import Event, Match, Occurrence, Play, Player, Team, User
 from ..roster import find_team, resolve_team
@@ -73,23 +75,12 @@ _SAFE_CLIP_NAME = re.compile(r"[A-Za-z0-9_-]{1,64}\.mp4")
 _jobs: dict[str, dict[str, Any]] = {}
 _jobs_lock = threading.Lock()
 
-_tracker = None
-_tracker_lock = threading.Lock()
-
-
 def _get_tracker():
-    """One YOLO model per process.
+    """Per-task tracking state backed by the process-wide person model."""
+    from trackers import Tracker
 
-    Team detection and the processing run used to load models/best.pt separately,
-    so every job paid for two loads.
-    """
-    global _tracker
-    with _tracker_lock:
-        if _tracker is None:
-            from trackers import Tracker
-
-            _tracker = Tracker(str(PROJECT_ROOT / "models" / "best.pt"))
-        return _tracker
+    path = PROJECT_ROOT / "models" / "best.pt"
+    return Tracker(str(path), model=model_cache.yolo(path), image_size=640)
 
 
 def _set_job(job_id: str, **changes) -> None:
@@ -159,6 +150,7 @@ def _detect_team_candidates(job_id: str) -> None:
     job = _job_snapshot(job_id)
     if job is None:
         return
+    started = perf_counter()
     try:
         _set_job(
             job_id,
@@ -256,6 +248,7 @@ def _detect_team_candidates(job_id: str) -> None:
             progress_percent=13,
             team_candidates=candidates,
             detected_team_colors=centers_rgb,
+            team_sampling_seconds=round(perf_counter() - started, 3),
         )
     except Exception as exc:
         _set_job(
@@ -309,7 +302,12 @@ def _clean_team_name(raw_team_name) -> str | None:
     return None
 
 
-def _persist_match(job: dict[str, Any], events: list[dict], fps: float) -> int:
+def _persist_match(
+    job: dict[str, Any],
+    events: list[dict],
+    fps: float,
+    final_score: dict[int, int] | None = None,
+) -> int:
     from main import describe_event
 
     with SessionLocal() as db:
@@ -425,8 +423,12 @@ def _persist_match(job: dict[str, Any], events: list[dict], fps: float) -> int:
                         name_confidence=actor.get("name_confidence"),
                     )
                 )
-            if event_type == "goal" and play is not None:
+            if event_type == "goal" and play is not None and final_score is None:
                 play.score += 1
+
+        if final_score is not None:
+            plays[team_a.team_name].score = int(final_score.get(1, 0))
+            plays[team_b.team_name].score = int(final_score.get(2, 0))
 
         db.commit()
         return match.match_id
@@ -462,7 +464,13 @@ def _process_job(job_id: str) -> None:
         fps = float(capture.get(cv2.CAP_PROP_FPS)) or 25.0
         capture.release()
 
-        from main import process_video
+        from main import DEFAULT_BALL_MODEL, process_video
+        from pipeline_config import PipelineConfig
+
+        config = PipelineConfig.short_clip(debug_ocr=False)
+        tracking_path = PROJECT_ROOT / "models" / "best.pt"
+        ball_path = Path(DEFAULT_BALL_MODEL)
+        ocr_engine = model_cache.paddle_ocr()
 
         def report_progress(frame_index: int, total_frames: int) -> None:
             # The frame loop used to run start to finish with no progress channel
@@ -484,7 +492,13 @@ def _process_job(job_id: str) -> None:
         arguments = SimpleNamespace(
             video=job["video_path"],
             output=str(OUTPUT_DIR / f"{job_id}.mp4"),
-            tracking_model=str(PROJECT_ROOT / "models" / "best.pt"),
+            tracking_model=str(tracking_path),
+            person_model=model_cache.yolo(tracking_path),
+            ball_model_instance=model_cache.yolo(ball_path) if ball_path.is_file() else None,
+            ocr_engine=ocr_engine,
+            pipeline_config=config,
+            confirmed_team_centers=True,
+            return_pipeline_result=True,
             event_model=str(PROJECT_ROOT / "models" / "final_model_80.pth"),
             team_a_name=job["team_a_name"],
             team_a_color=job["team_a_color"],
@@ -492,32 +506,47 @@ def _process_job(job_id: str) -> None:
             team_b_color=job["team_b_color"],
             team_a_code=_team_codes(job["team_a_name"]),
             team_b_code=_team_codes(job["team_b_name"]),
-            ocr_debug_dir=str(OCR_DIR / job_id),
+            ocr_debug_dir=None,
             player_image_dir=str(PLAYER_IMAGE_DIR / job_id),
             player_image_url_prefix=f"/static/player_images/{job_id}",
             clip_dir=str(clip_dir),
             clip_url_prefix=f"/api/processing/clips/{job_id}",
+            # Disable the pitch-keypoint/field-calibration pipeline for web jobs.
+            # It runs an extra YOLO pass every few frames and the current model's
+            # homographies are rejected, so it adds substantial latency without
+            # contributing usable event evidence. Player and ball tracking remain on.
+            pitch_model=None,
+            # Temporarily keep the shared yellow/red card detector out of the
+            # pipeline. Change this to True when card processing is wanted again.
+            detect_cards=False,
+            no_ocr=ocr_engine is None,
+            no_scoreboard=ocr_engine is None,
+            no_scorer_captions=False,
             # The full annotated render is off: it produced a 327 MB MJPG AVI that
             # Android cannot decode, and cost a copy and an encode every frame.
             write_annotated_video=False,
             no_display=True,
         )
-        events = process_video(arguments, progress_cb=report_progress)
+        pipeline_result = process_video(arguments, progress_cb=report_progress)
+        events = pipeline_result["events"]
+        score_by_team_id = pipeline_result["score_by_team_id"]
         _set_job(job_id, stage="Saving match summary", progress_percent=PROGRESS_PERSIST)
-        match_id = _persist_match(job, events, fps)
+        persistence_started = perf_counter()
+        match_id = _persist_match(job, events, fps, score_by_team_id)
+        pipeline_metrics = pipeline_result.setdefault("metrics", {})
+        phases = pipeline_metrics.setdefault("phases_seconds", {})
+        phases["team_sampling"] = float(job.get("team_sampling_seconds", 0.0))
+        phases["persistence"] = round(perf_counter() - persistence_started, 3)
 
         # Keyed by team id, not by the typed name. Matching on the name string
         # meant any event without a confident team silently left the sheet 0-0.
         team_names = {1: job["team_a_name"], 2: job["team_b_name"]}
-        score_by_team_id = {1: 0, 2: 0}
         player_results = []
         for event in events:
             if str(event.get("event", "")).lower() != "goal":
                 continue
             scorer = event.get("scorer") or {}
             team_id = int(scorer.get("team_id") or 0)
-            if team_id in score_by_team_id:
-                score_by_team_id[team_id] += 1
             player_results.append(
                 {
                     "team_name": team_names.get(team_id),
@@ -555,6 +584,7 @@ def _process_job(job_id: str) -> None:
             # One entry per merged clip; a goal and the shot before it share one.
             "clips": clips_from_events(events),
             "reel": _reel(job_id),
+            "pipeline_metrics": pipeline_metrics,
         }
         _set_job(
             job_id,
@@ -613,8 +643,9 @@ async def submit_file(
         await video.close()
 
     job_id = _create_job(temporary_path, user_id)
-    background_tasks.add_task(_detect_team_candidates, job_id)
-    return {"job_id": job_id, "status": "uploaded"}
+    _set_job(job_id, status="queued", stage="Queued for team detection")
+    job_queue.submit(_detect_team_candidates, job_id)
+    return {"job_id": job_id, "status": "queued"}
 
 
 @router.post("/api/processing/submit-url", status_code=202)
@@ -634,8 +665,9 @@ def submit_url(payload: VideoUrlRequest, background_tasks: BackgroundTasks):
         target.unlink(missing_ok=True)
         raise
     job_id = _create_job(target, payload.user_id)
-    background_tasks.add_task(_detect_team_candidates, job_id)
-    return {"job_id": job_id, "status": "uploaded"}
+    _set_job(job_id, status="queued", stage="Queued for team detection")
+    job_queue.submit(_detect_team_candidates, job_id)
+    return {"job_id": job_id, "status": "queued"}
 
 
 @router.post("/api/processing/confirm-teams/{job_id}", status_code=202)
@@ -671,7 +703,7 @@ def confirm_teams(
                 "progress_percent": 14,
             }
         )
-    background_tasks.add_task(_process_job, job_id)
+    job_queue.submit(_process_job, job_id)
     return {"job_id": job_id, "status": "queued"}
 
 

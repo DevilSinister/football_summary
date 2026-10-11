@@ -185,12 +185,16 @@ class TrackEventDetector:
         ball_assigner: Optional[PlayerBallAssigner] = None,
         detect_cards: bool = True,
         detect_fouls: bool = True,
+        detect_passes: bool = True,
+        detect_penalties: bool = True,
     ) -> None:
         self.fps = max(float(fps), 1.0)
         self.frame_size = frame_size
         self.ball_assigner = ball_assigner or PlayerBallAssigner()
         self.card_detector = CardDetector(self.fps) if detect_cards else None
         self.foul_detector = FoulDetector(self.fps) if detect_fouls else None
+        self.detect_passes = bool(detect_passes)
+        self.detect_penalties = bool(detect_penalties)
 
         self._heights: Deque[float] = deque(maxlen=400)
         self._scale = 0.0
@@ -387,7 +391,8 @@ class TrackEventDetector:
             self._search_goal_mouth(frame_number, frame, players)
 
         emitted.extend(self._update_possession(frame_number, players, holder, ball_centre))
-        emitted.extend(self._update_penalty(frame_number, players, ball_centre))
+        if self.detect_penalties:
+            emitted.extend(self._update_penalty(frame_number, players, ball_centre))
         emitted.extend(self._update_goal_line(frame_number))
         if self.foul_detector is not None:
             emitted.extend(
@@ -613,7 +618,7 @@ class TrackEventDetector:
             # Interception or tackle. Not a requested event.
             return emitted
 
-        if (
+        if self.detect_passes and (
             (same_team or unknown)
             and displacement >= MIN_PASS_DISTANCE
             and gap_frames <= MAX_FLIGHT_SECONDS * self.fps

@@ -2,6 +2,7 @@ import argparse
 import os
 
 import cv2
+from time import perf_counter
 
 from highlights import CLIP_EVENT_TYPES, export_highlights, open_mp4_writer
 from match_config import MatchConfig
@@ -24,7 +25,8 @@ from track_events import (
     summarise_passes,
     withdraw_saves_of_goals,
 )
-from scene import SceneTimeline, detect_scene_boundaries
+from scene import SceneTimeline
+from scene.cuts import find_boundaries, frame_signature
 from scoreboard import (
     ScoreboardReader,
     attribute_goals,
@@ -35,6 +37,7 @@ from scoreboard import (
     paddle_ocr_fn,
     parse_code_option,
 )
+from pipeline_config import PipelineConfig, PipelineMetrics, scheduled_frames
 
 
 MODELS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
@@ -372,7 +375,15 @@ def _roster_name(team_name, jersey_number):
     )
 
 
-def _improve_goal_scorers(events, scorer_identifier, video_path, fps, frame_height, ocr_fn=None):
+def _improve_goal_scorers(
+    events,
+    scorer_identifier,
+    video_path,
+    fps,
+    frame_height,
+    ocr_fn=None,
+    extra_ocr_allowance=GOAL_SCORER_OCR_ALLOWANCE,
+):
     """Re-decide every goal's scorer from all the evidence, not one shirt read.
 
     Sources and weights are in scorer_identifier/goal_scorer.py: the broadcast
@@ -393,9 +404,7 @@ def _improve_goal_scorers(events, scorer_identifier, video_path, fps, frame_heig
         board_frame = int(details.get("scoreboard_frame") or moment)
 
         candidates = live_candidate(scorer, str(details.get("attribution") or ""))
-        if ocr_fn is not None:
-            candidates += read_caption_candidates(video_path, moment, fps, ocr_fn, squad)
-        scorer_identifier.jersey_reader.max_ocr_calls += GOAL_SCORER_OCR_ALLOWANCE
+        scorer_identifier.jersey_reader.max_ocr_calls += max(0, int(extra_ocr_allowance))
         celebration_end = int(
             max(moment + CELEBRATION_SECONDS * fps, board_frame + CELEBRATION_AFTER_SCOREBOARD_SECONDS * fps)
         )
@@ -407,6 +416,11 @@ def _improve_goal_scorers(events, scorer_identifier, video_path, fps, frame_heig
             celebration_end,
             frame_height,
         )
+        preliminary = fuse_scorer(candidates, squad)
+        # Captions are a fallback: broad OCR passes are not paid for when the
+        # live/celebration evidence already identifies a scorer confidently.
+        if ocr_fn is not None and (preliminary is None or preliminary.get("unconfirmed")):
+            candidates += read_caption_candidates(video_path, moment, fps, ocr_fn, squad)
         details["scorer_evidence"] = [
             {
                 "source": c.source,
@@ -481,12 +495,48 @@ def describe_event(event):
     return f"{event_type.upper()} — {team}"
 
 
+def final_score_by_team(events, scoreboard_reader=None, code_to_team=None):
+    """Latest confirmed graphic score, otherwise deduplicated detected goals."""
+    score = {1: 0, 2: 0}
+    if (
+        scoreboard_reader is not None
+        and scoreboard_reader.active
+        and scoreboard_reader.tracker.state
+        and code_to_team
+    ):
+        mapped = {
+            int(code_to_team.get(code, 0)): int(value)
+            for code, value in scoreboard_reader.tracker.state.items()
+            if int(code_to_team.get(code, 0)) in score
+        }
+        if len(mapped) == 2:
+            score.update(mapped)
+            return score
+    for event in events:
+        if str(event.get("event", "")).lower() != "goal":
+            continue
+        scorer = event.get("scorer") or {}
+        team_id = int(event.get("team_id") or scorer.get("team_id") or 0)
+        if team_id in score:
+            score[team_id] += 1
+    return score
+
+
+def goal_output_events(events):
+    return [event for event in events if str(event.get("event", "")).lower() == "goal"]
+
+
+def should_calibrate_teams(args) -> bool:
+    return not bool(getattr(args, "confirmed_team_centers", False))
+
+
 def process_video(args, progress_cb=None):
     # Heavy model imports are delayed so configuration validation and --help work
     # without initializing Ultralytics/Torch or their user-level cache folders.
-    from event_detector import EventDetector
-    from event_logic import EventLogic
     from trackers import Tracker
+
+    config = getattr(args, "pipeline_config", None) or PipelineConfig()
+    metrics = PipelineMetrics()
 
     try:
         import torch
@@ -510,6 +560,9 @@ def process_video(args, progress_cb=None):
     height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = float(capture.get(cv2.CAP_PROP_FPS)) or 25.0
     total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+    duration = total_frames / max(fps, 1.0)
+    target_fps = config.analysis_fps(duration)
+    detector_size = config.detector_size(height)
 
     write_video = bool(getattr(args, "write_annotated_video", False))
     show_video = not args.no_display
@@ -522,12 +575,19 @@ def process_video(args, progress_cb=None):
             raise RuntimeError(f"Cannot open output video: {args.output}")
 
     ball_model = _optional_model(getattr(args, "ball_model", DEFAULT_BALL_MODEL))
-    pitch_model = _optional_model(getattr(args, "pitch_model", DEFAULT_PITCH_MODEL))
+    pitch_model = (
+        _optional_model(getattr(args, "pitch_model", DEFAULT_PITCH_MODEL))
+        if config.use_pitch_calibration
+        else None
+    )
     tracker = Tracker(
         args.tracking_model,
-        frame_rate=fps,
-        image_size=getattr(args, "image_size", None),
+        frame_rate=target_fps,
+        image_size=getattr(args, "image_size", None) or detector_size,
         ball_model_path=ball_model,
+        ball_image_size=detector_size,
+        model=getattr(args, "person_model", None),
+        ball_model=getattr(args, "ball_model_instance", None),
     )
     pitch_calibrator = None
     if pitch_model:
@@ -538,16 +598,45 @@ def process_video(args, progress_cb=None):
         )
     print(f"Ball source: {ball_model or 'ball class of ' + str(args.tracking_model)}")
     print(f"Pitch model: {pitch_model or 'none'}")
-    event_detector = EventDetector(args.event_model)
-    event_logic = EventLogic(fps=fps)
+    event_detector = None
+    event_logic = None
+    if config.use_legacy_event_model:
+        from event_detector import EventDetector
+        from event_logic import EventLogic
+
+        event_detector = EventDetector(args.event_model)
+        event_logic = EventLogic(fps=fps)
     team_assigner = TeamAssigner(match_config)
     ball_assigner = PlayerBallAssigner()
-    track_events = TrackEventDetector(fps, (width, height), ball_assigner=ball_assigner)
+    track_events = TrackEventDetector(
+        fps,
+        (width, height),
+        ball_assigner=ball_assigner,
+        detect_cards=config.detect_cards and bool(getattr(args, "detect_cards", True)),
+        detect_fouls=config.detect_fouls,
+        detect_passes=not config.goal_only,
+        detect_penalties=not config.goal_only,
+    )
     if getattr(args, "no_ocr", False):
         jersey_reader = JerseyReader(debug_dir=None, max_ocr_calls=0)
     else:
-        jersey_reader = JerseyReader(debug_dir=args.ocr_debug_dir)
-    scorer_identifier = ScorerIdentifier(jersey_reader=jersey_reader, frame_height=height)
+        jersey_reader = JerseyReader(
+            debug_dir=(getattr(args, "ocr_debug_dir", None) if config.debug_ocr else None),
+            engine=getattr(args, "ocr_engine", None),
+            max_crops=config.identity_crops,
+            max_ocr_calls=config.jersey_ocr_calls,
+        )
+    from scorer_identifier.identity import PlayerIdentityStore, min_readable_box_height
+
+    scorer_identifier = ScorerIdentifier(
+        jersey_reader=jersey_reader,
+        identity_store=PlayerIdentityStore(
+            max_crops_per_player=config.identity_crops,
+            crop_stride=1,
+            min_box_height=min_readable_box_height(height),
+        ),
+        frame_height=height,
+    )
 
     # Goals from the broadcast score graphic. Codes come from the caller (the
     # API reads them from the database), else from data/rosters.
@@ -564,108 +653,150 @@ def process_video(args, progress_cb=None):
                 fps,
                 (height, width),
                 expected_codes=combined_expected(known_codes),
-                read_every_seconds=float(getattr(args, "scoreboard_every", 1.0) or 1.0),
+                read_every_seconds=config.scoreboard_scan_seconds,
+                scan_every_seconds=config.scoreboard_scan_seconds,
+                burst_every_seconds=config.scoreboard_burst_seconds,
+                burst_duration_seconds=config.scoreboard_burst_duration,
+                permissive_after_misses=config.scoreboard_permissive_after_misses,
             )
         else:
             print(f"Scoreboard reading unavailable: {jersey_reader._engine_error}")
 
-    if _calibrate_teams(tracker, team_assigner, args.video, total_frames, fps, height):
+    if not should_calibrate_teams(args):
+        print("Using the team kit centres confirmed during upload.")
+    elif _calibrate_teams(tracker, team_assigner, args.video, total_frames, fps, height):
         print("Team kits calibrated from the video; configured colours name the two kits.")
     else:
         print("Team kit calibration found no clear second kit; matching configured colours directly.")
 
-    # Camera cuts and crossfades, found in one cheap decode pass up front so
-    # the frame loop knows where every shot starts and which frames are blends.
-    scenes = None
-    if not getattr(args, "no_scene_cuts", False):
-        scenes = SceneTimeline(detect_scene_boundaries(args.video))
-        print(f"Scene boundaries: {scenes.describe()}")
+    # Scene signatures are collected during the same sequential decode used
+    # for inference. A rolling overlap catches dissolves spanning two batches.
+    scenes = SceneTimeline([])
+    scene_signatures = []
+    seen_boundaries = set()
 
     frame_number = 0
     frames_with_ball = 0
     pending_events = []
     stop = False
+    scheduled = iter(scheduled_frames(total_frames, fps, target_fps))
+    next_scheduled = next(scheduled, None)
+
+    def update_scenes():
+        nonlocal scenes
+        if getattr(args, "no_scene_cuts", False) or len(scene_signatures) < 2:
+            return
+        local = find_boundaries([signature for _, signature in scene_signatures])
+        start_frame = scene_signatures[0][0]
+        boundaries = list(scenes.boundaries)
+        for boundary in local:
+            absolute = type(boundary)(
+                start_frame + boundary.start,
+                start_frame + boundary.end,
+                boundary.kind,
+                boundary.strength,
+            )
+            key = (absolute.start, absolute.end, absolute.kind)
+            if key not in seen_boundaries:
+                seen_boundaries.add(key)
+                boundaries.append(absolute)
+        scenes = SceneTimeline(sorted(boundaries, key=lambda boundary: boundary.start))
+
+    def process_batch(batch, frame_numbers):
+        nonlocal frames_with_ball, stop
+        skip_offsets = {o for o, number in enumerate(frame_numbers) if scenes.in_transition(number)}
+        reset_offsets = {o for o, number in enumerate(frame_numbers) if scenes.starts_scene(number)}
+        tracks = tracker.get_object_tracks(
+            batch,
+            read_from_stub=False,
+            reset_offsets=reset_offsets,
+            skip_offsets=skip_offsets,
+        )
+        tracker.add_position_to_tracks(tracks)
+
+        for offset, (frame, original_frame) in enumerate(zip(batch, frame_numbers)):
+            single = _frame_tracks(tracks, offset)
+            players = single["players"][0]
+            referees = single["referees"][0]
+            balls = single["ball"][0]
+            ball_bbox = next(iter(balls.values()))["bbox"] if balls else None
+            if ball_bbox is not None:
+                frames_with_ball += 1
+            in_transition = offset in skip_offsets
+            if offset in reset_offsets:
+                pending_events.extend(track_events.reset_scene(original_frame))
+                if pitch_calibrator is not None:
+                    pitch_calibrator.reset()
+            calibration = (
+                pitch_calibrator.update(original_frame, frame)
+                if pitch_calibrator is not None and not in_transition
+                else None
+            )
+            if scoreboard_reader is not None:
+                with metrics.timer("scoreboard_ocr"):
+                    scoreboard_reader.update(original_frame, frame)
+
+            new_events = []
+            if not in_transition:
+                _assign_teams(team_assigner, frame, players)
+                new_events = track_events.update(
+                    original_frame, players, ball_bbox, referees, frame, pitch=calibration
+                )
+                pending_events.extend(new_events)
+                # Only possession candidates can become a scorer. Keeping their
+                # best four crops avoids doing quality work for every player.
+                candidates = {
+                    track_id: player for track_id, player in players.items() if player.get("has_ball")
+                }
+                scorer_identifier.observe_players(original_frame, frame, candidates)
+                _record_ball_possession(scorer_identifier, players, original_frame)
+                if scoreboard_reader is not None and any(
+                    event.get("event") == "shot" for event in new_events
+                ):
+                    scoreboard_reader.trigger_burst(original_frame)
+
+            if event_detector is not None and event_logic is not None:
+                detected_events = event_detector.predict(frame, original_frame)
+                pending_events.extend(
+                    event_logic.update(detected_events, single, original_frame, track_events=track_events)
+                )
+
+            if write_video or show_video:
+                annotated = tracker.draw_annotations([frame], single)[0]
+                _draw_team_labels(annotated, players)
+                if writer is not None:
+                    writer.write(annotated)
+                if show_video:
+                    cv2.imshow("Football Analysis System", annotated)
+                    if cv2.waitKey(1) & 0xFF == ord("q"):
+                        stop = True
+                        return
+
     try:
         while not stop:
             batch = []
-            while len(batch) < FRAME_BATCH_SIZE:
+            batch_numbers = []
+            while len(batch) < FRAME_BATCH_SIZE and next_scheduled is not None:
                 success, frame = capture.read()
                 if not success:
+                    next_scheduled = None
                     break
-                batch.append(frame)
+                original_frame = frame_number
+                if not getattr(args, "no_scene_cuts", False):
+                    scene_started = perf_counter()
+                    scene_signatures.append((original_frame, frame_signature(frame)))
+                    metrics.add_time("scene_analysis", perf_counter() - scene_started)
+                    if len(scene_signatures) > 96:
+                        del scene_signatures[:-64]
+                if original_frame == next_scheduled:
+                    batch.append(frame)
+                    batch_numbers.append(original_frame)
+                    next_scheduled = next(scheduled, None)
+                frame_number += 1
             if not batch:
                 break
-
-            skip_offsets = set()
-            reset_offsets = set()
-            if scenes is not None:
-                skip_offsets = {o for o in range(len(batch)) if scenes.in_transition(frame_number + o)}
-                reset_offsets = {o for o in range(len(batch)) if scenes.starts_scene(frame_number + o)}
-            tracks = tracker.get_object_tracks(
-                batch,
-                read_from_stub=False,
-                reset_offsets=reset_offsets,
-                skip_offsets=skip_offsets,
-            )
-            tracker.add_position_to_tracks(tracks)
-
-            for offset, frame in enumerate(batch):
-                single = _frame_tracks(tracks, offset)
-                players = single["players"][0]
-                referees = single["referees"][0]
-                balls = single["ball"][0]
-                ball_bbox = next(iter(balls.values()))["bbox"] if balls else None
-                if ball_bbox is not None:
-                    frames_with_ball += 1
-                in_transition = offset in skip_offsets
-                if offset in reset_offsets:
-                    # A new camera shot: nothing tracked in the old one carries over.
-                    pending_events.extend(track_events.reset_scene(frame_number))
-                    if pitch_calibrator is not None:
-                        pitch_calibrator.reset()
-                calibration = (
-                    pitch_calibrator.update(frame_number, frame)
-                    if pitch_calibrator is not None and not in_transition
-                    else None
-                )
-                if scoreboard_reader is not None:
-                    scoreboard_reader.update(frame_number, frame)
-
-                if not in_transition:
-                    # Inside a crossfade two shots are blended: no team votes,
-                    # no shirt crops, no events.
-                    _assign_teams(team_assigner, frame, players)
-                    scorer_identifier.observe_players(frame_number, frame, players)
-
-                    # Possession, passes, crosses, shots, saves, penalties and
-                    # cards from the tracks themselves.
-                    pending_events.extend(
-                        track_events.update(
-                            frame_number, players, ball_bbox, referees, frame, pitch=calibration
-                        )
-                    )
-                    _record_ball_possession(scorer_identifier, players, frame_number)
-
-                # The learned goal/foul model proposes; the tracks confirm.
-                detected_events = event_detector.predict(frame, frame_number)
-                pending_events.extend(
-                    event_logic.update(
-                        detected_events, single, frame_number, track_events=track_events
-                    )
-                )
-
-                if write_video or show_video:
-                    annotated = tracker.draw_annotations([frame], single)[0]
-                    _draw_team_labels(annotated, players)
-                    if writer is not None:
-                        writer.write(annotated)
-                    if show_video:
-                        cv2.imshow("Football Analysis System", annotated)
-                        if cv2.waitKey(1) & 0xFF == ord("q"):
-                            stop = True
-                            break
-
-                frame_number += 1
+            update_scenes()
+            process_batch(batch, batch_numbers)
 
             if progress_cb is not None:
                 progress_cb(frame_number, total_frames)
@@ -679,6 +810,7 @@ def process_video(args, progress_cb=None):
     pending_events.extend(track_events.finish(frame_number))
     pending_events = _drop_model_fouls_near_track_fouls(pending_events, fps)
     pending_events = _drop_model_goals_near_pitch_goals(pending_events, fps)
+    code_to_team = None
     if scoreboard_reader is not None and scoreboard_reader.active:
         # Score-graphic goals are added to the track, pitch and model goals,
         # not substituted for them: a proposal inside a score change's window
@@ -730,7 +862,12 @@ def process_video(args, progress_cb=None):
     pending_events = withdraw_saves_of_goals(pending_events)
     pending_events.sort(key=lambda event: int(event.get("frame", 0)))
 
-    print(f"Ball selected in {frames_with_ball} of {frame_number} frames")
+    # Shots and saves remain available above as attribution evidence. The web
+    # profile exposes and persists only final, deduplicated goal events.
+    if config.goal_only:
+        pending_events = goal_output_events(pending_events)
+
+    print(f"Ball selected in {frames_with_ball} of {tracker.person_inference_frames} analysed frames")
     if pitch_calibrator is not None:
         stats = pitch_calibrator.summary()
         print(
@@ -749,8 +886,9 @@ def process_video(args, progress_cb=None):
         return 0 if kind == "goal" else 1 if kind in CLIP_EVENT_TYPES else 2
 
     ordered = sorted(pending_events, key=resolution_order)
-    for event in ordered:
-        _resolve_identities(scorer_identifier, event, image_dir, url_prefix)
+    with metrics.timer("scorer_ocr"):
+        for event in ordered:
+            _resolve_identities(scorer_identifier, event, image_dir, url_prefix)
 
     # Goals: fuse the caption, the celebration close-ups and the live read.
     caption_ocr = None
@@ -760,22 +898,32 @@ def process_video(args, progress_cb=None):
         and jersey_reader._ensure_engine()
     ):
         caption_ocr = paddle_ocr_fn(jersey_reader.engine)
-    _improve_goal_scorers(pending_events, scorer_identifier, args.video, fps, height, caption_ocr)
+    with metrics.timer("scorer_ocr"):
+        _improve_goal_scorers(
+            pending_events,
+            scorer_identifier,
+            args.video,
+            fps,
+            height,
+            caption_ocr,
+            extra_ocr_allowance=(0 if config.goal_only else GOAL_SCORER_OCR_ALLOWANCE),
+        )
     for event in pending_events:
         event["description"] = describe_event(event)
 
     # One clip per passage of play, cut at the camera shots, with the source
     # audio; the reel joins them.
-    highlights = export_highlights(
-        args.video,
-        pending_events,
-        fps,
-        getattr(args, "clip_dir", None),
-        getattr(args, "clip_url_prefix", None),
-        boundaries=scenes.boundaries if scenes is not None else (),
-        total_frames=total_frames,
-        reel=not getattr(args, "no_highlight_reel", False),
-    )
+    with metrics.timer("highlights"):
+        highlights = export_highlights(
+            args.video,
+            pending_events,
+            fps,
+            getattr(args, "clip_dir", None),
+            getattr(args, "clip_url_prefix", None),
+            boundaries=scenes.boundaries,
+            total_frames=total_frames,
+            reel=not getattr(args, "no_highlight_reel", False),
+        )
     if highlights["clips"]:
         reel = highlights["reel"]
         print(
@@ -786,8 +934,25 @@ def process_video(args, progress_cb=None):
 
     for event in pending_events:
         print(f"[frame {event.get('frame', 0)}] {event['description']}")
-    event_logic.generate_summary(fps, events=pending_events)
-    return pending_events
+    if event_logic is not None:
+        event_logic.generate_summary(fps, events=pending_events)
+
+    metrics.add_time("person_detection", tracker.person_inference_seconds)
+    metrics.add_time("ball_detection", tracker.ball_inference_seconds)
+    metrics.increment("decoded_frames", frame_number)
+    metrics.increment("analysed_frames", tracker.person_inference_frames)
+    metrics.increment("person_inference_frames", tracker.person_inference_frames)
+    metrics.increment("ball_inference_frames", tracker.ball_inference_frames)
+    if scoreboard_reader is not None:
+        metrics.increment("scoreboard_ocr_calls", scoreboard_reader.ocr_calls)
+    metrics.increment("scorer_ocr_calls", getattr(jersey_reader, "_ocr_calls", 0))
+    score_by_team_id = final_score_by_team(pending_events, scoreboard_reader, code_to_team)
+    result = {
+        "events": pending_events,
+        "score_by_team_id": score_by_team_id,
+        "metrics": metrics.summary(),
+    }
+    return result if getattr(args, "return_pipeline_result", False) else pending_events
 
 
 def main():
