@@ -1,0 +1,169 @@
+{
+  "team_name": "SC Paderborn",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Markus Schubert",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Ruben Müller",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Jonah Sticker",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Nyamekye Awortwie-Grant",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Santiago Castañeda",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Tom Baack",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Oliver Batista Meier",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Luka Đurić",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Rayan Philippe",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Sven Michel",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Nahuel Noll",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Laurin Curda",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Marvin Pieringer",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Albert Millgramm",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Felix Götze",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Jano ter Horst",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Mattes Hansen",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Raphael Obermair",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Niklas Mohr",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Tjark Scheller",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Sebastian Klaas",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Steffen Tigges",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Laurin Ulrich",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Clemens Lippmann",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Stefano Marino",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Florian Pruhs",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Lasse Eickel",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Marcel Hoffmeier",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Deniz Zeitler",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Gabriel Vidović",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Timur Gayret",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 46,
+      "name": "Tristan Zobel",
+      "position": "DF"
+    }
+  ]
+}

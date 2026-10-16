@@ -1,0 +1,149 @@
+{
+  "team_name": "Valencia",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Stole Dimitrievski",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Guido Rodríguez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "José Copete",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Mouctar Diakhaby",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "César Tárrega",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Umar Sadiq",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Arnaut Danjuma",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Javi Guerra",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Hugo Duro",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Harvey Elliott",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Luis Rioja",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Justin de Haas",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Cristian Rivero",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "José Gayà",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Aliou Dieng",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Diego López",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Pepelu",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Dani Raba",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Dimitri Foulquier",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Jesús Vázquez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Arnau Martínez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Filip Ugrinić",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Pablo Maffeo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Kayne van Oevelen",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 27,
+      "name": "David Otorbi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Aaron Mayol",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Iker Córdoba",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Ryūnosuke Satō",
+      "position": "MF"
+    }
+  ]
+}

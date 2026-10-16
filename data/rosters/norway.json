@@ -1,0 +1,139 @@
+{
+  "team_name": "Norway",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Orjan Nyland",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Morten Thorsby",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Kristoffer Ajer",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Leo Skiri Ostigard",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "David Moller Wolfe",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Patrick Berg",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Alexander Sorloth",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Sander Berge",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Erling Haaland",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Martin Odegaard",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Jorgen Strand Larsen",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Sander Tangvik",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Egil Selvik",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Fredrik Aursnes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Fredrik Andre Bjorkan",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Marcus Holmgren Pedersen",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Torbjorn Heggem",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Kristian Thorstvedt",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Thelo Aasgaard",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Antonio Nusa",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Andreas Schjelderup",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Oscar Bobb",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Jens Petter Hauge",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Sondre Langas",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Henrik Falchener",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Julian Ryerson",
+      "position": "DF"
+    }
+  ]
+}

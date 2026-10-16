@@ -1,6 +1,4 @@
 from collections import deque
-import os
-import pickle
 import sys
 from time import perf_counter
 
@@ -35,10 +33,12 @@ DETECT_BATCH_SIZE = 20
 # than the ball, and perspective stretches this, so the band is wide.
 BALL_MIN_SIZE_RATIO = 0.05
 BALL_MAX_SIZE_RATIO = 0.50
-# How far the ball may jump between consecutive frames, in player heights. A
-# 30 m/s shot at 25 fps covers roughly 0.7 heights per frame.
-BALL_GATE_HEIGHTS_PER_FRAME = 1.6
-BALL_HISTORY_FRAMES = 12
+# How far the ball may travel, in player heights per second. A 30 m/s shot
+# covers roughly 17 heights a second; the gate was tuned as 1.6 heights per
+# frame at 25 fps. It is per second because the API analyses 10-12 frames a
+# second, and a per-frame gate tuned at 25 fps rejected every fast shot there.
+BALL_GATE_HEIGHTS_PER_SECOND = 40.0
+BALL_HISTORY_SECONDS = 0.5
 
 # Share of the ground patch under a person's feet that must read as turf for
 # them to count as on the pitch. Stewards, photographers and bench staff stand on
@@ -151,7 +151,12 @@ class BallSelector:
     last seen, and a single box is kept.
     """
 
-    def __init__(self, history_frames=BALL_HISTORY_FRAMES):
+    def __init__(self, frame_rate=25.0, history_frames=None):
+        # ``frame_rate`` is the rate select() is called at (the analysis rate).
+        self.frame_rate = max(float(frame_rate or 25.0), 1.0)
+        self.gate_heights_per_frame = BALL_GATE_HEIGHTS_PER_SECOND / self.frame_rate
+        if history_frames is None:
+            history_frames = max(4, int(round(BALL_HISTORY_SECONDS * self.frame_rate)))
         self.history = deque(maxlen=history_frames)
         self.frames_since_seen = 10**6
         self._frame_index = 0
@@ -199,7 +204,7 @@ class BallSelector:
             if predicted is not None and reference > 0:
                 centre = np.asarray(((x1 + x2) / 2.0, (y1 + y2) / 2.0))
                 distance = float(np.linalg.norm(centre - predicted))
-                gate = BALL_GATE_HEIGHTS_PER_FRAME * reference * self.frames_since_seen
+                gate = self.gate_heights_per_frame * reference * self.frames_since_seen
                 if distance > gate:
                     # Too far from the last ball to be the same object, unless the
                     # trail has gone cold and anything plausible is welcome.
@@ -252,7 +257,7 @@ class Tracker:
             frame_rate=int(round(self.frame_rate)),
             minimum_consecutive_frames=2,
         )
-        self.ball_selector = BallSelector()
+        self.ball_selector = BallSelector(self.frame_rate)
         # Per track: [goalkeeper observations, total observations].
         self._role_votes = {}
         # ByteTrack.reset() restarts ids at 1. Ids handed out after a shot
@@ -399,8 +404,6 @@ class Tracker:
     def get_object_tracks(
         self,
         frames,
-        read_from_stub=False,
-        stub_path=None,
         reset_offsets=None,
         skip_offsets=None,
     ):
@@ -410,11 +413,6 @@ class Tracker:
         ``skip_offsets``: frames inside a dissolve - not detected, not tracked,
         returned empty, because boxes on a blend of two shots belong to neither.
         """
-
-        if read_from_stub and stub_path is not None and os.path.exists(stub_path):
-            with open(stub_path, 'rb') as f:
-                tracks = pickle.load(f)
-            return tracks
 
         skip = set(skip_offsets or ())
         resets = set(reset_offsets or ())
@@ -519,10 +517,6 @@ class Tracker:
             ball_bbox = self.ball_selector.select(ball_candidates, median_height)
             if ball_bbox is not None:
                 tracks["ball"][frame_num][1] = {"bbox": ball_bbox}
-
-        if stub_path is not None:
-            with open(stub_path, 'wb') as f:
-                pickle.dump(tracks, f)
 
         return tracks
 

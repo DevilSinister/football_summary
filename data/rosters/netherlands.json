@@ -1,0 +1,139 @@
+{
+  "team_name": "Netherlands",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Bart Verbruggen",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Lutsharel Geertruida",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Marten de Roon",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Virgil van Dijk",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Nathan Ake",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Jan Paul van Hecke",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Justin Kluivert",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Ryan Gravenberch",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Wout Weghorst",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Memphis Depay",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Cody Gakpo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Mats Wieffer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Robin Roefs",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Tijjani Reijnders",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Micky van de Ven",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Guus Til",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Noa Lang",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Donyell Malen",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Brian Brobbey",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Teun Koopmeiners",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Frenkie de Jong",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Denzel Dumfries",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Mark Flekken",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Crysencio Summerville",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Jorrel Hato",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Quinten Timber",
+      "position": "MF"
+    }
+  ]
+}

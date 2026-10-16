@@ -1,0 +1,179 @@
+{
+  "team_name": "Sassuolo",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 3,
+      "name": "Josh Doig",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Fali Candé",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Sebastian Walukiewicz",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Cristian Volpato",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Andrea Ghion",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Kieron Bowie",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Domenico Berardi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Daniel Boloca",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Giacomo Satalino",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Duje Ćaleta-Car",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Fedde Leysen",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Vasilije Adžić",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Nemanja Matić",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Laurs Skjellerup",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Ignace Van Der Brempt",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Jay Idzes",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Lorenzo Nyarko",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Benja Domínguez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Cas Odenthal",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Yeferson Paz",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Rafa Obrador",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Luca Lipani",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Giorgio Vezzosi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Kristian Thorstvedt",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Armand Laurienté",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 46,
+      "name": "Simone Cinquegrano",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Arijanet Muric",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 50,
+      "name": "Darryl Bakola",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 55,
+      "name": "Ibrahim Sulemana",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 70,
+      "name": "Edoardo Pieragnolo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Nicholas Pierini",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 80,
+      "name": "Stefano Turati",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 90,
+      "name": "Ismaël Koné",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 94,
+      "name": "Sebastiano Esposito",
+      "position": "FW"
+    }
+  ]
+}

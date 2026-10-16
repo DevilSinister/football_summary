@@ -1,0 +1,134 @@
+{
+  "team_name": "Celta Vigo",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Altay Bayındır",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Carl Starfelt",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Marcos Alonso",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Abdoulaye Faye",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Sergio Carreira",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Ilaix Moriba",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Borja Iglesias",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Miguel Román",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Ferran Jutglà",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Iago Aspas",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Pablo Durán",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Ionuț Radu",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Aleix Febas",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Álvaro Núñez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Hugo González",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Javi Rueda",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Yoel Lago",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Williot Swedberg",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Javi Rodríguez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Sebastián Cáceres",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Javi Galán",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Hugo Álvarez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Couhaib Driouech",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Iván Villar",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Jones El-Abdellaoui",
+      "position": "FW"
+    }
+  ]
+}

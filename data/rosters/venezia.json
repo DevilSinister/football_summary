@@ -1,0 +1,194 @@
+{
+  "team_name": "Venezia",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Filip Stanković",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Matías Moreno",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Joël Schingtienne",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Bartol Franjić",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Ridgeciano Haps",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Gianluca Busio",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Albion Rrahmani",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Lamine Fanne",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Andrea Adorante",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "John Yeboah",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Thierry Correia",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Juan Jesus",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Rufai Mohammed",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Armel Bella-Kotchap",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Antoine Hainaut",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Simon Sohm",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Richie Sagrado",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Þórir Jóhann Helgason",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Matteo Grandi",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Redouane Halhal",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Toma Bašić",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Saad El Haddad",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Alessio Pozzi",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Lion Lauberbach",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Matteo Dagasso",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Alfred Duncan",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Marin Šverko",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Lorenzo Berardi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Calixte Ligue",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Akor Adams",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 55,
+      "name": "Simone Panada",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 56,
+      "name": "Kornel Lisman",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 70,
+      "name": "Pasquale Mazzocchi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 71,
+      "name": "Kike Pérez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Toni Fernández",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 95,
+      "name": "Ale Gomes",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 96,
+      "name": "Lorenzo Montipò",
+      "position": "GK"
+    }
+  ]
+}

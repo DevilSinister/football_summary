@@ -1,0 +1,164 @@
+{
+  "team_name": "Chelsea",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Emiliano Martínez",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Marco Palestra",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Wesley Fofana",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Valentín Barco",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Maxence Lacroix",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Levi Colwill",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Pedro Neto",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 9,
+      "name": "João Pedro",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Cole Palmer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Jamie Gittens",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Jordan Henderson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Morgan Rogers",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Danny Welbeck",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Jorrel Hato",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Emmanuel Emegha",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Geovany Quenda",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Reece James",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Moisés Caicedo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Malo Gusto",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Teddy Sharman-Lowe",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Pep Chavarría",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Aaron Anselmino",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Reggie Watson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Mahdi Nicoll-Jazuli",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Josh Acheampong",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Olutayo Subuloye",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Mike Penders",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Facundo Buonanotte",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 41,
+      "name": "Estêvão",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Gabriel Slonina",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Roméo Lavia",
+      "position": "MF"
+    }
+  ]
+}

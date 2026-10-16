@@ -1,0 +1,139 @@
+{
+  "team_name": "Belgium",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Thibaut Courtois",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Zeno Debast",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Arthur Theate",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Brandon Mechele",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Maxim De Cuyper",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Axel Witsel",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Kevin De Bruyne",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Youri Tielemans",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Romelu Lukaku",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Leandro Trossard",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Jeremy Doku",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Senne Lammens",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Mike Penders",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Dodi Lukebakio",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Thomas Meunier",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Koni De Winter",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Charles De Ketelaere",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Joaquin Seys",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Diego Moreira",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Hans Vanaken",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Timothy Castagne",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Alexis Saelemaekers",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Nicolas Raskin",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Amadou Onana",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Nathan Ngoy",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Matias Fernandez-Pardo",
+      "position": "FW"
+    }
+  ]
+}

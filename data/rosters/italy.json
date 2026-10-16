@@ -1,0 +1,124 @@
+{
+  "team_name": "Italy",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Gianluigi Donnarumma",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Michael Kayode",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Matteo Ruggeri",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Alessandro Romano",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Riccardo Calafiori",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Alessandro Bastoni",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Nicolo Cambiaghi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Sandro Tonali",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Francesco Pio Esposito",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Nicolo Fagioli",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Gianluca Scamacca",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Marco Carnesecchi",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Guglielmo Vicario",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Samuele Inacio",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Issa Doumbia",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Davide Frattesi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Daniel Maldini",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Nicolo Barella",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Giorgio Scalvini",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Sebastiano Esposito",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Antonio Vergara",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Giovanni Di Lorenzo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Gianluca Mancini",
+      "position": "DF"
+    }
+  ]
+}

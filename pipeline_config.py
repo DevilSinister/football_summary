@@ -15,8 +15,21 @@ class PipelineConfig:
     high_resolution_size: int = 960
     high_resolution_height: int = 721
     goal_only: bool = False
-    use_legacy_event_model: bool = True
+    # The old LSTM (final_model_80.pth) is kept for comparison only; its goal
+    # score is noise on every measured clip. main.py --legacy-event-model.
+    use_legacy_event_model: bool = False
     use_pitch_calibration: bool = True
+    # The E2E-Spot action-spotting model (models/checkpoint_088.pt). It needs
+    # every decoded frame offered to it but only scores spotting_sample_fps.
+    # Commentary speech to text (faster-whisper) is the primary source of
+    # player names: scorer, assister, fouler and the player on the ball.
+    use_commentary: bool = True
+    whisper_model: str = "small"
+    # Event types a goal-only profile returns; the rest stay internal evidence.
+    output_events: tuple = ("goal",)
+    use_spotting: bool = True
+    spotting_sample_fps: float = 2.0
+    spotting_min_confidence: float = 0.1
     detect_fouls: bool = True
     detect_cards: bool = True
     scoreboard_scan_seconds: float = 2.0
@@ -36,10 +49,15 @@ class PipelineConfig:
             goal_only=True,
             use_legacy_event_model=False,
             use_pitch_calibration=False,
-            detect_fouls=False,
+            # Owner, 2026-10-15: web results show goals and fouls; foul
+            # detection is rule-based and gets its accuracy pass next.
+            detect_fouls=True,
+            output_events=("goal", "foul"),
             detect_cards=False,
             identity_crops=4,
-            jersey_ocr_calls=32,
+            # Shirt reading is the second source of names after commentary:
+            # every goal and foul participant gets reads, not just the scorer.
+            jersey_ocr_calls=64,
             debug_ocr=debug_ocr,
         )
 

@@ -1,0 +1,149 @@
+{
+  "team_name": "Toulouse FC",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 2,
+      "name": "Rasmus Nicolaisen",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Mark McKenzie",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Seny Koumbassa",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Alexis Vossah",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Julian Vignolo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Thomas Jorgensen",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Santiago Hidalgo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Sion Oppong",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Christ Tape",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Jacen Russell-Rowe",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Niko Sigur",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Aron Donnum",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Guillaume Restes",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Abu Francis",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Mathis Amougou",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "David Odogu",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Casper Tengstedt",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Enzo Faty",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Rafik Messali",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Cristian Casseres Jr",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Ylies Aradj",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Mathis Saka",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Niklas Schmidt",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Ilyas Azizi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Aymen Amaaouch",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 60,
+      "name": "Mathys Niflore",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Mario Sauer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 94,
+      "name": "Ismail Diallo",
+      "position": "DF"
+    }
+  ]
+}

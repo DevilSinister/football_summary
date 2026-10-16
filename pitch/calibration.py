@@ -9,7 +9,7 @@ several keypoints independently agree:
 * the refit on those inliers leaves a median residual under ``max_error_m``,
 * the bottom-centre of the image (where the camera looks) lands on the pitch.
 
-Measured on 2026-09-23 with ``models/football_field_best.pt`` (trained with
+Measured on 2026-09-23 with the since-replaced ``football_field_best.pt`` (trained with
 mosaic on): keypoint confidences never exceeded 0.35 and RANSAC kept only the
 minimal four points, so no frame passes. The gate is what keeps those fits from
 steering the event rules; a model trained without mosaic should clear it.

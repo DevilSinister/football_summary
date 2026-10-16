@@ -1,0 +1,149 @@
+{
+  "team_name": "Bournemouth",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Djordje Petrovic",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Julián Araujo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Adrien Truffert",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Lewis Cook",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "James Hill",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Julio Soler",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "David Brooks",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Alex Scott",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Evanilson",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Ryan Christie",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Ben Gannon-Doak",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Tyler Adams",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "António Silva",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Adam Smith",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Marcus Tavernier",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Fraser Forster",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Bafodé Diakité",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Justin Kluivert",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Michele Di Gregorio",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Amine Adli",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Juanlu Sánchez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Alex Tóth",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Max Aarons",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Daniel Jebbison",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Álvaro Rodríguez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Rayan",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Veljko Milosavljevic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 55,
+      "name": "Mack Allan",
+      "position": "GK"
+    }
+  ]
+}

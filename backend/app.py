@@ -10,7 +10,7 @@ from sqlalchemy import select
 from .database import Base, SessionLocal, engine
 from .schema import ensure_schema
 from .models import User
-from .routers import processing, users
+from .routers import players, processing, users
 
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -35,6 +35,7 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 app.include_router(users.router)
 app.include_router(processing.router)
+app.include_router(players.router)
 
 
 @app.on_event("startup")

@@ -1,0 +1,154 @@
+{
+  "team_name": "Leeds United",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "James Trafford",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Jayden Bogle",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Gabriel Gudmundsson",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Ethan Ampadu",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Tarik Muharemovic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Joe Rodon",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Daniel James",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Sean Longstaff",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Dominic Calvert-Lewin",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Harry Wilson",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Brenden Aaronson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Lukas Nmecha",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Jaka Bijol",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Michael Zetterer",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Anton Stach",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Noah Okafor",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Alex Cairns",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Ao Tanaka",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Jean-Mattéo Bahoya",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 24,
+      "name": "James Justin",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Melvin Bard",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Nico Elvedi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Ilia Gruev",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 47,
+      "name": "Rhys Chadwick",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 48,
+      "name": "Rory Mahady",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Darryl Ombang",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 50,
+      "name": "Alfie Cresswell",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 65,
+      "name": "Jayden Lienou",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 72,
+      "name": "Callum Mills",
+      "position": "MF"
+    }
+  ]
+}

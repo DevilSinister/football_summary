@@ -1,0 +1,144 @@
+{
+  "team_name": "Como",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Jean Butez",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Marc-Oliver Kempf",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Álex Valle",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Jacobo Ramón",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Máximo Perrone",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Luis Milla",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Lucas Da Cunha",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Maxence Caqueret",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Anastasios Douvikas",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Nico Paz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Assane Diao",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Alberto Dossena",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Adrian Lahdo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Kaiki Bruno",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Jesús Rodríguez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Edoardo Goldaniga",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Martin Baturina",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Samuele Ricci",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Mauro Vigorito",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Yan Couto",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Ivan Smolčić",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Mattia Liberali",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Jayden Addai",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 53,
+      "name": "Willy Kambwala",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 90,
+      "name": "Moise Kean",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 97,
+      "name": "Robert Sánchez",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 99,
+      "name": "Trevoh Chalobah",
+      "position": "DF"
+    }
+  ]
+}

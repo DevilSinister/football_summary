@@ -1,0 +1,149 @@
+{
+  "team_name": "ESTAC Troyes",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Zacharie Boucher",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Lucas Maronnier",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Anis Ouzenadji",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Junior Diaz",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Paolo Gozzi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Adrien Monfray",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Kandet Diawara",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Mouhamed Diop",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Jeremy Le Douaron",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Merwan Ifnaoui",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Iron Gomis",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Ismael Boura",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Antoine Mille",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Renaud Ripart",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Hugo Picard",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Timothee Nkada",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Alexandre Phliponeau",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Karim Dermane",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Noah Donkor",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Patrick Beach",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Ibrahim Traore",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Roman Murcy",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Idrissa Soukouna",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Christ Batola",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Yacouba Kone",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Hillel Konate",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 41,
+      "name": "Enisio Carneiro",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Yvann Titi",
+      "position": "DF"
+    }
+  ]
+}

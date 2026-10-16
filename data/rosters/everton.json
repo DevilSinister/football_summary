@@ -1,0 +1,139 @@
+{
+  "team_name": "Everton",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Jordan Pickford",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Ainsley Maitland-Niles",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Jarrad Branthwaite",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Michael Keane",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "James Tarkowski",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Kiernan Dewsbury-Hall",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Jack Grealish",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Thierno Barry",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Mark Travers",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Jake O'Brien",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Vitalii Mykolenko",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Tyrique George",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Tyler Dibling",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Brennan Johnson",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Christian Nørgaard",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Charly Alcaraz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Hayden Hackney",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Tom King",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Merlin Röhl",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "James Garner",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Harrison Armstrong",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 50,
+      "name": "George Pickford",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 58,
+      "name": "Braiden Graham",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 67,
+      "name": "Martin Sherif",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 76,
+      "name": "Malik Olayiwola",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 81,
+      "name": "Harvey Foster",
+      "position": "MF"
+    }
+  ]
+}

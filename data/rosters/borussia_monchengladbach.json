@@ -1,0 +1,159 @@
+{
+  "team_name": "Borussia Mönchengladbach",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Moritz Nicolas",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Fabio Chiarodia",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Isac Lidberg",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Kevin Diks",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Jan Leszczyński",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Kō Itakura",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Kevin Stöger",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Enzo Leopold",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Franck Honorat",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Florian Neuhaus",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Tim Kleindienst",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Daiki Hashioka",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Philipp Sander",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Jens Castrop",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Shūto Machino",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Nicolas Kühn",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "David Herold",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Tobias Sippel",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Yukhym Konoplya",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Jan Olschowsky",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Robin Hack",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Lukas Ullrich",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Fritz Fleck",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Joe Scally",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Daniel Batz",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Mathieu Nguefack",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Wael Mohya",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Hugo Bolin",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Iaia Manco Danfa",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 47,
+      "name": "Zento Uno",
+      "position": "MF"
+    }
+  ]
+}

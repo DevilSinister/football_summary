@@ -1,26 +1,170 @@
 {
   "team_name": "Bayern Munich",
-  "short_code": "BAY",
-  "aliases": ["bayern munchen", "bayern", "fc bayern munchen", "bay"],
-  "season": "2025-26",
-  "source": "authored from model knowledge (cutoff May 2026) - verify before trusting",
-  "needs_review": true,
+  "aliases": [
+    "bayern munchen",
+    "bayern",
+    "fc bayern munchen",
+    "bay"
+  ],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
   "players": [
-    { "jersey_no": 1,  "name": "Manuel Neuer",       "position": "GK" },
-    { "jersey_no": 2,  "name": "Dayot Upamecano",    "position": "DF" },
-    { "jersey_no": 4,  "name": "Jonathan Tah",       "position": "DF" },
-    { "jersey_no": 6,  "name": "Joshua Kimmich",     "position": "MF" },
-    { "jersey_no": 7,  "name": "Serge Gnabry",       "position": "FW" },
-    { "jersey_no": 9,  "name": "Harry Kane",         "position": "FW" },
-    { "jersey_no": 10, "name": "Jamal Musiala",      "position": "MF" },
-    { "jersey_no": 14, "name": "Luis Diaz",          "position": "FW" },
-    { "jersey_no": 17, "name": "Michael Olise",      "position": "FW" },
-    { "jersey_no": 19, "name": "Alphonso Davies",    "position": "DF" },
-    { "jersey_no": 21, "name": "Sacha Boey",         "position": "DF" },
-    { "jersey_no": 22, "name": "Raphael Guerreiro",  "position": "DF" },
-    { "jersey_no": 24, "name": "Sven Ulreich",       "position": "GK" },
-    { "jersey_no": 27, "name": "Konrad Laimer",      "position": "MF" },
-    { "jersey_no": 42, "name": "Aleksandar Pavlovic","position": "MF" },
-    { "jersey_no": 45, "name": "Nicolas Jackson",    "position": "FW" }
-  ]
+    {
+      "jersey_no": 1,
+      "name": "Manuel Neuer",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Dayot Upamecano",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Kim Min-jae",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Jonathan Tah",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Joshua Kimmich",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Serge Gnabry",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Tom Bischof",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Harry Kane",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Jamal Musiala",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Nathaniel Brown",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Luis Díaz",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Michael Olise",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Alphonso Davies",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Hiroki Itō",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Sacha Boey",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Sven Ulreich",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Konrad Laimer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Cassiano Kiala",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Ismael Saibari",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Jannis Bärtl",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 38,
+      "name": "David Podar-Știube",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Bara Sapoko Ndiaye",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Jonas Urbig",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Lennart Karl",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 43,
+      "name": "Filip Pavić",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Josip Stanišić",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Aleksandar Pavlović",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 46,
+      "name": "Tim Binder",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 47,
+      "name": "David Santos Daiber",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 48,
+      "name": "Bastian Assomo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Maycon Cardozo",
+      "position": "FW"
+    }
+  ],
+  "short_code": "BAY"
 }

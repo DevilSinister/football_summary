@@ -1,0 +1,124 @@
+{
+  "team_name": "Angers SCO",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Anthony Lopes",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Carlens Arcus",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Ousmane Camara",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Louis Mouton",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Usman Simbakoli",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Branco van den Boomen",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Prosper Peter",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Amine Sbai",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Harouna Djibirin",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Yassin Belkhdim",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Melvin Zinga",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Joseph Kalulu",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Jim Allevinah",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Amine El Ouazzani",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Marius Louer",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Jordan Lefort",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Emmanuel Biumla",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Anthony Bermont",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Lilian Raolisoa",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Mael Gernigon",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Bane Diatta",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Oumar Pona",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 93,
+      "name": "Haris Belkebla",
+      "position": "MF"
+    }
+  ]
+}

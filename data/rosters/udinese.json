@@ -1,0 +1,149 @@
+{
+  "team_name": "Udinese",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 4,
+      "name": "Sandi Lovrić",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "David Alaba",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Oier Zarraga",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Idrissa Gueye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Jesper Karlström",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Keinan Davis",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Nicolò Zaniolo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Hassane Kamara",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Nicolò Bertola",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "James Abankwah",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Vakoun Bayo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Matteo Palma",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Juan David Arizala",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Mërgim Vojvoda",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Jakub Piotrowski",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Christian Kabasele",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Oumar Solet",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Giorgi Chakvetadze",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Jurgen Ekkelenkamp",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Lennon Miller",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Maduka Okoye",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 41,
+      "name": "Bartosz Mrozek",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Giulio Vinciati",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 46,
+      "name": "Unai Gómez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 59,
+      "name": "Alessandro Zanoli",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Enzo Ebosse",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 91,
+      "name": "Lazar Jovanović",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 93,
+      "name": "Daniele Padelli",
+      "position": "GK"
+    }
+  ]
+}

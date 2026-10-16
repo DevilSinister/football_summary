@@ -1,0 +1,144 @@
+{
+  "team_name": "Bologna",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Łukasz Skorupski",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Emil Holm",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Arthur Theate",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Tommaso Pobega",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Eivind Helland",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Nikola Moro",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Riccardo Orsolini",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Mikel Amondarain",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Artem Dovbyk",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Federico Bernardeschi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Samuel Mbangula",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Torbjørn Heggem",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Nicolò Casale",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Oussama El Azzouzi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Marco Libra",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Lewis Ferguson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Nadir Zortea",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Jens Odgaard",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Jay Enem",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Rahim Alhassane",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Massimo Pessina",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Nicolò Cambiaghi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Lorenzo De Silvestri",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Juan Miranda",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 41,
+      "name": "Martin Vitík",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 72,
+      "name": "Ukko Happonen",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 91,
+      "name": "Roberto Piccoli",
+      "position": "FW"
+    }
+  ]
+}

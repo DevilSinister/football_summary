@@ -1,0 +1,144 @@
+{
+  "team_name": "TSG Hoffenheim",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Oliver Baumann",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Robin Hranáč",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Sean Dulic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Ozan Kabak",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Leon Avdullahu",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Patrick Wimmer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Max Moerstedt",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Adam Hložek",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Fisnik Asllani",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Bernardo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Adam Daghim",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Valentin Gendrey",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Luis Engelns",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Nathan De Cat",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Wouter Burger",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Tim Lemperle",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Bambasé Conté",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Albian Hajdari",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Alexander Prass",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Andrej Kramarić",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Kōki Machida",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Natnael Abraha",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Cajetan Lenz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Vladimír Coufal",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Lúkas Petersson",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Luca Philipp",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Mats Rots",
+      "position": "DF"
+    }
+  ]
+}

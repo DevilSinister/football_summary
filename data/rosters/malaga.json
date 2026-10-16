@@ -1,0 +1,149 @@
+{
+  "team_name": "Málaga",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Alfonso Herrero",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Jens Cajuste",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Carlos Puga",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Einar Galilea",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Álex Pastor",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Ramón Enríquez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Haitam Abaida",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Carlos Dotor",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Chupete",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "David Larrubia",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Joaquín Muñoz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "José Salinas",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Carlos López",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Rafa Rodríguez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Ángel Recio",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Diego Murillo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Eneko Jauregi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Pablo Martínez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Juan Cruz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Fernando Calero",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Adrián Niño",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Dani Lorenzo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Izan Merino",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Julen Lobete",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Juan Berrocal",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Rafita",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Aarón Ochoa",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Adam Aznou",
+      "position": "DF"
+    }
+  ]
+}

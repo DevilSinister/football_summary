@@ -1,0 +1,129 @@
+{
+  "team_name": "Inter",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Josep Martínez",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Aleksandar Stanković",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "John Stones",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Piotr Zieliński",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Petar Sučić",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Marcus Thuram",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Lautaro Martínez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Luis Henrique",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Raffaele Di Gennaro",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Ange-Yoan Bonny",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Andy Diouf",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Hakan Çalhanoğlu",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Curtis Jones",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Henrikh Mkhitaryan",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Nicolò Barella",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Manuel Akanji",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Benjamin Pavard",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Carlos Augusto",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Yann Bisseck",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Federico Dimarco",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Ivan Provedel",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 94,
+      "name": "Francesco Pio Esposito",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 95,
+      "name": "Alessandro Bastoni",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 99,
+      "name": "Djed Spence",
+      "position": "DF"
+    }
+  ]
+}

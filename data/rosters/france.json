@@ -1,0 +1,139 @@
+{
+  "team_name": "France",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Brice Samba",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Malo Gusto",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Lucas Digne",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Dayot Upamecano",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Jules Kounde",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Manu Kone",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Ousmane Dembele",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Aurelien Tchouameni",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Marcus Thuram",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Kylian Mbappe",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Michael Olise",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Bradley Barcola",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "N'Golo Kante",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Adrien Rabiot",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Ibrahima Konate",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Mike Maignan",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 17,
+      "name": "William Saliba",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Warren Zaire-Emery",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Theo Hernandez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Desire Doue",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Lucas Hernandez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Jean-Philippe Mateta",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Robin Risser",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Rayan Cherki",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Maghnes Akliouche",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Maxence Lacroix",
+      "position": "DF"
+    }
+  ]
+}

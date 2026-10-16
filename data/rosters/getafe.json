@@ -1,0 +1,124 @@
+{
+  "team_name": "Getafe",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Jiří Letáček",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Dakonam Djené",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Davinchi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Saba Sazonov",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Abdel Abqar",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Mario Martín",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Juanmi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Nemanja Gudelj",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Borja Mayoral",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Martín Satriano",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Ramon Terrats",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "David Soria",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Dani Carvajal",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Sebastián Boselli",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Francho Serrano",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Kiko Femenía",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Enes Ünal",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Iván Azón",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Andrés García",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Johan Mojica",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Orel Mangala",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Zaid Romero",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Jean Ives Valou",
+      "position": "DF"
+    }
+  ]
+}

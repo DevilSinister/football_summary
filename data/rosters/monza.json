@@ -1,0 +1,164 @@
+{
+  "team_name": "Monza",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Noel Törnqvist",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Saba Goglichidze",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Lorenzo Lucchesi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Jan Ziółkowski",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Yvan Maye",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Valentin Antov",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Ricardo Mangas",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Manga Foe Ondoa",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Gustavo Varela",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Patrick Cutrone",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Omari Forson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Ebenezer Akinsanmiro",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Cyril Ngonge",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Keita Baldé",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Samuele Birindelli",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Demba Thiam",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Leonardo Colombo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Exequiel Zeballos",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Adam Bakoune",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Patrick Ciurria",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Idrissa Touré",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Andrea Colpani",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Matteo Pessina",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 43,
+      "name": "Aljaž Strajnar",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Andrea Carboni",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 46,
+      "name": "Jay Robinson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 47,
+      "name": "Dany Mota",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 60,
+      "name": "Eddy Kouadio",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 70,
+      "name": "Kevin Martins",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 80,
+      "name": "Mathis Mout",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 90,
+      "name": "Michael Folorunsho",
+      "position": "MF"
+    }
+  ]
+}

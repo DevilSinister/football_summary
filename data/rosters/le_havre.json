@@ -1,0 +1,134 @@
+{
+  "team_name": "Le Havre AC",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 5,
+      "name": "Ahmed Touba",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Junior Mwanga",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Amir Richardson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Josh Maja",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Felix Mambimbi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Elias Jelert",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Rassoul Ndiaye",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Ayumu Seko",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Arnaud Bodart",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Kaito Mizuta",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Joan Tincres",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Djibril Ouziad",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Vincent Sasso",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Guy-Noel Zohouri",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Mbwana Samatta",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Simon Ebonog",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Enzo Koffi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Stephan Zagadou",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Sota Nakamura",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Timothee Pembele",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Rayan Fofana",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Ismail Bouneb",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Lionel Mpasi",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 78,
+      "name": "Daren Mosengo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 93,
+      "name": "Gauthier Gallon",
+      "position": "GK"
+    }
+  ]
+}

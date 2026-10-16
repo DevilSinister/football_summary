@@ -421,6 +421,7 @@ def _persist_match(
                         team_confidence=actor.get("team_confidence"),
                         jersey_confidence=actor.get("jersey_confidence"),
                         name_confidence=actor.get("name_confidence"),
+                        role=actor.get("role"),
                     )
                 )
             if event_type == "goal" and play is not None and final_score is None:
@@ -452,6 +453,26 @@ def _team_codes(name: str) -> str:
             return ",".join(sorted(codes))
     except Exception:
         return ""
+
+
+def _db_squad(name: str) -> list[dict]:
+    """The team's players from the database ([] when unknown or unreachable).
+
+    The pipeline names players from this: commentary mentions, shirt numbers,
+    and the number-one keeper for saves (players.position = 'GK').
+    """
+    try:
+        with SessionLocal() as db:
+            team = find_team(db, name)
+            if team is None:
+                return []
+            return [
+                {"jersey_no": p.jersey_no, "name": p.name, "position": p.position}
+                for p in team.players
+                if p.jersey_no is not None and p.name
+            ]
+    except Exception:
+        return []
 
 
 def _process_job(job_id: str) -> None:
@@ -497,9 +518,12 @@ def _process_job(job_id: str) -> None:
             ball_model_instance=model_cache.yolo(ball_path) if ball_path.is_file() else None,
             ocr_engine=ocr_engine,
             pipeline_config=config,
+            spotting_bundle=model_cache.spotting(),
+            reid_embedder=model_cache.reid(),
+            whisper_model_instance=model_cache.whisper(),
+            squads={1: _db_squad(job["team_a_name"]), 2: _db_squad(job["team_b_name"])},
             confirmed_team_centers=True,
             return_pipeline_result=True,
-            event_model=str(PROJECT_ROOT / "models" / "final_model_80.pth"),
             team_a_name=job["team_a_name"],
             team_a_color=job["team_a_color"],
             team_b_name=job["team_b_name"],
@@ -547,12 +571,23 @@ def _process_job(job_id: str) -> None:
                 continue
             scorer = event.get("scorer") or {}
             team_id = int(scorer.get("team_id") or 0)
+            assister = next((a for a in event.get("actors") or [] if a.get("role") == "assister"), None)
             player_results.append(
                 {
                     "team_name": team_names.get(team_id),
                     "jersey_number": scorer.get("jersey_number"),
                     "player_name": scorer.get("player_name"),
                     "player_image": scorer.get("player_image"),
+                    "name_source": scorer.get("identity_source"),
+                    "assister": (
+                        {
+                            "jersey_number": assister.get("jersey_number"),
+                            "player_name": assister.get("player_name"),
+                            "name_source": assister.get("identity_source"),
+                        }
+                        if assister
+                        else None
+                    ),
                     "time_seconds": int(event.get("frame", 0)) / max(fps, 1.0),
                     "clip_url": event.get("clip_url"),
                 }

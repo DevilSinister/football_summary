@@ -1,0 +1,139 @@
+{
+  "team_name": "Spain",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "David Raya",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Marc Pubill",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Alejandro Grimaldo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Eric Garcia",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Marcos Llorente",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Mikel Merino",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Ferran Torres",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Fabian Ruiz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Gavi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Dani Olmo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Yeremy Pino",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Pedro Porro",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Joan Garcia",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Aymeric Laporte",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Alex Baena",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Rodri",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Nico Williams",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Martin Zubimendi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Lamine Yamal",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Pedri",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Mikel Oyarzabal",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Pau Cubarsi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Unai Simon",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Marc Cucurella",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Victor Munoz",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Borja Iglesias",
+      "position": "FW"
+    }
+  ]
+}

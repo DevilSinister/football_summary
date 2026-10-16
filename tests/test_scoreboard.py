@@ -208,9 +208,19 @@ class AttributionTests(unittest.TestCase):
         self.assertEqual(evidence, [shot])
 
     def test_a_shot_outside_the_window_is_not_used(self):
-        goals, _ = attribute_goals([self.GOAL], self.CODES, {"MCI": 2}, self.NAMES, [self.shot(10, 2, 31)], 25.0)
+        # Last old-score read at frame 400; with the graphic's lag and padding
+        # the window opens at 400 - 7 s * 25 = 225, so a shot at 10 is long gone.
+        late = ScoreGoal("MCI", 500, 400, {"POR": 0, "MCI": 0}, {"POR": 0, "MCI": 1})
+        goals, _ = attribute_goals([late], self.CODES, {"MCI": 2}, self.NAMES, [self.shot(10, 2, 31)], 25.0)
         self.assertEqual(goals[0]["participants"], [])
         self.assertEqual(goals[0]["details"]["attribution"], "scoreboard only")
+
+    def test_a_shot_just_before_the_graphic_still_showed_the_old_score_is_used(self):
+        # Regression (test.mp4, 2026-10-14): the graphic read 0-0 one second
+        # after the ball was in the net; the shot was 3 s before that read.
+        late = ScoreGoal("MCI", 500, 400, {"POR": 0, "MCI": 0}, {"POR": 0, "MCI": 1})
+        goals, _ = attribute_goals([late], self.CODES, {"MCI": 2}, self.NAMES, [self.shot(325, 2, 31)], 25.0)
+        self.assertEqual(goals[0]["participants"][0]["track_id"], 31)
 
     def test_a_misread_kit_does_not_lose_the_scorer(self):
         goals, _ = attribute_goals([self.GOAL], self.CODES, {"MCI": 2, "POR": 1}, self.NAMES, [self.shot(200, 1, 12)], 25.0)
@@ -296,6 +306,62 @@ class MergeBoardGoalsTests(unittest.TestCase):
         )
         self.assertEqual([e["frame"] for e in duplicates], [1000])
         self.assertIn(400, [e["frame"] for e in merged])
+
+
+# The 2026 LaLiga bug at 1080p, Levante-Sevilla 56:43 (boxes from PaddleOCR):
+# crest and clock on the left, codes stacked, scores on the right.
+LEV_BOX = (186, 66, 231, 99)
+SEV_BOX = (187, 124, 232, 155)
+
+
+class LaLigaBugTests(unittest.TestCase):
+    def test_the_clocks_minutes_are_not_the_lower_score(self):
+        # "56:19" read split: "19" sits nearer SEV than SEV's own "2" does.
+        tokens = [tok("LEV", LEV_BOX), tok("1", (268, 63, 284, 104)), tok("19", (140, 124, 175, 157)),
+                  tok("SEV", SEV_BOX), tok("2", (262, 125, 290, 153))]
+        self.assertEqual(parse_tokens(tokens).scores, (1, 2))
+
+    def test_a_missed_score_is_no_reading_not_the_clock(self):
+        # The thin "1" is often not read; the clock must not stand in for it.
+        tokens = [tok("LEV", LEV_BOX), tok("19", (140, 124, 175, 157)), tok("SEV", SEV_BOX),
+                  tok("2", (262, 125, 290, 153))]
+        self.assertIsNone(parse_tokens(tokens))
+
+    def test_codes_come_from_the_first_confirmed_score_not_the_first_read(self):
+        # The package opens on a full-time card read once as "LEV 3 3 SEL".
+        tracker = ScoreTracker(confirm_reads=2)
+        tracker.observe(500, reading((3, 3), codes=("LEV", "SEL")))
+        tracker.observe(4100, reading((0, 1), codes=("LEV", "SEV")))
+        tracker.observe(4200, reading((0, 1), codes=("LEV", "SEV")))
+        self.assertEqual(tracker.state, {"LEV": 0, "SEV": 1})
+        tracker.observe(4850, reading((1, 1), codes=("LEV", "SEV")))
+        tracker.observe(4900, reading((1, 1), codes=("LEV", "SEV")))
+        self.assertEqual([goal.code for goal in tracker.goals], ["LEV"])
+
+    def test_a_permissive_scan_snaps_a_misread_code_to_the_expected_one(self):
+        reader = ScoreboardReader(lambda image: [], 25.0, (1080, 1920), expected_codes=["LEV", "SEV"])
+        self.assertEqual(reader._snap(("LEV", "SEL")), ("LEV", "SEV"))
+        self.assertEqual(reader._snap(("ABC", "SEL")), ("ABC", "SEV"))
+
+    def test_a_region_read_once_is_given_up_quickly(self):
+        # A full-time card at the bottom is read once and goes; the real bug is
+        # top left. The reader must not sit on the empty corner for a minute.
+        fps = 25.0
+        frames = {"card": True}
+
+        def fake_ocr(image):
+            if frames["card"]:
+                return [("LEV 3 3 SEV", 0.95, (60.0, 40.0, 400.0, 80.0))]
+            return []
+
+        reader = ScoreboardReader(fake_ocr, fps, (1080, 1920), expected_codes=["LEV", "SEV"])
+        frame = np.zeros((1080, 1920, 3), dtype=np.uint8)
+        reader.update(0, frame)
+        self.assertIsNotNone(reader.region)
+        frames["card"] = False
+        for number in range(1, int(12 * fps)):
+            reader.update(number, frame)
+        self.assertIsNone(reader.region)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,149 @@
+{
+  "team_name": "FC Augsburg",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Finn Dahmen",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Calvin Brackelmann",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Han-Noah Massengo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Chrislain Matsima",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Jeffrey Gouweleeuw",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Seol Young-woo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Sima Suso",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Rodrigo Ribeiro",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Mert Kömür",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Michael Gregoritsch",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Yannik Keitel",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Steve Mounié",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Hennes Behrens",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Tim Breithaupt",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Robin Fellhauer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Alexis Claude-Maurice",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Arijon Ibrahimović",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Nediljko Labrović",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Faik Sakar",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Marius Wolf",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Anton Kade",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Fabian Rieder",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Juma Bah",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Tim Schnitzer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Uchenna Ogundu",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Noahkai Banks",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Mahmut Küçükşahin",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 48,
+      "name": "Tom Wisbereit",
+      "position": "GK"
+    }
+  ]
+}

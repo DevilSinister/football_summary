@@ -1,0 +1,129 @@
+{
+  "team_name": "Racing Santander",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Simon Eriksson",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Álvaro Mantilla",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Aarón Martín",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Manu Hernando",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Pablo Ramón",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Íñigo Sainz-Maza",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Giorgi Guliashvili",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "André Almeida",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Juan Carlos Arana",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Iñigo Vicente",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Andrés Martín",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Asier Villalibre",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Julen Agirrezabala",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Maguette Gueye",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Pablo García",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Facundo González",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Jorge Salinas",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Matteo Prati",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Iker Luque",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Sergio Canales",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Yassir Zabiri",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Pedro Felipe",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Iván Martín",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Jeanuël Belocian",
+      "position": "DF"
+    }
+  ]
+}

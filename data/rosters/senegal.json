@@ -1,0 +1,139 @@
+{
+  "team_name": "Senegal",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Yehvann Diouf",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Mamadou Sarr",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Kalidou Koulibaly",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Abdoulaye Seck",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Idrissa Gueye",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Pathe Ciss",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Assane Diao",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Lamine Camara",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Bamba Dieng",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Sadio Mane",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Nicolas Jackson",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Cherif Ndiaye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Iliman Ndiaye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Ismail Jakobs",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Krepin Diatta",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Edouard Mendy",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Pape Matar Sarr",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Ismaila Sarr",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Moussa Niakhate",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Ibrahim Mbaye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Habib Diarra",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Bara Sapoko Ndiaye",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Mory Diaw",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Antoine Mendy",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "El Hadji Malick Diouf",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Pape Gueye",
+      "position": "MF"
+    }
+  ]
+}

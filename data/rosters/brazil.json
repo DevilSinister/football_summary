@@ -1,0 +1,139 @@
+{
+  "team_name": "Brazil",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Alisson Becker",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Ederson Silva",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Gabriel",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Marquinhos",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Casemiro",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Alex Sandro",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Vinicius Jr.",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Bruno Guimaraes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Matheus Cunha",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Neymar",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Raphinha",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Weverton",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Danilo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Bremer",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Leo Pereira",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Douglas Santos",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Fabinho",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Danilo Santos",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Endrick",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Lucas Paqueta",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Luiz Henrique",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Gabriel Martinelli",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Ederson",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Roger Ibanez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Igor Thiago",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Rayan",
+      "position": "FW"
+    }
+  ]
+}

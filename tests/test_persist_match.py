@@ -115,6 +115,8 @@ class PersistMatchTests(unittest.TestCase):
             self.assertEqual(occurrences[0].end_time, 2.4)
             self.assertEqual(occurrences[1].detected_jersey_no, 10)
             self.assertIsNone(occurrences[1].detected_player_name)
+            # Each row says which part the player had in the event.
+            self.assertEqual([o.role for o in occurrences], ["passer", "receiver"])
             # The receiver got an unnamed roster slot, ready for a real line-up.
             slot = db.scalar(select(models.Player).where(models.Player.jersey_no == 10))
             self.assertIsNotNone(slot)

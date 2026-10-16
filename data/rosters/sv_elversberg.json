@@ -1,0 +1,149 @@
+{
+  "team_name": "SV Elversberg",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Frank Lehmann",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Nicholas Mickelson",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Florian Le Joncour",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Luis Seifert",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Amara Condé",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Maurice Krattenmacher",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Łukasz Poręba",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Noel Futkeu",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Noah Darvich",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Jason Ceka",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Elias Etringer",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Raif Adam",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Luca Pfeiffer",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Frederik Schmahl",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Lukas Pinckert",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Nicolas Kristof",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Lasse Günther",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Luca Schnellbacher",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Lukas Petkov",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Luca Sirch",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Tim Boss",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Tom Zimmerschied",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Jan Gyamerah",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Maximilian Rohr",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Cole Campbell",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Francis Onyeka",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "David Mokwa",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 43,
+      "name": "Felix Keidel",
+      "position": "DF"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 This repository contains the Footy AI backend.
 
-- **Backend source:** this repository, branch `jugaad`
+- **Backend source:** this repository, branch `jugaad2.0` (earlier work on `jugaad`)
 - **Frontend source:** `https://github.com/DevilSinister/footyai.git`, branch `sinister/experimental`
 
 Agents working on the frontend must pull the backend changes from the `jugaad`

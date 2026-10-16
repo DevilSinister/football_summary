@@ -1,0 +1,129 @@
+{
+  "team_name": "Nottingham Forest",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 2,
+      "name": "Ousmane Diomande",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Neco Williams",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Murillo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Ibrahim Sangaré",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Callum Hudson-Odoi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Nicolás Domínguez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Chris Wood",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Morgan Gibbs-White",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Igor Jesus",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "John Victor",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Dan Ndoye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Arnaud Kalimuendo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Liam Delap",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Xaver Schlager",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Ryan Yates",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Jair Cunha",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "James McAtee",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Luca Netz",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Matz Sels",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Daniel Muñoz",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Nikola Milenkovic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Steven Benda",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Ola Aina",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Nicolò Savona",
+      "position": "DF"
+    }
+  ]
+}

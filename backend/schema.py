@@ -56,6 +56,48 @@ def _add_event_clip_times(engine: Engine) -> list[str]:
     return applied
 
 
+def _add_column(engine: Engine, table: str, column: str, definition: str) -> list[str]:
+    inspector = inspect(engine)
+    if table not in inspector.get_table_names():
+        return []  # create_all builds it with the column
+    if column in {c["name"] for c in inspector.get_columns(table)}:
+        return []
+    with engine.begin() as connection:
+        connection.execute(text(f"ALTER TABLE {table} ADD {column} {definition}"))
+    return [f"{table}.{column}"]
+
+
+def _widen_to_unicode(engine: Engine, table: str, column: str, length: int) -> list[str]:
+    """VARCHAR -> NVARCHAR on SQL Server, keeping every stored value.
+
+    The one exception to "additive only": widening is lossless, and the
+    squad import (2026-10-15) showed VARCHAR under SQL_Latin1_General_CP1
+    turning 84 player names' letters outside Windows-1252 into "?" or
+    unaccented letters (Dragusin, Yigit). Only unindexed, nullable name
+    columns are widened here.
+    """
+    if engine.dialect.name != "mssql":
+        return []
+    inspector = inspect(engine)
+    if table not in inspector.get_table_names():
+        return []
+    columns = {c["name"]: c for c in inspector.get_columns(table)}
+    if column not in columns or "NVARCHAR" in str(columns[column]["type"]).upper():
+        return []
+    with engine.begin() as connection:
+        connection.execute(text(f"ALTER TABLE {table} ALTER COLUMN {column} NVARCHAR({length}) NULL"))
+    return [f"{table}.{column} nvarchar"]
+
+
 def ensure_schema(engine: Engine) -> list[str]:
     """Apply every pending additive change; returns what was applied."""
-    return _add_team_short_code(engine) + _add_event_clip_times(engine)
+    return (
+        _add_team_short_code(engine)
+        + _add_event_clip_times(engine)
+        # GK/DF/MF/FW from the squad import; saves name the keeper from it.
+        + _add_column(engine, "players", "position", "VARCHAR(2) NULL")
+        # scorer / assister / fouler ... so a goal's two players are told apart.
+        + _add_column(engine, "occurrences", "role", "VARCHAR(20) NULL")
+        + _widen_to_unicode(engine, "players", "name", 100)
+        + _widen_to_unicode(engine, "occurrences", "detected_player_name", 100)
+    )

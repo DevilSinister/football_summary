@@ -1,0 +1,159 @@
+{
+  "team_name": "Union Berlin",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Frederik Rønnow",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Felix Uduokhai",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Andrik Markgraf",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Zeno Van Den Bosch",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Marvin Friedrich",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Aljoscha Kemlein",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Oliver Burke",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Rani Khedira",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Livan Burcu",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Jeong Woo-yeong",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "András Schäfer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Leopold Querfeld",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Tom Rothe",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Derrick Köhn",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Josip Juranović",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Janik Haberer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Michel Aebischer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Tim Skarke",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Andrej Ilić",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Robert Skov",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Carl Klaus",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Marin Ljubičić",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Christopher Trimmel",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Emmanuel Latte Lath",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Kastriot Imeri",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Matheo Raab",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Mekhi Gray",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Stanley Nsoki",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Julien Friedrich",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Linus Güther",
+      "position": "MF"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "team_name": "RC Lens",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Regis Gurtner",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Ruben Aguilar",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Maik Nawrocki",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Nidal Celik",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Andrija Bulatovic",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Samson Baidoo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Florian Sotoca",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Yacine Titraoui",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Thorgan Hazard",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Florian Thauvin",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Odsonne Edouard",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Jhoanner Chavez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Matthieu Udol",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Mathieu Gorgelin",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Abdallah Sima",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Jean-Clair Todibo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Amadou Haidara",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Michal Skoras",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Saud Abdulhamid",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Jonathan Gradit",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Ismaelo Ganiou",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Michael Cuisance",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Junior Kadile",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Franjo Ivanovic",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Souleymane Sagnan",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Kyllian Antonio",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Mezian Mesloub",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Robin Risser",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 60,
+      "name": "Ilan Jourdren",
+      "position": "GK"
+    }
+  ]
+}

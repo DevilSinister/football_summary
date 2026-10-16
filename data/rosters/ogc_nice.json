@@ -1,0 +1,154 @@
+{
+  "team_name": "OGC Nice",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 2,
+      "name": "Ali Abdi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Mohamed Abdelmonem",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Hicham Boudaoui",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Gauthier Hein",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Morgan Sanson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Mohamed Amoura",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Sofiane Diop",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Elye Wahi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Laurent Abergel",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Isak Jansson",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Issiaga Camara",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Niels Nkounkou",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Axel Witsel",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Nathan Ngoumou",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Antoine Mendy",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Nassim Laarej",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Xavier Mandza",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Alidu Seidu",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Djibril Coulibaly",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 41,
+      "name": "Everton",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Zoumana Diallo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 55,
+      "name": "Youssouf Ndayishimiye",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 60,
+      "name": "Martin Ponsot",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 64,
+      "name": "Moise Bombito",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Teddy Boulhendi",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 80,
+      "name": "Yehvann Diouf",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 84,
+      "name": "Hamza Koutoune",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 92,
+      "name": "Jonathan Clauss",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 99,
+      "name": "Salis Abdul Samed",
+      "position": "MF"
+    }
+  ]
+}

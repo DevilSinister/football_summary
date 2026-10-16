@@ -1,0 +1,134 @@
+{
+  "team_name": "FC Lorient",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Benjamin Leroy",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Alec Georgen",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Montassar Talbi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Bandiougou Fadiga",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Noah Cadiou",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Mohamed Bamba",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Isak Jensen",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Theo Le Bris",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Tosin Aiyegun",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Jean-Victor Makengo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Ibrahima Balde",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Souleymane Faye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Dembo Sylla",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Bingourou Kamara",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Srdan Kuzmic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Nathaniel Adjei",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Gabin Bernardeau",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Yvon Mvogo",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Mamadou Kone",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 43,
+      "name": "Arsene Kouassi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 55,
+      "name": "Nosa Edward Obaretin",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 62,
+      "name": "Arthur Avom",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 72,
+      "name": "Noah Mbamba",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Panos Katseris",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 95,
+      "name": "Isaak Toure",
+      "position": "DF"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "team_name": "Aston Villa",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Zion Suzuki",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Matty Cash",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Victor Lindelöf",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Taylor Harwood-Bellis",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Tyrone Mings",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Ross Barkley",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "John McGinn",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Boubacar Kamara",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Emiliano Buendía",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Nicolas Jackson",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Matteo Ruggeri",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Pau Torres",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Alejandro Garnacho",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Tammy Abraham",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Ibrahim Mbaye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Ian Maatsen",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Amadou Onana",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Lamare Bogarde",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Leon Goretzka",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Aaron Wan-Bissaka",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "João Gomes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Brian Madjo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Marco Bizot",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 42,
+      "name": "James Wright",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Johan Manzambi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 47,
+      "name": "Alysson",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 48,
+      "name": "Modou Kéba Cissé",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 53,
+      "name": "George Hemmings",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 60,
+      "name": "Owen Asemota",
+      "position": "GK"
+    }
+  ]
+}

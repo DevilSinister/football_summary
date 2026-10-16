@@ -1,0 +1,154 @@
+{
+  "team_name": "Brentford",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Caoimhín Kelleher",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Aaron Hickey",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Rico Henry",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Sepp van den Berg",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Yehor Yarmoliuk",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Kevin Schade",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Mathias Jensen",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Igor Thiago",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Josh Dasilva",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Dango Ouattara",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Hákon Valdimarsson",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Callum Wilson",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Fábio Carvalho",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Antoni Milambo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Mamadou Sangaré",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Jaidon Anthony",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Kristoffer Ajer",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Nathan Collins",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Keane Lewis-Potter",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Mikkel Damsgaard",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "El Hadji Malick Diouf",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Vitaly Janelt",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Ellery Balcombe",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Michael Kayode",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Kim Ji-Soo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Gustavo Nunes",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Jannik Schuster",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 47,
+      "name": "Kaye Furo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 48,
+      "name": "Benjamin Fredrick",
+      "position": "DF"
+    }
+  ]
+}

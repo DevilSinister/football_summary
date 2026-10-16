@@ -3,6 +3,8 @@ opencv-python
 pandas
 scikit-learn
 torch
+timm>=1.0
+faster-whisper>=1.2
 ultralytics
 supervision
 paddlepaddle>=3.0

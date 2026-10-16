@@ -1,0 +1,144 @@
+{
+  "team_name": "Olympique Lyon",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Dominik Greif",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Mads Bidstrup",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Nicolas Tagliafico",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Tanner Tessmann",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Ernest Nuamah",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Corentin Tolisso",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Pavel Sulc",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Keito Nakamura",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Zachary Athekame",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Abner",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Lois Openda",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Khalis Merah",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Moussa Niakhate",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Felix Bacher",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Ruben Kluivert",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Clinton Mata",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Tyler Morton",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Julien Duranville",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Justin Bengui",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Kail Boudache",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Alejandro Gomes Rodriguez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Remy Descamps",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Remi Himbert",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 50,
+      "name": "Lassine Diarra",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 76,
+      "name": "Mohamed Ouedraogo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 85,
+      "name": "Noham Kamara",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 99,
+      "name": "Noah Nartey",
+      "position": "MF"
+    }
+  ]
+}

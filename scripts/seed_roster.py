@@ -62,7 +62,8 @@ def _print_summary(stats: SeedStats, dry_run: bool) -> None:
     print(
         f"players {verb}: {stats.players_inserted} inserted, "
         f"{stats.players_named} unnamed slots filled, "
-        f"{stats.players_renamed} renamed, {stats.players_unchanged} unchanged"
+        f"{stats.players_renamed} renamed, {stats.players_unchanged} unchanged, "
+        f"{stats.positions_set} positions set"
     )
     for note in stats.notes:
         print(f"  note: {note}")

@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Unicode, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
@@ -63,9 +63,13 @@ class Player(Base):
     __table_args__ = (UniqueConstraint("team_id", "jersey_no", name="uq_player_team_jersey"),)
 
     player_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    # NVARCHAR: squad names carry letters outside Windows-1252 (Drăgușin).
+    name: Mapped[str | None] = mapped_column(Unicode(100), nullable=True)
     jersey_no: Mapped[int | None] = mapped_column(Integer, nullable=True)
     team_id: Mapped[int | None] = mapped_column(ForeignKey("teams.team_id"), nullable=True)
+    # GK, DF, MF or FW from the roster; NULL when unknown. Added to existing
+    # databases by backend/schema.py. A save names the team's keeper from it.
+    position: Mapped[str | None] = mapped_column(String(2), nullable=True)
 
     team: Mapped[Team | None] = relationship(back_populates="players")
     occurrences: Mapped[list["Occurrence"]] = relationship(back_populates="player")
@@ -133,11 +137,14 @@ class Occurrence(Base):
     end_time: Mapped[float | None] = mapped_column(Float, nullable=True)
     detected_track_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
     detected_jersey_no: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    detected_player_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    detected_player_name: Mapped[str | None] = mapped_column(Unicode(100), nullable=True)
     detected_team_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
     team_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)
     jersey_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)
     name_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)
+    # The participant's part in the event (scorer, assister, shooter,
+    # goalkeeper, fouler, fouled, ...). NULL on rows written before 2026-10-15.
+    role: Mapped[str | None] = mapped_column(String(20), nullable=True)
 
     event: Mapped[Event] = relationship(back_populates="occurrences")
     play: Mapped[Play | None] = relationship(back_populates="occurrences")

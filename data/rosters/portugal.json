@@ -1,0 +1,139 @@
+{
+  "team_name": "Portugal",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Diogo Costa",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Nelson Semedo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Ruben Dias",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Tomas Araujo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Diogo Dalot",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Matheus Nunes",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Cristiano Ronaldo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Bruno Fernandes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Goncalo Ramos",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Bernardo Silva",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Joao Felix",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Jose Sa",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Renato Veiga",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Goncalo Inacio",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Joao Neves",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Francisco Trincao",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Rafael Leao",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Pedro Neto",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Goncalo Guedes",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Joao Cancelo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Ruben Neves",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Rui Silva",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Vitinha",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Samu Costa",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Nuno Mendes",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Francisco Conceicao",
+      "position": "FW"
+    }
+  ]
+}

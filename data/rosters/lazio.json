@@ -1,0 +1,164 @@
+{
+  "team_name": "Lazio",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 2,
+      "name": "Diogo Leite",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Luca Pellegrini",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Danilho Doekhi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Nicolò Rovella",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Fisayo Dele-Bashiru",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Bruno Galassi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Andrea Pinamonti",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Mattia Zaccagni",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Gustav Isaksen",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Tijjani Noslin",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Romano Floriani Mussolini",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Davide Frattesi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Nuno Tavares",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Reda Belahyane",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Matteo Cancellieri",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Alfonso Pedraza",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Kenneth Taylor",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Oliver Provstgaard",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Adrian Przyborek",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Manuel Lazzari",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Danilo Cataldi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Christos Mandas",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Josip Šutalo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Edoardo Motta",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 55,
+      "name": "Alessio Furlanetto",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 59,
+      "name": "Davide Renzetti",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 63,
+      "name": "Federico Serra",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 71,
+      "name": "Valerio Farcomeni",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 76,
+      "name": "Filipe Bordon",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Adam Marušić",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 80,
+      "name": "Albert Guðmundsson",
+      "position": "FW"
+    }
+  ]
+}

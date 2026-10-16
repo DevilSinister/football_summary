@@ -1,0 +1,124 @@
+{
+  "team_name": "Stade Brest 29",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Egil Selvik",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Bradley Locko",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Gautier Lloris",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Brendan Chardonnet",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Mamady Diambou",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Joseph Nonge",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Hugo Magnetti",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Giovani Versini",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Noah Edjouma",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Luck Zogbe",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Joris Chotard",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Noe Poillion",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Mama Balde",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Justin Bourgault",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Ludovic Ajorque",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Kamory Doumbia",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Lucas Tousart",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Mathieu Patouillet",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Djylian N'Guessan",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Romain Cagnon",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 71,
+      "name": "Raphael Le Guen",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Kenny Lala",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 99,
+      "name": "Pathe Mboup",
+      "position": "FW"
+    }
+  ]
+}

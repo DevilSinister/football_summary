@@ -1,0 +1,179 @@
+{
+  "team_name": "Hull City",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Jack Butland",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Lewie Coyle",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Ryan Giles",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Charlie Hughes",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Hidemasa Morita",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Semi Ajayi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Sorba Thomas",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Eliot Matazo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Oliver McBurnie",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Mohamed Belloumi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Joe Gelhardt",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Dillon Phillips",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Jens Hjertø-Dahl",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "John Egan",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Paddy McNair",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Brooke Norton-Cuffy",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Konstantinos Tzolakis",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Óscar Zambrano",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Elliot Stroud",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Lucas Herrington",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Matt Targett",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Darko Gyabi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Matt Crooks",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Kieran Dowell",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Regan Slater",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Ilyas Ansah",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Lucas Gourna-Douath",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Nobel Mendy",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Abdülkadir Ömür",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Christos Mouzakitis",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Tim Iroegbunam",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 47,
+      "name": "Robinio Vaz",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 50,
+      "name": "Mohamed-Ali Cho",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 55,
+      "name": "Archie Howard",
+      "position": "GK"
+    }
+  ]
+}

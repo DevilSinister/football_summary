@@ -1,0 +1,134 @@
+{
+  "team_name": "Real Betis",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Álvaro Valles",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Héctor Bellerín",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Diego Llorente",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Natan",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Marc Bartra",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Facundo Bernal",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Antony",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Pablo Fornals",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Cucho Hernández",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Abde Ezzalzouli",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Fran García",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Ángel Ortiz",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Diego Conde",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Iker Losada",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Álvaro Fidalgo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Valentín Gómez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Rodrigo Riquelme",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Nelson Deossa",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Troy Parrott",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Giovanni Lo Celso",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Marc Roca",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Isco",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Junior Firpo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Aitor Ruibal",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Dani Ceballos",
+      "position": "MF"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "team_name": "Cagliari",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Elia Caprile",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Zé Pedro",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Riyad Idrissi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Alessandro Romano",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Harry Winks",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Michel Adopo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Kevin Carlos",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Jacopo Fazzini",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Alen Sherri",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Alessandro Deiola",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Juan Rodríguez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Mattia Felici",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "M'Bala Nzola",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Yael Trepy",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Riccardo Ciervo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Roberto Gagliardini",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Raphael Kofler",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Boris Radunović",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Giuseppe Aurelio",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Yerry Mina",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Joseph Liteta",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Yukinari Sugawara",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Demi Akarakiri",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Paul Mendy",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Ivan Sulev",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Adam Obert",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Alessandro Sugamele",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Nicola Grandu",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Alieu Fadera",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 70,
+      "name": "Daniel Maldini",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 79,
+      "name": "Yanis Massolin",
+      "position": "MF"
+    }
+  ]
+}

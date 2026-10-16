@@ -1,0 +1,174 @@
+{
+  "team_name": "Sunderland",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 4,
+      "name": "Kevin Danso",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Dan Ballard",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Dayann Méthalie",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Chemsdine Talbi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Alan Browne",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Brian Brobbey",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Nilson Angulo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Chris Rigg",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Thomas Meunier",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Luke O'Nien",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Romaine Mundle",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Omar Alderete",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Reinildo Mandava",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Wilson Isidor",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Habib Diarra",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Nordi Mukiele",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Simon Moore",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Robin Roefs",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Noah Sadiki",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Enzo Le Fée",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Jules Ahoka",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Melker Ellborg",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Trai Hume",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Granit Xhaka",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Jocelin Ta Bi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Malick Fofana",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Jack Whittaker",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Aji Alese",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 46,
+      "name": "Abdoullah Ba",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 48,
+      "name": "Jenson Jones",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 50,
+      "name": "Juan Angulo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 57,
+      "name": "Tymur Tutierov",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Tom Proctor",
+      "position": "MF"
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "team_name": "Rayo Vallecano",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Dani Cárdenas",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Andrei Rațiu",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Marash Kumbulla",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Pedro Díaz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Luiz Felipe",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Pathé Ciss",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Isi Palazón",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Unai López",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Alemão",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Sergio Camello",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Randy Nteka",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Augusto Batalla",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Giorgi Tsitaishvili",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Mujaid Sadick",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Adrià Pedrosa",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Álvaro García",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Jorge de Frutos",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Iván Balliu",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Fran Pérez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Pelayo Fernández",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Óscar Valentín",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Florian Lejeune",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Emil Audero",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Jozhua Vertrouwd",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Gnangoro Bouare",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Rayane Belaid",
+      "position": "MF"
+    }
+  ]
+}

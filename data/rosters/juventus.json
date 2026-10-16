@@ -1,0 +1,159 @@
+{
+  "team_name": "Juventus",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Kamil Grabara",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Zeki Çelik",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Bremer",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Federico Gatti",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Manuel Locatelli",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Lloyd Kelly",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Francisco Conceição",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Teun Koopmeiners",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Randal Kolo Muani",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Kenan Yıldız",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Edon Zhegrova",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Douglas Luiz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Jérémie Boga",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Arkadiusz Milik",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Pierre Kalulu",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Kerim Alajbegović",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Jeff Ekhator",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Khéphren Thuram",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Andrea Cambiaso",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Weston McKennie",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Carlo Pinsoglio",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Daniele Rugani",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Guglielmo Vicario",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Jhon Lucumí",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Nick Woltemade",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Pape Matar Sarr",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Nico González",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Juan Cabal",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Riccardo Radu",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Justin Oboavwoduo",
+      "position": "FW"
+    }
+  ]
+}

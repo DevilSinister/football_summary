@@ -1,0 +1,159 @@
+{
+  "team_name": "Tottenham Hotspur",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 3,
+      "name": "Andy Robertson",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Tosin Adarabioyo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Marcos Senesi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Jan Paul van Hecke",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Xavi Simons",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Conor Gallagher",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Richarlison",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "James Maddison",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Mathys Tel",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Destiny Udogie",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Archie Gray",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Lucas Bergvall",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Sandro Tonali",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Sávio",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Mateus Fernandes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Dominic Solanke",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Mohammed Kudus",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Dejan Kulusevski",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Omar Marmoush",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Pedro Porro",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Mykhailo Mudryk",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Wilson Odobert",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Rodrigo Bentancur",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Antonín Kinsky",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Ben Davies",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Micky van de Ven",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Martin Dúbravka",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Brandon Austin",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 50,
+      "name": "George Abbott",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 68,
+      "name": "Luca Williams-Barnett",
+      "position": "MF"
+    }
+  ]
+}

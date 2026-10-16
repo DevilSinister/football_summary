@@ -1,28 +1,150 @@
 {
   "team_name": "Manchester City",
-  "short_code": "MCI",
-  "aliases": ["man city", "mcfc", "mci", "manchester city fc"],
-  "season": "2025-26",
-  "source": "authored from model knowledge (cutoff May 2026) - verify before trusting",
-  "needs_review": true,
+  "aliases": [
+    "man city",
+    "mcfc",
+    "mci",
+    "manchester city fc"
+  ],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
   "players": [
-    { "jersey_no": 9,  "name": "Erling Haaland",     "position": "FW" },
-    { "jersey_no": 10, "name": "Jack Grealish",      "position": "FW" },
-    { "jersey_no": 11, "name": "Jeremy Doku",        "position": "FW" },
-    { "jersey_no": 14, "name": "Nico Gonzalez",      "position": "MF" },
-    { "jersey_no": 16, "name": "Rodri",              "position": "MF" },
-    { "jersey_no": 17, "name": "Rayan Cherki",       "position": "MF" },
-    { "jersey_no": 19, "name": "Tijjani Reijnders",  "position": "MF" },
-    { "jersey_no": 20, "name": "Bernardo Silva",     "position": "MF" },
-    { "jersey_no": 21, "name": "Rayan Ait-Nouri",    "position": "DF" },
-    { "jersey_no": 24, "name": "Josko Gvardiol",     "position": "DF" },
-    { "jersey_no": 26, "name": "Savinho",            "position": "FW" },
-    { "jersey_no": 27, "name": "Matheus Nunes",      "position": "MF" },
-    { "jersey_no": 31, "name": "Ederson",            "position": "GK" },
-    { "jersey_no": 32, "name": "Omar Marmoush",      "position": "FW" },
-    { "jersey_no": 33, "name": "Gianluigi Donnarumma", "position": "GK" },
-    { "jersey_no": 47, "name": "Phil Foden",         "position": "MF" },
-    { "jersey_no": 52, "name": "Oscar Bobb",         "position": "FW" },
-    { "jersey_no": 82, "name": "Rico Lewis",         "position": "DF" }
-  ]
+    {
+      "jersey_no": 1,
+      "name": "Gianluigi Donnarumma",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Rúben Dias",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Elliot Anderson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Marc Guéhi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Iliman Ndiaye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Mateo Kovacic",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Erling Haaland",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Rayan Cherki",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Jérémy Doku",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Marcus Bettinelli",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Enzo Fernández",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Rayan Aït-Nouri",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Vitor Reis",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Josko Gvardiol",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Matheus Nunes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Gerónimo Rulli",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Ayyoub Bouaddi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Nico O'Reilly",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Allan",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Antoine Semenyo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Abdukodir Khusanov",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 47,
+      "name": "Phil Foden",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 56,
+      "name": "Ryan McAidoo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 61,
+      "name": "Kaden Braithwaite",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 75,
+      "name": "Floyd Samba",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 82,
+      "name": "Rico Lewis",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 94,
+      "name": "Finley Burns",
+      "position": "DF"
+    }
+  ],
+  "short_code": "MCI"
 }

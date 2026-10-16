@@ -46,7 +46,12 @@ CONFIRM_FRAMES = 2            # frames a new holder needs before a switch counts
 MAX_FLIGHT_SECONDS = 2.5      # longest gap that can still be a pass
 LOOSE_BALL_TIMEOUT_SECONDS = 3.0
 MIN_PASS_DISTANCE = 0.8       # player heights the ball must travel
-ID_SWITCH_MAX_GAP_FRAMES = 3
+# Windows below are in seconds, never in frames or updates: the API analyses
+# 10-12 frames a second of a 25-60 fps source, so a count of updates or of
+# source frames means a different amount of time on every video.
+ID_SWITCH_MAX_GAP_SECONDS = 0.25
+RELEASE_WINDOW_SECONDS = 0.25     # ball samples used for the release speed
+RELEASE_WINDOW_MAX_SECONDS = 0.5  # widened until it holds two samples
 
 # Cross
 CROSS_MIN_LATERAL = 3.5       # player heights of horizontal travel
@@ -77,7 +82,7 @@ PITCH_SHOT_MAX_DISTANCE_M = 35.0
 PITCH_SHOT_MAX_ANGLE_DEGREES = 25.0
 PITCH_SHOT_MIN_TRAVEL_M = 2.0
 GOAL_CONFIRM_SAMPLES = 2               # consecutive ball positions in the net
-GOAL_CONFIRM_WINDOW_FRAMES = 4
+GOAL_CONFIRM_WINDOW_SECONDS = 0.25
 GOAL_APPROACH_SECONDS = 2.0
 GOAL_APPROACH_DISTANCE_M = 25.0
 
@@ -97,7 +102,9 @@ MOUTH_SEARCH_HEIGHTS = 8.0      # player heights between ball and keeper to look
 MOUTH_MAX_AGE_SECONDS = 1.0     # how long a found goal frame is trusted
 MOUTH_EVERY_SECONDS = 0.08
 
-EVENT_COOLDOWN_SECONDS = {"shot": 1.0, "save": 1.0, "penalty": 10.0, "cross": 0.5, "goal": 30.0, "foul": 3.0}
+EVENT_COOLDOWN_SECONDS = {"shot": 1.0, "save": 1.0, "penalty": 10.0, "cross": 0.5, "goal": 10.0, "foul": 3.0}
+# The goal cooldown only stops one shot being counted twice; replays and real
+# second goals are told apart later by track_events.goal_merge.
 
 # A card is tied to a foul recorded at most this long before it.
 CARD_FOUL_LOOKBACK_SECONDS = 60.0
@@ -210,7 +217,6 @@ class TrackEventDetector:
 
         self.current: Optional[_Segment] = None
         self._candidate: Optional[Tuple[int, int, int]] = None  # track, count, first frame
-        self._frames_without_holder = 0
 
         self._still_anchor: Optional[Tuple[int, float, float]] = None
         self._penalty_setup: Optional[dict] = None
@@ -313,7 +319,12 @@ class TrackEventDetector:
         """(speed in heights/s, dx, dy) over the first frames after release."""
         if self._scale <= 0:
             return None
-        samples = [s for s in self._ball if release_frame <= s[0] <= release_frame + 6]
+        after = [s for s in self._ball if release_frame <= s[0] <= release_frame + RELEASE_WINDOW_MAX_SECONDS * self.fps]
+        samples = [s for s in after if s[0] <= release_frame + RELEASE_WINDOW_SECONDS * self.fps]
+        if len(samples) < 2:
+            # Sparse analysis (or a 50/60 fps source) leaves one sample in the
+            # short window; take the first two inside the wider one.
+            samples = after[:2]
         if len(samples) < 2:
             return None
         first, last = samples[0], samples[-1]
@@ -504,7 +515,6 @@ class TrackEventDetector:
                 current.end_ball_pitch = self._ball_pitch_now
             current.absorb(players[holder])
             self._candidate = None
-            self._frames_without_holder = 0
             return emitted
 
         if holder >= 0:
@@ -539,12 +549,12 @@ class TrackEventDetector:
                     self._last_segment = current
                 self.current = new_segment
                 self._candidate = None
-                self._frames_without_holder = 0
             return emitted
 
-        # Nobody has the ball this frame.
-        self._frames_without_holder += 1
-        if current is not None and self._frames_without_holder > LOOSE_BALL_TIMEOUT_SECONDS * self.fps:
+        # Nobody has the ball this frame. Measured from the last frame the
+        # holder was seen, not by counting updates, which run at the analysis
+        # rate rather than the source rate.
+        if current is not None and frame_number - current.end_frame > LOOSE_BALL_TIMEOUT_SECONDS * self.fps:
             emitted.extend(self._on_release_without_receiver(current, frame_number))
             self._last_segment = current
             self.current = None
@@ -575,7 +585,7 @@ class TrackEventDetector:
             displacement = ball_travel
 
         # Same player under a new id, or a duel for a ball that never moved.
-        if displacement < MIN_PASS_DISTANCE and gap_frames <= ID_SWITCH_MAX_GAP_FRAMES:
+        if displacement < MIN_PASS_DISTANCE and gap_frames <= ID_SWITCH_MAX_GAP_SECONDS * self.fps:
             return emitted
 
         release = self._release_velocity(prev.end_frame)
@@ -832,7 +842,8 @@ class TrackEventDetector:
         """
         if self._pitch is None or not self._ball_pitch:
             return []
-        recent = [s for s in self._ball_pitch if frame_number - s[0] <= GOAL_CONFIRM_WINDOW_FRAMES]
+        window = GOAL_CONFIRM_WINDOW_SECONDS * self.fps
+        recent = [s for s in self._ball_pitch if frame_number - s[0] <= window]
         if len(recent) < GOAL_CONFIRM_SAMPLES:
             return []
         confirm = recent[-GOAL_CONFIRM_SAMPLES:]
@@ -1070,13 +1081,19 @@ class TrackEventDetector:
         last = after[-1]
         decided_at = last[0] + gap if lost_in_goal else end
         # Held for a while after it went in: a catch (or a clearance off the line).
-        longest_hold, run, last_holder = 0, 0, -1
+        # Hold length is measured in frames elapsed, not samples, so it means the
+        # same time whatever share of the frames is analysed.
+        longest_hold, run_start, last_holder = 0, None, -1
         for f, holder in self._holders:
             if f < entered[0] or f > decided_at:
                 continue
-            run = run + 1 if holder >= 0 and holder == last_holder else (1 if holder >= 0 else 0)
+            if holder < 0:
+                run_start = None
+            elif holder != last_holder or run_start is None:
+                run_start = f
             last_holder = holder
-            longest_hold = max(longest_hold, run)
+            if run_start is not None:
+                longest_hold = max(longest_hold, f - run_start + 1)
         if longest_hold >= GOAL_HOLD_SECONDS * self.fps:
             return None
 
@@ -1146,7 +1163,6 @@ class TrackEventDetector:
         self._mouths.clear()
         self._holders.clear()
         self._candidate = None
-        self._frames_without_holder = 0
         self._ball.clear()
         self._ball_pitch.clear()
         self._ball_pitch_now = None

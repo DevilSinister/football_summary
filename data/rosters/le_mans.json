@@ -1,0 +1,154 @@
+{
+  "team_name": "Le Mans FC",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Ewan Hatfout",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Harold Voyer",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Edwin Quarshie",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Billal Brahimi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Alexandre Lauray",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Antoine Rabillard",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Jean Vercruysse",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Adil Bourabaa",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Joao Almeida",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Habib Diallo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Louis Mafouta",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Noa Boisse",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Raul Torrente",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Samuel Yohou",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Lucas Buades",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Djibril Sidibe",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "William Harhouz",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Theo Eyoum",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Lucas Calodat",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Daouda Traore",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Dame Gueye",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Rayan Bamba",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Martin Rossignol",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Erwan Colas",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Lucas Bretelle",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 55,
+      "name": "Augustin Delbecque",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 76,
+      "name": "Yasser Larouci",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 98,
+      "name": "Nicolas Kocik",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 99,
+      "name": "Enzo Vagner",
+      "position": "FW"
+    }
+  ]
+}

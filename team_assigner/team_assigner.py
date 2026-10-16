@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 from match_config import MatchConfig
-from .calibration import bgr_to_lab, kit_color_bgr
+from .calibration import KIT_FEATURE_WEIGHTS, bgr_to_lab, kit_color_bgr
 
 
 # Lab channel weights for kit comparison. Lightness swings by 40 units between
@@ -15,7 +15,18 @@ from .calibration import bgr_to_lab, kit_color_bgr
 # blurred red-and-white stripes read a = +12 to +17, but their b channel swung
 # from +17 (stripes) to -27 (blue shorts in the box) between crops. The red-green
 # axis is therefore the one that decides, lightness and blue-yellow only assist.
-KIT_FEATURE_WEIGHTS = np.asarray([0.5, 3.0, 1.0], dtype=float)
+# The weights (KIT_FEATURE_WEIGHTS) live in calibration.py so that upload-stage
+# clustering uses the same space.
+
+# Once a track's team is settled it is re-measured only every Nth frame, and
+# every new vote first fades the old ones. A settled track used to stop
+# measuring for good, so when ByteTrack swapped an id onto an opponent the old
+# team stuck to it for the rest of the shot.
+SETTLED_RECHECK_EVERY = 5
+# With decay d a steady stream of confidence c settles at c / (1 - d): 0.97
+# lets even floor-confidence (0.15) frames reach the 4.0 settle weight, and a
+# switched id still flips within about a dozen re-checks.
+VOTE_DECAY = 0.97
 
 
 def kit_feature(color_bgr) -> np.ndarray:
@@ -56,6 +67,7 @@ class TeamAssigner:
         self.player_team_dict = {}
         self.player_assignment_dict = {}
         self.player_votes: Dict[int, Dict[int, float]] = {}
+        self._calls: Dict[int, int] = {}
         self.match_config = match_config
         self.color_distance_threshold = color_distance_threshold
         self.color_ambiguity_margin = color_ambiguity_margin
@@ -254,12 +266,15 @@ class TeamAssigner:
     def get_player_assignment(self, frame, player_bbox, player_id) -> Dict[str, object]:
         player_id = int(player_id)
         settled = self.player_assignment_dict.get(player_id)
+        calls = self._calls.get(player_id, 0) + 1
+        self._calls[player_id] = calls
 
-        # Stop re-measuring once a track has accumulated enough agreeing evidence.
-        # This bounds the per-frame cost without freezing on one early observation.
+        # A settled track is re-measured only every few frames: that bounds the
+        # per-frame cost, while still letting an id switch flip the team.
         if (
             settled is not None
             and float(settled.get("vote_weight", 0.0)) >= self.vote_weight_target
+            and calls % SETTLED_RECHECK_EVERY != 0
         ):
             return settled
 
@@ -271,6 +286,8 @@ class TeamAssigner:
         votes = self.player_votes.setdefault(player_id, {})
         observed_team = int(observation["team_id"])
         if observed_team != 0:
+            for team in votes:
+                votes[team] *= VOTE_DECAY
             # Weight each vote by how confident that frame was, with a small floor
             # so a run of weak but consistent frames can still settle a track.
             votes[observed_team] = votes.get(observed_team, 0.0) + max(
@@ -311,6 +328,7 @@ class TeamAssigner:
             self.player_votes,
             self.player_assignment_dict,
             self.player_team_dict,
+            self._calls,
         ):
             for stale in [key for key in store if key not in active]:
                 del store[stale]

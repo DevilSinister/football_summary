@@ -1,0 +1,139 @@
+{
+  "team_name": "Argentina",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Juan Musso",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Marcos Senesi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Nicolas Tagliafico",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Gonzalo Montiel",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Leandro Paredes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Lisandro Martinez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Rodrigo De Paul",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Valentin Barco",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Julian Alvarez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Lionel Messi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Giovani Lo Celso",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Geronimo Rulli",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Cristian Romero",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Exequiel Palacios",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Nicolas Gonzalez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Thiago Almada",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Giuliano Simeone",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Nico Paz",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Nicolas Otamendi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Alexis Mac Allister",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Jose Lopez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Lautaro Martinez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Emiliano Martinez",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Enzo Fernandez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Facundo Medina",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Nahuel Molina",
+      "position": "DF"
+    }
+  ]
+}

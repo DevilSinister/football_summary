@@ -1,0 +1,124 @@
+{
+  "team_name": "Fiorentina",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 2,
+      "name": "Dodô",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Radu Drăgușin",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Marco Brescianini",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Marin Pongračić",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Luca Ranieri",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Arthur Atta",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "João Mário",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Luca Lezzerini",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Álex Jiménez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Víctor Valdepeñas",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Beto",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Alieu Njie",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Cher Ndour",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Pedro Gonçalves",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Wilfried Gnonto",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Franco Mastantuono",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Mateo Pellegrino",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Viery",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Christ Inao Oulaï",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 43,
+      "name": "David de Gea",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Nicolò Fagioli",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 53,
+      "name": "Oliver Christensen",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 65,
+      "name": "Fabiano Parisi",
+      "position": "DF"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "team_name": "Fulham",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Bernd Leno",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Kenny Tete",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Calvin Bassey",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Jorge Cuenca",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Joachim Andersen",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Harrison Reed",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Gonzalo García",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "César Palacios",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Rodrigo Muniz",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Tom Cairney",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Kevin",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Oscar Bobb",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Hugo Larsson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Sander Berge",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Alex Iwobi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Jonah Kusi-Asare",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Shea Charles",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Manuel Ángel",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Timothy Castagne",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "David Affengruber",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Benjamin Lecomte",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Josh King",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Ryan Sessegnon",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Emile Smith Rowe",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Antonee Robinson",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Chibby Nwoko",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Macaulay Zepa",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Alex Borto",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Bradley Slade",
+      "position": "DF"
+    }
+  ]
+}

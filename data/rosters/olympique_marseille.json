@@ -1,0 +1,119 @@
+{
+  "team_name": "Olympique Marseille",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Jeffrey de Lange",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 4,
+      "name": "CJ Egan-Riley",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Tochukwu Nnadi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Angel Gomes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Himad Abdelli",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Amine Gouiri",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Neal Maupay",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Derek Cornelius",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Igor Paixao",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Bamo Meite",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Geoffrey Kondogbia",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Nayef Aguerd",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Timothy Weah",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Pierre-Emile Hojbjerg",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Ulisses Garcia",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Faris Moumbagna",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Emerson",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Jelle Van Neck",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 43,
+      "name": "Tadjidine Mmadi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 48,
+      "name": "Keyliane Abdallah",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Amine Harit",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 92,
+      "name": "Theo Vermot",
+      "position": "GK"
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "team_name": "Genoa",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Justin Bijlow",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Mario Mitaj",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Kingsley Ehizibue",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Alex Amorim",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Leo Østigård",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Tommaso Baldanzi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Vitinha",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Júnior Messias",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Ethan Meichtry",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Cody Drameh",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Elias Havel",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Milutin Osmajić",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Joi Nuredini",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Stefano Sabelli",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Johan Vásquez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Hamed Traorè",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Alessandro Marcandalli",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Lorenzo Colombo",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 31,
+      "name": "David Puczka",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Morten Frendrup",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Sebastian Otoa",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Daniele Sommariva",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 71,
+      "name": "Samuel Wiafe",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 76,
+      "name": "Lorenzo Venturino",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Mikael Egill Ellertsson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 92,
+      "name": "Stephan El Shaarawy",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 97,
+      "name": "Djibril Sow",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 99,
+      "name": "Franz Stolz",
+      "position": "GK"
+    }
+  ]
+}

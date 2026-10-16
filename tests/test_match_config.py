@@ -66,5 +66,24 @@ class MatchConfigTests(unittest.TestCase):
         self.assertEqual(assignment["team_id"], 0)
 
 
+class TeamVoteTests(unittest.TestCase):
+    def test_a_settled_track_flips_after_an_id_switch(self):
+        # Regression: a track stopped measuring once settled, so an id that
+        # ByteTrack swapped onto an opponent kept the old team for good.
+        config = MatchConfig.from_detected_colors("North FC", (220, 30, 40), "South FC", (20, 60, 210))
+        assigner = TeamAssigner(config)
+        observed = {"team": 1}
+        assigner._observe = lambda frame, bbox: {
+            "team_id": observed["team"], "team_name": "", "confidence": 0.6, "color_distance": 5.0,
+        }
+        for _ in range(40):
+            first = assigner.get_player_assignment(None, [0, 0, 10, 20], 7)
+        self.assertEqual(first["team_id"], 1)
+        observed["team"] = 2
+        for _ in range(80):
+            later = assigner.get_player_assignment(None, [0, 0, 10, 20], 7)
+        self.assertEqual(later["team_id"], 2)
+
+
 if __name__ == "__main__":
     unittest.main()

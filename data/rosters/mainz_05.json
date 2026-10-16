@@ -1,0 +1,139 @@
+{
+  "team_name": "Mainz 05",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Alexander Schwolow",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Phillipp Mwene",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Fabio Gruber",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Stefan Posch",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Eric Martel",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Kaishū Sano",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Lee Jae-sung",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Paul Nebel",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Phillip Tietz",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Nadiem Amiri",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Ransford-Yeboah Königsdörffer",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Lennard Maloney",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Stefan Bell",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Benedict Hollerbach",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Anthony Caci",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Otto Ruoppi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Danny da Costa",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Sheraldo Becker",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Sōta Kawasaki",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Silas",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Robin Zentner",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Silvan Widmer",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Dominik Kohr",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Alynho Haïdara",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Maximilian Kinzig",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 48,
+      "name": "Kacper Potulski",
+      "position": "DF"
+    }
+  ]
+}

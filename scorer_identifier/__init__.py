@@ -4,6 +4,7 @@ from .goal_scorer import (
     fuse_scorer,
     live_candidate,
     match_caption,
+    match_caption_teams,
     read_caption_candidates,
     squad_for,
 )
@@ -29,6 +30,7 @@ __all__ = [
     "fuse_scorer",
     "live_candidate",
     "match_caption",
+    "match_caption_teams",
     "read_caption_candidates",
     "squad_for",
 ]

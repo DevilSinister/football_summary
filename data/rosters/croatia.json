@@ -1,0 +1,139 @@
+{
+  "team_name": "Croatia",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Dominik Livakovic",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Josip Stanisic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Marin Pongracic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Josko Gvardiol",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Duje Caleta-Car",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Josip Sutalo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Nikola Moro",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Mateo Kovacic",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Andrej Kramaric",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Luka Modric",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Ante Budimir",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Ivor Pandur",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Nikola Vlasic",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Ivan Perisic",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Mario Pasalic",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Martin Baturina",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Petar Sucic",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Kristijan Jakic",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Toni Fruk",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Igor Matanovic",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Luka Sucic",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Luka Vuskovic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Dominik Kotarski",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Marco Pasalic",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Martin Erlic",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Petar Musa",
+      "position": "FW"
+    }
+  ]
+}

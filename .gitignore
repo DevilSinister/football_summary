@@ -20,4 +20,9 @@ output_videos/player_images/
 # Model weights and match footage stay local; models/best.pt and
 # input_videos/test.mp4 were committed before this rule and remain tracked.
 models/*.pt
+models/reid/
+models/whisper/
+models/config.json
 input_videos/*.mp4
+# Enrolled player reference images (people's photos) stay local.
+data/player_gallery/

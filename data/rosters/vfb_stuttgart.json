@@ -1,0 +1,154 @@
+{
+  "team_name": "VfB Stuttgart",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Fabian Bredlow",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Ameen Al-Dakhil",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Ramon Hendriks",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Josha Vagnoman",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Angelo Stiller",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Maximilian Mittelstädt",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Tiago Tomás",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Ermedin Demirović",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Chris Führich",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Bilal El Khannouss",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Luca Jaquez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Atakan Karazor",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Dženan Pejčinović",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Jamie Leweling",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Leonidas Stergiou",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Grischa Prömel",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Lorenz Assignon",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Dan-Axel Zagadou",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Jeff Chabot",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Deniz Undav",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Nikolas Nartey",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Finn Jeltsch",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Justin Diehl",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Marius Funk",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Ertuğrul Yiğit",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 41,
+      "name": "Dennis Seimen",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 43,
+      "name": "Jarzinho Malanga",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Leo Sauer",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 46,
+      "name": "Stefan Drljača",
+      "position": "GK"
+    }
+  ]
+}

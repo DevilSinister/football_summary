@@ -1,0 +1,154 @@
+{
+  "team_name": "Coventry City",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Premier League",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 2,
+      "name": "Ethan Pinnock",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Jay Dasilva",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Bobby Thomas",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Jack Rudoni",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Matt Grimes",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Tatsuhiro Sakamoto",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Caleb Yirenkyi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Ellis Simms",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Ephron Mason-Clark",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Haji Wright",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Stephen Mfuni",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Ben Wilson",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Taiwo Awoniyi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Frank Onyeka",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Loum Tchaouna",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Carl Rushworth",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Kaine Kesler-Hayden",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Jake Bidwell",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Joel Latibeaudiere",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Brandon Thomas-Asante",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Aurèle Amenda",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Dan Bentley",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Luke Woolfenden",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Milan van Ewijk",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Josh Eccles",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Victor Torp",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Yann Gboho",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Gustavo Hamer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Sidiki Cherif",
+      "position": "FW"
+    }
+  ]
+}

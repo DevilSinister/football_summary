@@ -17,8 +17,9 @@ from scorer_identifier import (
     read_caption_candidates,
     squad_for,
 )
-from scorer_identifier.goal_scorer import CELEBRATION_SECONDS
+from scorer_identifier.goal_scorer import CELEBRATION_SECONDS, ScorerCandidate
 from team_assigner import TeamAssigner, kit_color_bgr, safe_player_crop
+from track_events.goal_merge import CLEAR_NAME_CONFIDENCE
 from track_events import (
     TrackEventDetector,
     drop_replayed_goals,
@@ -41,10 +42,14 @@ from pipeline_config import PipelineConfig, PipelineMetrics, scheduled_frames
 
 
 MODELS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
-# Trained on 2026-09-23: a single-class ball detector and a 32-keypoint pitch
-# model. Both are optional; pass "none" to either option to run without it.
+# Trained on 2026-09-23: a single-class ball detector. Pass "none" to run
+# without it.
 DEFAULT_BALL_MODEL = os.path.join(MODELS_DIR, "ball_detector_best.pt")
-DEFAULT_PITCH_MODEL = os.path.join(MODELS_DIR, "football_field_best.pt")
+# The pitch-keypoint model (models/Football_field.pt) is opt-in: it was trained
+# with mosaic=1.0 and, measured 2026-10-07, places goal-end keypoints in the
+# stands, so a wrong goal line would add false goals. Pass
+# --pitch-model models/Football_field.pt to use it.
+DEFAULT_PITCH_MODEL = "none"
 PITCH_STRIDE_FRAMES = 5
 
 # Frames are read and detected in chunks so the batching inside
@@ -59,6 +64,10 @@ CALIBRATION_MAX_FRAMES = 60
 # Extra shirt-number OCR calls each goal may spend on its celebration close-ups,
 # on top of JerseyReader's whole-job budget.
 GOAL_SCORER_OCR_ALLOWANCE = 48
+# The commentary's scorer vote, times its own confidence (caption is 3.0).
+WEIGHT_COMMENTARY = 3.5
+# Skip the broadcast caption OCR only when two sources already agree this well.
+CAPTION_SKIP_CONFIDENCE = 0.85
 # The celebration window also runs this long past the score change on the
 # graphic, which often comes after the replay.
 CELEBRATION_AFTER_SCOREBOARD_SECONDS = 10.0
@@ -81,7 +90,19 @@ def build_parser():
     parser.add_argument("video", help="input match video")
     parser.add_argument("--output", default="output_videos/output.mp4")
     parser.add_argument("--tracking-model", default="models/best.pt")
-    parser.add_argument("--event-model", default="models/final_model_80.pth")
+    parser.add_argument(
+        "--event-model",
+        default="models/final_model_80.pth",
+        help="weights for --legacy-event-model",
+    )
+    parser.add_argument(
+        "--legacy-event-model",
+        action="store_true",
+        help=(
+            "also run the old LSTM event model (off by default: it reads a strip of a 64x64 "
+            "thumbnail, not the features it was trained on, and its goal score is noise)"
+        ),
+    )
     parser.add_argument("--team-a-name", required=True)
     parser.add_argument("--team-a-color", required=True, help="primary kit color as #RRGGBB")
     parser.add_argument("--team-b-name", required=True)
@@ -109,7 +130,7 @@ def build_parser():
     parser.add_argument(
         "--pitch-model",
         default=DEFAULT_PITCH_MODEL,
-        help='pitch keypoint (pose) weights for pitch coordinates; "none" disables them',
+        help='pitch keypoint (pose) weights, e.g. models/Football_field.pt; default "none" (off)',
     )
     parser.add_argument(
         "--pitch-stride",
@@ -129,6 +150,22 @@ def build_parser():
         "--no-scene-cuts",
         action="store_true",
         help="do not detect camera cuts and crossfades (not recommended for broadcast clips)",
+    )
+    parser.add_argument(
+        "--no-commentary",
+        action="store_true",
+        help="do not transcribe the commentary for player names",
+    )
+    parser.add_argument("--whisper-model", help='speech-to-text model size (default "small")')
+    parser.add_argument(
+        "--no-reid",
+        action="store_true",
+        help="do not name players from enrolled reference images (data/player_gallery)",
+    )
+    parser.add_argument(
+        "--no-spotting",
+        action="store_true",
+        help="do not run the action-spotting model (models/checkpoint_088.pt)",
     )
     parser.add_argument(
         "--no-scoreboard",
@@ -280,6 +317,305 @@ def _assign_teams(team_assigner, frame, players):
         player["team_confidence"] = assignment["confidence"]
 
 
+def _team_squads(args, team_names):
+    """{team id: [{jersey_no, name, position}]}.
+
+    The API passes the squads it read from the players table (``args.squads``,
+    keyed by team id); the command line reads data/rosters, which
+    scripts.import_squads keeps in step with the database.
+    """
+    given = getattr(args, "squads", None) or {}
+    return {team_id: list(given.get(team_id) or squad_for(name)) for team_id, name in team_names.items()}
+
+
+def _first_choice_keeper(squad):
+    """The squad's number-one keeper: shirt 1 if a keeper wears it, else the lowest-numbered keeper."""
+    keepers = [p for p in squad or [] if str(p.get("position") or "").upper() == "GK" and p.get("jersey_no") is not None]
+    if not keepers:
+        return None
+    return next((k for k in keepers if int(k["jersey_no"]) == 1), min(keepers, key=lambda k: int(k["jersey_no"])))
+
+
+ASSIST_LOOKBACK_SECONDS = 15.0
+
+
+def _attach_pass_assisters(events, fps):
+    """Add the assister to each goal: the last pass a team-mate made to the scorer.
+
+    Uses the pass events the detector recorded (kept internally even when the
+    output is goals only). Commentary naming the assister later overrides it.
+    """
+    fps = max(float(fps), 1.0)
+    passes = [e for e in events if e.get("event") in ("pass", "cross")]
+    for goal in (e for e in events if e.get("event") == "goal"):
+        participants = goal.setdefault("participants", [])
+        if any(p.get("role") == "assister" for p in participants):
+            continue
+        scorer = next((p for p in participants if p.get("role") == "scorer"), None)
+        if scorer is None or scorer.get("track_id") is None:
+            continue
+        frame = int(goal.get("frame", 0))
+        for p in sorted(passes, key=lambda e: -int(e.get("frame", 0))):
+            if not frame - ASSIST_LOOKBACK_SECONDS * fps <= int(p.get("frame", 0)) <= frame:
+                continue
+            people = {q.get("role"): q for q in p.get("participants") or []}
+            receiver, passer = people.get("receiver"), people.get("passer")
+            if receiver is None or passer is None or receiver.get("track_id") != scorer.get("track_id"):
+                continue
+            if passer.get("track_id") == scorer.get("track_id"):
+                continue
+            if scorer.get("team_id") and passer.get("team_id") and passer["team_id"] != scorer["team_id"]:
+                continue
+            participants.append({**passer, "role": "assister"})
+            goal.setdefault("details", {})["assist_from"] = "detected pass"
+            break
+
+
+def _role_record(role, found, team_names):
+    return {
+        "role": role,
+        "team_id": found["team_id"],
+        "team_name": team_names.get(found["team_id"]),
+        "jersey_number": found["jersey_number"],
+        "player_name": found["player_name"],
+        "jersey_confidence": found["confidence"],
+        "name_confidence": found["confidence"],
+        "identity_source": "commentary",
+        "said": found.get("said"),
+        "said_at_seconds": found.get("said_at_seconds"),
+    }
+
+
+def _merge_role(event, role, found, team_names, identity_tracker=None):
+    """Commentary is the primary source: it names the actor in this role.
+
+    The tracked actor in the role (if any) keeps its track and photo when the
+    commentary agrees with its shirt number; otherwise the commentary wins
+    and the photo, which shows someone else, is dropped. The named player is
+    also attached to that track as identity evidence.
+    """
+    actors = event.setdefault("actors", [])
+    actor = next((a for a in actors if a.get("role") == role), None)
+    record = _role_record(role, found, team_names)
+    if actor is None:
+        actors.append(record)
+        return record
+    if actor.get("track_id") is not None and identity_tracker is not None:
+        identity_tracker.add_name_evidence(int(actor["track_id"]), found["team_id"], found["jersey_number"], 0.9)
+    if actor.get("jersey_number") not in (None, found["jersey_number"]):
+        actor.pop("player_image", None)
+    actor.update({k: v for k, v in record.items() if k != "role"})
+    return actor
+
+
+def _team_from_scoreboard(goal):
+    """True when the score graphic decided the goal's team: names do not overrule it."""
+    return goal.get("source") == "scoreboard" and bool(goal.get("team_id"))
+
+
+def _correct_goal_team(event, team_id, team_names, evidence):
+    """Credit the goal to ``team_id``: a clear name said the kit colours were wrong."""
+    old = event.get("team_name") or "unknown_team"
+    event["team_id"], event["team_name"] = int(team_id), team_names.get(int(team_id))
+    event.setdefault("details", {})["team_corrected"] = {"from": old, "by": evidence}
+    for actor in event.get("actors") or []:
+        if actor.get("role") in ("scorer", "assister"):
+            actor["team_id"], actor["team_name"] = event["team_id"], event["team_name"]
+
+
+def _commentary_goal_roles(events, words, mentions, fps):
+    """{id(goal event): roles} - scorer, assister, ruled-out phrase from the commentary.
+
+    Each goal's window stops at its neighbours, so a name said in the next
+    attack is not credited to this goal.
+    """
+    from commentary import goal_roles
+
+    fps = max(float(fps), 1.0)
+    goals = sorted((e for e in events if str(e.get("event", "")).lower() == "goal"), key=lambda e: int(e.get("frame", 0)))
+    times = [int(g.get("frame", 0)) / fps for g in goals]
+    roles = {}
+    for index, goal in enumerate(goals):
+        roles[id(goal)] = goal_roles(
+            times[index],
+            int(goal.get("team_id") or 0),
+            mentions,
+            words,
+            next_goal_seconds=times[index + 1] if index + 1 < len(times) else None,
+            previous_goal_seconds=times[index - 1] if index else None,
+            other_team=not _team_from_scoreboard(goal),
+        )
+    return roles
+
+
+def _apply_commentary(events, words, mentions, fps, team_names, identity_tracker=None, goal_roles_by_event=None):
+    """Assister of every goal, fouler and fouled of every foul, from the commentary.
+
+    The scorer is decided earlier, in _improve_goal_scorers, where the
+    commentary is the heaviest of the votes; here it only fills a scorer the
+    fusion left unnamed. Measured on Levante 3-3 Sevilla (2026-10-16): the
+    commentary alone named 4 of 6 scorers right and 1 wrong (the transcript
+    turned "Ndukwe" into "Lufel"), while the on-screen caption named all six -
+    so a commentary guess must not overrule a caption.
+    """
+    from commentary import foul_roles
+
+    fps = max(float(fps), 1.0)
+    goal_roles_by_event = goal_roles_by_event or _commentary_goal_roles(events, words, mentions, fps)
+    for event in events:
+        kind = str(event.get("event", "")).lower()
+        seconds = int(event.get("frame", 0)) / fps
+        details = event.setdefault("details", {})
+        if kind == "goal":
+            roles = goal_roles_by_event.get(id(event)) or {}
+            if roles.get("ruled_out"):
+                details["commentary"] = f"ruled out? commentator: '{roles['ruled_out']}'"
+            scorer = event.get("scorer") or {}
+            found = roles.get("scorer")
+            other_team = found is not None and event.get("team_id") and found["team_id"] != event["team_id"]
+            if other_team and (
+                _team_from_scoreboard(event) or float(found["confidence"]) < CLEAR_NAME_CONFIDENCE
+            ):
+                found = None  # not clear enough to say the kit colours were wrong
+            caption_led = "caption" in (scorer.get("scorer_sources") or [])
+            if found is not None and not caption_led and (
+                scorer.get("jersey_number") is None or scorer.get("unconfirmed")
+            ):
+                if not event.get("team_id"):
+                    event["team_id"], event["team_name"] = found["team_id"], team_names.get(found["team_id"])
+                elif other_team:
+                    _correct_goal_team(event, found["team_id"], team_names, ["commentary"])
+                merged = _merge_role(event, "scorer", found, team_names, identity_tracker)
+                previous = {k: v for k, v in scorer.items() if k != "player_image"}
+                event["scorer"] = {
+                    **previous, **merged, "role": "scorer", "unconfirmed": False,
+                    "scorer_confidence": found["confidence"], "scorer_sources": ["commentary"],
+                }
+                details["scorer_from"] = "commentary"
+            elif found is not None and scorer.get("jersey_number") == found["jersey_number"]:
+                # The fusion agrees with the commentary: tie the name to the track.
+                if scorer.get("track_id") is not None and identity_tracker is not None:
+                    identity_tracker.add_name_evidence(
+                        int(scorer["track_id"]), found["team_id"], found["jersey_number"], 0.9
+                    )
+            assister = roles.get("assister")
+            if assister is not None and int(assister["team_id"]) in (0, int(event.get("team_id") or 0)):
+                # A team-mate of the scorer: not one of the side a caption showed conceded.
+                _merge_role(event, "assister", assister, team_names, identity_tracker)
+                details["assister_from"] = "commentary"
+        elif kind == "foul":
+            roles = foul_roles(seconds, mentions)
+            for role in ("fouler", "fouled"):
+                if roles[role] is not None:
+                    merged = _merge_role(event, role, roles[role], team_names, identity_tracker)
+                    if role == "fouler":
+                        event["scorer"] = {**(event.get("scorer") or {}), **merged}
+                    details[f"{role}_from"] = "commentary"
+
+
+def _name_keepers(events, team_squads, team_names):
+    """A save (or any keeper actor) with no read shirt: the team's number-one keeper.
+
+    Shots are usually saved by the starting keeper, so the roster's keeper is a
+    good default; a shirt read or a commentary mention overrides it.
+    """
+    for event in events:
+        for actor in event.get("actors") or []:
+            if actor.get("role") != "goalkeeper" or actor.get("jersey_number") is not None:
+                continue
+            keeper = _first_choice_keeper(team_squads.get(int(actor.get("team_id") or 0)))
+            if keeper is None:
+                continue
+            actor.update({
+                "jersey_number": int(keeper["jersey_no"]),
+                "player_name": keeper.get("name"),
+                "jersey_confidence": 0.6,
+                "name_confidence": 0.6,
+                "identity_source": "roster keeper",
+                "team_name": actor.get("team_name") or team_names.get(int(actor.get("team_id") or 0)),
+            })
+            if (event.get("scorer") or {}).get("role") == "goalkeeper" or event.get("event") == "save":
+                event["scorer"] = {**(event.get("scorer") or {}), **actor}
+
+
+def _transcribe_commentary(args, config, team_squads):
+    """(words, player mentions, language) from the video's commentary; empty without speech."""
+    from commentary import find_mentions, load_whisper, transcribe_video
+
+    model = getattr(args, "whisper_model_instance", None)
+    try:
+        if model is None:
+            model = load_whisper(getattr(args, "whisper_model", None) or config.whisper_model)
+        words, language = transcribe_video(args.video, model)
+    except Exception as error:  # optional source: no model, no ffmpeg, bad audio
+        print(f"Commentary unavailable, running without it: {error}")
+        return [], [], None
+    mentions = find_mentions(words, team_squads)
+    named = sorted({c.name for m in mentions for c in m.candidates[:1]})
+    print(
+        f"Commentary: {len(words)} words ({language or 'no speech'}); "
+        f"{len(mentions)} player mention(s)" + (f": {', '.join(named[:12])}" if named else "")
+    )
+    return words, mentions, language
+
+
+def _build_identity_tracker(args, team_names, fps, squads=None):
+    """Per-track name probabilities from commentary, shirt reads, reference images and the roster.
+
+    None when neither team has a roster or any enrolled player. Appearance is
+    used only for teams with reference images and when the re-ID weights load;
+    otherwise commentary mentions, shirt-number reads and the roster drive it.
+    """
+    if getattr(args, "no_reid", False):
+        return None
+    from identity import DEFAULT_REID_WEIGHTS, GALLERY_DIR, IdentityTracker, PlayerGallery, ReidEmbedder
+
+    gallery = PlayerGallery(getattr(args, "player_gallery_dir", None) or GALLERY_DIR)
+    enrolled = {team_id: gallery.members(name) for team_id, name in team_names.items()}
+    squads = squads or {team_id: squad_for(name) for team_id, name in team_names.items()}
+    if not any(enrolled.values()) and not any(squads.values()):
+        return None
+    embedder = getattr(args, "reid_embedder", None)
+    if embedder is None and any(enrolled.values()) and os.path.isfile(DEFAULT_REID_WEIGHTS):
+        try:
+            embedder = ReidEmbedder.load()
+        except Exception as error:  # optional: a truncated or LFS-pointer file must not fail the run
+            print(f"Re-identification weights unavailable: {error}")
+    galleries = {
+        team_id: gallery.team_prototypes(team_names[team_id], embedder) if embedder and enrolled[team_id] else None
+        for team_id in team_names
+    }
+    print(
+        "Player identity: "
+        + ", ".join(f"{team_names[t]} {len(enrolled[t])} enrolled / {len(squads[t])} in roster" for t in team_names)
+        + f"; appearance {'on' if any(galleries.values()) else 'off'}"
+    )
+    return IdentityTracker(squads, galleries, embedder, fps)
+
+
+def _apply_identity(identity_tracker, actors):
+    """Feed shirt-number reads in; name actors the OCR could not read."""
+    track_ids = [int(a["track_id"]) for a in actors if a.get("track_id") is not None]
+    for actor in actors:
+        if actor.get("jersey_number") is not None and actor.get("track_id") is not None:
+            identity_tracker.add_number_read(
+                int(actor["track_id"]), int(actor["jersey_number"]), float(actor.get("jersey_confidence") or 0.5)
+            )
+    for actor in actors:
+        if actor.get("jersey_number") is not None or actor.get("track_id") is None:
+            continue
+        track_id = int(actor["track_id"])
+        named = identity_tracker.name_for(track_id, concurrent=[t for t in track_ids if t != track_id])
+        if named is None:
+            continue
+        actor["jersey_number"] = named["jersey_number"]
+        actor["player_name"] = named["player_name"]
+        actor["jersey_confidence"] = named["probability"]
+        actor["name_confidence"] = named["probability"]
+        # The combined per-track belief: commentary, shirt reads, appearance.
+        actor["identity_source"] = "identity"
+
+
 def _record_ball_possession(scorer_identifier, players, frame_number):
     """Feed the scorer history from the possession the event detector settled."""
     for track_id, player in players.items():
@@ -318,7 +654,7 @@ def _frame_tracks(tracks, offset):
     return {key: [value[offset]] for key, value in tracks.items()}
 
 
-def _resolve_identities(scorer_identifier, event, image_dir, url_prefix):
+def _resolve_identities(scorer_identifier, event, image_dir, url_prefix, identity_tracker=None):
     """Attach team and shirt number to every participant of an event.
 
     ``scorer`` keeps its historical name: it is the primary actor (scorer,
@@ -338,6 +674,8 @@ def _resolve_identities(scorer_identifier, event, image_dir, url_prefix):
         return
     if participants:
         actors = scorer_identifier.identify_participants(participants)
+        if identity_tracker is not None:
+            _apply_identity(identity_tracker, actors)
         event["actors"] = actors
         primary_role = PRIMARY_ROLE.get(str(event.get("event", "")).lower())
         primary = next((actor for actor in actors if actor.get("role") == primary_role), None)
@@ -355,8 +693,27 @@ def _resolve_identities(scorer_identifier, event, image_dir, url_prefix):
         if event.get("team_id", 0) == 0 and primary.get("team_id", 0):
             event["team_id"] = primary["team_id"]
             event["team_name"] = primary["team_name"]
+    elif str(event.get("event", "")).lower() != "goal":
+        # A spotted shot has no tracked shooter: report it without a player
+        # rather than guess (and spend shirt-number OCR on) the last holder.
+        event["scorer"] = {
+            "team_id": event.get("team_id", 0),
+            "team_name": event.get("team_name"),
+            "jersey_number": None,
+            "player_name": None,
+        }
     else:
         scorer = scorer_identifier.identify_goal(int(event.get("frame", 0)))
+        team_id = int(event.get("team_id") or 0)
+        if team_id and int(scorer.get("team_id") or 0) not in (0, team_id):
+            # The last player in possession plays for the other side (a
+            # defender, a keeper): the goal's team stands, no player is named.
+            scorer = {
+                "team_id": team_id,
+                "team_name": event.get("team_name"),
+                "jersey_number": None,
+                "player_name": None,
+            }
         event["scorer"] = scorer
         _save_scorer_image(scorer_identifier, scorer, image_dir, url_prefix)
 
@@ -375,6 +732,29 @@ def _roster_name(team_name, jersey_number):
     )
 
 
+def _back_caption_with_shared_name(candidates, team_id):
+    """A spoken surname several players share ("Romero") supports the one the caption names.
+
+    The commentary resolves a shared surname by the goal's team, which comes
+    from kit colours; on Levante-Sevilla that turned "Romero" into Sevilla's
+    Isaac while the caption showed Levante's Iván.
+    """
+    captioned = {
+        (int(c.team_id or team_id), int(c.jersey_number)): c
+        for c in candidates if c.source == "caption" and c.jersey_number is not None
+    }
+    for candidate in candidates:
+        if candidate.source != "commentary":
+            continue
+        for team, number in candidate.detail.get("shared_with") or []:
+            caption = captioned.get((int(team), int(number)))
+            if caption is not None:
+                candidate.detail["moved_from"] = [candidate.team_id or team_id, candidate.jersey_number]
+                candidate.team_id, candidate.jersey_number = int(team), int(number)
+                candidate.player_name = caption.player_name
+                break
+
+
 def _improve_goal_scorers(
     events,
     scorer_identifier,
@@ -383,6 +763,9 @@ def _improve_goal_scorers(
     frame_height,
     ocr_fn=None,
     extra_ocr_allowance=GOAL_SCORER_OCR_ALLOWANCE,
+    team_squads=None,
+    commentary_roles=None,
+    team_names=None,
 ):
     """Re-decide every goal's scorer from all the evidence, not one shirt read.
 
@@ -391,14 +774,25 @@ def _improve_goal_scorers(
     the scoring team's players in the celebration close-ups, and the live read
     of the shooter. The result replaces ``scorer`` (and the scorer actor) with
     the fused shirt number, a confidence, and a name only when confirmed.
+
+    Captions and the commentary are matched against both squads: the goal's
+    team comes from kit colours, which are often wrong, and a clear name from
+    the other squad corrects it (``details.team_corrected``). A team the score
+    graphic decided is not corrected; its goal searches its own squad only.
     """
     fps = max(float(fps), 1.0)
+    team_names = team_names or {}
     for event in events:
         if str(event.get("event", "")).lower() != "goal":
             continue
         details = event.setdefault("details", {})
         team_id = int(event.get("team_id", 0) or 0)
-        squad = squad_for(event.get("team_name"))
+        squad = (team_squads or {}).get(team_id) or squad_for(event.get("team_name"))
+        locked = _team_from_scoreboard(event)
+        squads = {
+            int(t): members for t, members in (team_squads or {}).items()
+            if members and (not locked or int(t) == team_id)
+        }
         scorer = dict(event.get("scorer") or {})
         moment = int(event.get("frame", 0) or 0)
         board_frame = int(details.get("scoreboard_frame") or moment)
@@ -416,34 +810,79 @@ def _improve_goal_scorers(
             celebration_end,
             frame_height,
         )
-        preliminary = fuse_scorer(candidates, squad)
-        # Captions are a fallback: broad OCR passes are not paid for when the
-        # live/celebration evidence already identifies a scorer confidently.
-        if ocr_fn is not None and (preliminary is None or preliminary.get("unconfirmed")):
-            candidates += read_caption_candidates(video_path, moment, fps, ocr_fn, squad)
+        spoken = ((commentary_roles or {}).get(id(event)) or {}).get("scorer")
+        if spoken is not None:
+            # The commentary is the heaviest single vote (caption 3.0).
+            candidates.append(ScorerCandidate(
+                int(spoken["jersey_number"]), WEIGHT_COMMENTARY * float(spoken["confidence"]),
+                "commentary", spoken["player_name"],
+                detail={"said": spoken.get("said"), "shared_with": spoken.get("shared_with") or []},
+                team_id=int(spoken.get("team_id") or 0) or None,
+            ))
+        preliminary = fuse_scorer(candidates, squad, squads, team_id)
+        # Captions are read unless the evidence is already decisive: a
+        # commentary guess alone is not (it named 1 of 6 wrong on
+        # Levante-Sevilla while the caption named all six right).
+        decisive = (
+            preliminary is not None
+            and not preliminary.get("unconfirmed")
+            and preliminary["scorer_confidence"] >= CAPTION_SKIP_CONFIDENCE
+            and len(preliminary.get("scorer_sources") or []) >= 2
+        )
+        if ocr_fn is not None and not decisive:
+            candidates += read_caption_candidates(
+                video_path, moment, fps, ocr_fn, squad, squads=squads, team_id=team_id
+            )
+        _back_caption_with_shared_name(candidates, team_id)
         details["scorer_evidence"] = [
             {
                 "source": c.source,
+                "team_id": c.team_id or team_id,
                 "jersey_number": c.jersey_number,
                 "player_name": c.player_name,
                 "weight": round(c.weight, 3),
             }
             for c in candidates
         ]
-        fused = fuse_scorer(candidates, squad)
+        fused = fuse_scorer(candidates, squad, squads, team_id)
         if fused is None:
             continue
+        fused_team = int(fused.pop("team_id") or 0)
+        if team_id and fused_team != team_id:
+            name_sources = sorted(set(fused["scorer_sources"]) & {"caption", "commentary"})
+            if fused["unconfirmed"] or not name_sources:
+                # The other squad's player is not named clearly enough to
+                # move the goal: decide among the goal team's evidence only.
+                own = [c for c in candidates if not c.team_id or int(c.team_id) == team_id]
+                fused = fuse_scorer(own, squad, squads, team_id)
+                if fused is None:
+                    continue
+                fused.pop("team_id", None)
+            else:
+                _correct_goal_team(event, fused_team, team_names, name_sources)
+                team_id = fused_team
+        elif not team_id and fused_team and not fused["unconfirmed"]:
+            # No team was read from the kits; the named scorer gives it.
+            event["team_id"], event["team_name"] = fused_team, team_names.get(fused_team)
+            team_id = fused_team
 
         changed = fused["jersey_number"] != scorer.get("jersey_number")
         for record in [scorer, *[a for a in event.get("actors") or [] if a.get("role") == "scorer"]]:
             record.update(fused)
-            record.setdefault("team_id", team_id)
+            if details.get("team_corrected") or not record.get("team_id"):
+                record["team_id"], record["team_name"] = team_id, event.get("team_name")
             record.setdefault("team_name", event.get("team_name"))
             if changed:
                 # The photo is of the tracked shooter, who is not the fused scorer.
                 record.pop("player_image", None)
                 record["jersey_confidence"] = fused["scorer_confidence"]
         event["scorer"] = scorer
+        actors = event.setdefault("actors", [])
+        if not any(a.get("role") == "scorer" for a in actors):
+            # A goal no player was tracked for (spotted, or from the graphic):
+            # the API stores one row per actor, so the named scorer needs one,
+            # first, ahead of any assister.
+            actors.insert(0, {**scorer, "role": "scorer"})
 
 
 def _actor_label(actor):
@@ -522,8 +961,8 @@ def final_score_by_team(events, scoreboard_reader=None, code_to_team=None):
     return score
 
 
-def goal_output_events(events):
-    return [event for event in events if str(event.get("event", "")).lower() == "goal"]
+def goal_output_events(events, kinds=("goal",)):
+    return [event for event in events if str(event.get("event", "")).lower() in kinds]
 
 
 def should_calibrate_teams(args) -> bool:
@@ -561,7 +1000,9 @@ def process_video(args, progress_cb=None):
     fps = float(capture.get(cv2.CAP_PROP_FPS)) or 25.0
     total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
     duration = total_frames / max(fps, 1.0)
-    target_fps = config.analysis_fps(duration)
+    # The full profile asks for "every frame" with a huge rate; the tracker
+    # sizes its lost-track buffer from this, so it must be a real rate.
+    target_fps = min(fps, config.analysis_fps(duration))
     detector_size = config.detector_size(height)
 
     write_video = bool(getattr(args, "write_annotated_video", False))
@@ -600,11 +1041,11 @@ def process_video(args, progress_cb=None):
     print(f"Pitch model: {pitch_model or 'none'}")
     event_detector = None
     event_logic = None
-    if config.use_legacy_event_model:
+    if config.use_legacy_event_model or getattr(args, "legacy_event_model", False):
         from event_detector import EventDetector
         from event_logic import EventLogic
 
-        event_detector = EventDetector(args.event_model)
+        event_detector = EventDetector(getattr(args, "event_model", None) or "models/final_model_80.pth")
         event_logic = EventLogic(fps=fps)
     team_assigner = TeamAssigner(match_config)
     ball_assigner = PlayerBallAssigner()
@@ -614,7 +1055,9 @@ def process_video(args, progress_cb=None):
         ball_assigner=ball_assigner,
         detect_cards=config.detect_cards and bool(getattr(args, "detect_cards", True)),
         detect_fouls=config.detect_fouls,
-        detect_passes=not config.goal_only,
+        # Passes are always followed (cheap, rule-based): the last team-mate
+        # pass to the scorer is the goal's assist. Goal-only output hides them.
+        detect_passes=True,
         detect_penalties=not config.goal_only,
     )
     if getattr(args, "no_ocr", False):
@@ -662,6 +1105,34 @@ def process_video(args, progress_cb=None):
         else:
             print(f"Scoreboard reading unavailable: {jersey_reader._engine_error}")
 
+    spotter = None
+    if config.use_spotting and not getattr(args, "no_spotting", False):
+        bundle = getattr(args, "spotting_bundle", None)
+        if bundle is None:
+            try:
+                from spotting import load_spotting_bundle
+
+                bundle = load_spotting_bundle()
+            except Exception as error:  # optional: a truncated or LFS-pointer file must not fail the run
+                print(f"Spotting model unavailable, running without it: {error}")
+        if bundle is not None:
+            from spotting import ActionSpotter
+
+            spotter = ActionSpotter(
+                bundle.model, bundle.labels, fps, sample_fps=config.spotting_sample_fps, clip_len=bundle.clip_len
+            )
+            print(f"Spotting model on, sampling {spotter.sample_fps:g} frames a second")
+
+    team_squads = _team_squads(args, team_names)
+    identity_tracker = _build_identity_tracker(args, team_names, fps, team_squads)
+    commentary_words, commentary_mentions, commentary_language = [], [], None
+    if config.use_commentary and not getattr(args, "no_commentary", False):
+        with metrics.timer("commentary"):
+            commentary_words, commentary_mentions, commentary_language = _transcribe_commentary(
+                args, config, team_squads
+            )
+    possession_log = []
+
     if not should_calibrate_teams(args):
         print("Using the team kit centres confirmed during upload.")
     elif _calibrate_teams(tracker, team_assigner, args.video, total_frames, fps, height):
@@ -702,13 +1173,26 @@ def process_video(args, progress_cb=None):
                 boundaries.append(absolute)
         scenes = SceneTimeline(sorted(boundaries, key=lambda boundary: boundary.start))
 
+    handled_scene_start = -1
+
     def process_batch(batch, frame_numbers):
-        nonlocal frames_with_ball, stop
+        nonlocal frames_with_ball, stop, handled_scene_start
         skip_offsets = {o for o, number in enumerate(frame_numbers) if scenes.in_transition(number)}
-        reset_offsets = {o for o, number in enumerate(frame_numbers) if scenes.starts_scene(number)}
+        # Only some frames are analysed, so the exact first frame of a shot is
+        # usually not among them. Reset on the first analysed frame at or after
+        # any scene start not yet acted on - otherwise roughly half the cuts at
+        # 25 fps (and most at 60 fps) never clear the previous shot's ball trail
+        # and goal frame, and the "cut away after a shot" goal rule never fires.
+        reset_offsets = set()
+        for offset, number in enumerate(frame_numbers):
+            if offset in skip_offsets:
+                continue
+            start = scenes.latest_start_at_or_before(number)
+            if start is not None and start > handled_scene_start:
+                reset_offsets.add(offset)
+                handled_scene_start = start
         tracks = tracker.get_object_tracks(
             batch,
-            read_from_stub=False,
             reset_offsets=reset_offsets,
             skip_offsets=skip_offsets,
         )
@@ -725,6 +1209,10 @@ def process_video(args, progress_cb=None):
             in_transition = offset in skip_offsets
             if offset in reset_offsets:
                 pending_events.extend(track_events.reset_scene(original_frame))
+                # Ids restart (offset) at a cut; old tracks' team votes are dead.
+                team_assigner.forget_players(players.keys())
+                if identity_tracker is not None:
+                    identity_tracker.end_scene()
                 if pitch_calibrator is not None:
                     pitch_calibrator.reset()
             calibration = (
@@ -739,17 +1227,33 @@ def process_video(args, progress_cb=None):
             new_events = []
             if not in_transition:
                 _assign_teams(team_assigner, frame, players)
+                if identity_tracker is not None:
+                    identity_started = perf_counter()
+                    identity_tracker.observe(original_frame, frame, players, calibration)
+                    metrics.add_time("player_identity", perf_counter() - identity_started)
                 new_events = track_events.update(
                     original_frame, players, ball_bbox, referees, frame, pitch=calibration
                 )
                 pending_events.extend(new_events)
-                # Only possession candidates can become a scorer. Keeping their
-                # best four crops avoids doing quality work for every player.
+                # Shirt crops for the ball holder and for every player big
+                # enough to read (close-ups, replays): the fouled player, the
+                # assister and a scorer seen before he touched the ball need
+                # reads too. The size gate keeps wide shots to a few players.
+                readable = scorer_identifier.identity_store.min_box_height
                 candidates = {
-                    track_id: player for track_id, player in players.items() if player.get("has_ball")
+                    track_id: player
+                    for track_id, player in players.items()
+                    if player.get("has_ball") or float(player["bbox"][3]) - float(player["bbox"][1]) >= readable
                 }
                 scorer_identifier.observe_players(original_frame, frame, candidates)
                 _record_ball_possession(scorer_identifier, players, original_frame)
+                holder = next((t for t, p in players.items() if p.get("has_ball")), None)
+                if holder is not None:
+                    # Whole-match possession timeline: a spoken name goes to
+                    # whoever had the ball when it was said.
+                    possession_log.append(
+                        (original_frame, int(holder), int(players[holder].get("team", 0) or 0))
+                    )
                 if scoreboard_reader is not None and any(
                     event.get("event") == "shot" for event in new_events
                 ):
@@ -788,6 +1292,10 @@ def process_video(args, progress_cb=None):
                     metrics.add_time("scene_analysis", perf_counter() - scene_started)
                     if len(scene_signatures) > 96:
                         del scene_signatures[:-64]
+                if spotter is not None and spotter.wants(original_frame):
+                    spotting_started = perf_counter()
+                    spotter.add_frame(original_frame, frame)
+                    metrics.add_time("spotting", perf_counter() - spotting_started)
                 if original_frame == next_scheduled:
                     batch.append(frame)
                     batch_numbers.append(original_frame)
@@ -808,6 +1316,28 @@ def process_video(args, progress_cb=None):
             cv2.destroyAllWindows()
 
     pending_events.extend(track_events.finish(frame_number))
+    if spotter is not None:
+        from spotting import USED_CLASSES, fuse_spotted_events
+
+        with metrics.timer("spotting"):
+            spotter.finish()
+        spotted = spotter.events(min_confidence=config.spotting_min_confidence, classes=USED_CLASSES)
+        before = len(pending_events)
+        pending_events = fuse_spotted_events(pending_events, spotted, fps)
+        print(
+            f"Spotting: {len(spotter.sample_frames)} samples, {spotter.inference_seconds:.1f}s inference; "
+            + (", ".join(f"{e['event']} {e['confidence']:.2f}@{e['frame'] / fps:.1f}s" for e in spotted) or "nothing")
+            + f"; {len(pending_events) - before} event(s) added"
+        )
+    commentary_attached = []
+    if commentary_mentions:
+        from commentary import attach_to_tracks
+
+        commentary_attached = attach_to_tracks(commentary_mentions, possession_log, fps, identity_tracker)
+        print(
+            f"Commentary: {len(commentary_attached)} of {len(commentary_mentions)} spoken names attached "
+            "to the player on the ball"
+        )
     pending_events = _drop_model_fouls_near_track_fouls(pending_events, fps)
     pending_events = _drop_model_goals_near_pitch_goals(pending_events, fps)
     code_to_team = None
@@ -857,15 +1387,20 @@ def process_video(args, progress_cb=None):
                 f"Scoreboard: no score graphic read ({scoreboard_reader.ocr_calls} OCR calls); "
                 "goals come from the track and pitch rules"
             )
-    # One goal is shown live and again in replays; a shot that went in was not saved.
-    pending_events = drop_replayed_goals(pending_events, fps)
+    # Spotted kick-offs only separate goals from replays (drop_replayed_goals,
+    # after the scorers are named); they are not events a user sees.
+    kick_off_frames = [int(e.get("frame", 0)) for e in pending_events if e.get("event") == "kick_off"]
+    pending_events = [event for event in pending_events if event.get("event") != "kick_off"]
+    # A shot that went in was not saved.
     pending_events = withdraw_saves_of_goals(pending_events)
     pending_events.sort(key=lambda event: int(event.get("frame", 0)))
+    # Before passes are hidden: the last team-mate pass to the scorer.
+    _attach_pass_assisters(pending_events, fps)
 
     # Shots and saves remain available above as attribution evidence. The web
-    # profile exposes and persists only final, deduplicated goal events.
+    # profile exposes and persists only the configured event types.
     if config.goal_only:
-        pending_events = goal_output_events(pending_events)
+        pending_events = goal_output_events(pending_events, config.output_events)
 
     print(f"Ball selected in {frames_with_ball} of {tracker.person_inference_frames} analysed frames")
     if pitch_calibrator is not None:
@@ -888,7 +1423,7 @@ def process_video(args, progress_cb=None):
     ordered = sorted(pending_events, key=resolution_order)
     with metrics.timer("scorer_ocr"):
         for event in ordered:
-            _resolve_identities(scorer_identifier, event, image_dir, url_prefix)
+            _resolve_identities(scorer_identifier, event, image_dir, url_prefix, identity_tracker)
 
     # Goals: fuse the caption, the celebration close-ups and the live read.
     caption_ocr = None
@@ -898,6 +1433,11 @@ def process_video(args, progress_cb=None):
         and jersey_reader._ensure_engine()
     ):
         caption_ocr = paddle_ocr_fn(jersey_reader.engine)
+    commentary_roles = (
+        _commentary_goal_roles(pending_events, commentary_words, commentary_mentions, fps)
+        if commentary_mentions or commentary_words
+        else {}
+    )
     with metrics.timer("scorer_ocr"):
         _improve_goal_scorers(
             pending_events,
@@ -907,7 +1447,26 @@ def process_video(args, progress_cb=None):
             height,
             caption_ocr,
             extra_ocr_allowance=(0 if config.goal_only else GOAL_SCORER_OCR_ALLOWANCE),
+            team_squads=team_squads,
+            commentary_roles=commentary_roles,
+            team_names=team_names,
         )
+    # The commentary names the assister, the fouler and the fouled player, and
+    # a scorer the fusion left unnamed. Keepers default to the roster's number one.
+    if commentary_roles or commentary_mentions:
+        _apply_commentary(
+            pending_events, commentary_words, commentary_mentions, fps, team_names, identity_tracker,
+            goal_roles_by_event=commentary_roles,
+        )
+    # One goal is shown live and again in replays. Decided only now, once
+    # captions and commentary have named the scorers: two goals close together
+    # with different named scorers are two goals (highlight packages).
+    goals_before = sum(1 for e in pending_events if e.get("event") == "goal")
+    pending_events = drop_replayed_goals(pending_events, fps, kick_off_frames=kick_off_frames)
+    replays = goals_before - sum(1 for e in pending_events if e.get("event") == "goal")
+    if replays:
+        print(f"Goals: {replays} replay(s) of an earlier goal dropped")
+    _name_keepers(pending_events, team_squads, team_names)
     for event in pending_events:
         event["description"] = describe_event(event)
 
@@ -951,6 +1510,21 @@ def process_video(args, progress_cb=None):
         "events": pending_events,
         "score_by_team_id": score_by_team_id,
         "metrics": metrics.summary(),
+        "player_tracks": identity_tracker.summary() if identity_tracker is not None else [],
+        "commentary": {
+            "language": commentary_language,
+            "words": len(commentary_words),
+            "mentions": [
+                {"at_seconds": round(m.start, 2), "said": m.text,
+                 "players": [{"team_id": c.team_id, "jersey_number": c.jersey_no, "name": c.name} for c in m.candidates]}
+                for m in commentary_mentions
+            ],
+            "attached": [
+                {"at_seconds": round(a.mention.start, 2), "track_id": a.track_id,
+                 "team_id": a.candidate.team_id, "jersey_number": a.candidate.jersey_no, "name": a.candidate.name}
+                for a in commentary_attached
+            ],
+        },
     }
     return result if getattr(args, "return_pipeline_result", False) else pending_events
 

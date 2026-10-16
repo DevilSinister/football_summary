@@ -171,6 +171,26 @@ def parse_one_line(token: Token, expected: Optional[Iterable[str]] = None) -> Op
     )
 
 
+def _assign(candidates, codes) -> Optional[Tuple[dict, float]]:
+    """Nearest digit token to each code, one token per code (a merged token may
+    serve both); ``(assignment, total distance)``, or None if a code has none."""
+    assigned: dict = {}
+    taken_tokens: set = set()
+    total = 0.0
+    for distance, code, value, token in candidates:
+        if code in assigned:
+            continue
+        token_key = (id(token), code) if distance == 0.0 else id(token)
+        if token_key in taken_tokens:
+            continue
+        assigned[code] = (value, token)
+        taken_tokens.add(token_key)
+        total += distance
+    if any(code not in assigned for code in codes):
+        return None
+    return assigned, total
+
+
 def parse_tokens(
     tokens: Sequence[Token],
     expected: Optional[Iterable[str]] = None,
@@ -242,17 +262,23 @@ def parse_tokens(
                 candidates.append((distance, code, value, token))
 
     candidates.sort(key=lambda item: item[0])
-    assigned: dict = {}
-    taken_tokens: set = set()
-    for distance, code, value, token in candidates:
-        if code in assigned:
-            continue
-        token_key = (id(token), code) if distance == 0.0 else id(token)
-        if token_key in taken_tokens:
-            continue
-        assigned[code] = (value, token)
-        taken_tokens.add(token_key)
-    if code_a not in assigned or code_b not in assigned:
+    if stacked:
+        # Both score cells of a stacked graphic sit on one side of the codes.
+        # The LaLiga bug has its clock on the other side, level with the lower
+        # code; read split ("56:" and "19") the clock's minutes are closer to
+        # that code than its score is, and were taken for it (Levante-Sevilla,
+        # 2026-10-16). Assign each side separately; keep the closer complete one.
+        codes_left, codes_right = min(box_a[0], box_b[0]), max(box_a[2], box_b[2])
+        sides = []
+        for keep in (lambda t: t.cx >= codes_right, lambda t: t.cx <= codes_left):
+            side = _assign([c for c in candidates if keep(c[3])], (code_a, code_b))
+            if side is not None:
+                sides.append(side)
+        assigned = min(sides, key=lambda side: side[1])[0] if sides else None
+    else:
+        found = _assign(candidates, (code_a, code_b))
+        assigned = found[0] if found else None
+    if assigned is None:
         return None
 
     boxes = [box_a, box_b, assigned[code_a][1].box, assigned[code_b][1].box]

@@ -1,0 +1,129 @@
+{
+  "team_name": "Villarreal",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Luiz Júnior",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Logan Costa",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Alex Freeman",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Alassane Diatta",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Pau Navarro",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Gerard Moreno",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Juan Foyth",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Georges Mikautadze",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Alberto Moleiro",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Ilias Akhomach",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Renato Veiga",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Rubén Gómez",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Santi Comesaña",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Santiago Mouriño",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Carlos Maciá",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Tajon Buchanan",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Pape Gueye",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Nicolas Pépé",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Carlos Romero",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Tani Oluwaseyi",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Ayoze Pérez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Sergi Cardona",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Nathan Saliba",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Péter Gulácsi",
+      "position": "GK"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "team_name": "SC Freiburg",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 3,
+      "name": "Philipp Lienhart",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Kenneth Schmidt",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Manuel Gulde",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Patrick Osterhage",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Derry Scherhant",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Maximilian Eggestein",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Lucas Höler",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Yuito Suzuki",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Yannik Engelhardt",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Jan-Niklas Beste",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Rihito Yamamoto",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Florian Müller",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Cyriaque Irié",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Florent Muslija",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Jannik Huth",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Kiliann Sildillia",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Nicolas Höfler",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Matthias Ginter",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Christian Günter",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Igor Matanović",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Vincenzo Grifo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Jordy Makengo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Max Rosenfelder",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Michael Gregoritsch",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Rouven Tarnutzer",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Keisuke Goto",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Mio Backhaus",
+      "position": "GK"
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "team_name": "Eintracht Frankfurt",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Noah Atubolu",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Elias Baum",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Lilian Brassier",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Robin Koch",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Otávio",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Oscar Højlund",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Ansgar Knauff",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Farès Chaïbi",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Jonathan Burkardt",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Younes Ebnoutalib",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Noël Aséko",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Ritsu Dōan",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Timothy Chandler",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Raphael Onyedika",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Keita Kosugi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Mario Götze",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Ayoube Amaimouni",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Love Arrhov",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Jens Grahl",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Nnamdi Collins",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Malik Pimpong",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Jeremiaha Maluze",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Eba Bekir İş",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 39,
+      "name": "Amil Šiljević",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 40,
+      "name": "Kauã Santos",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 42,
+      "name": "Can Uzun",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Jessic Ngankam",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Marvin Dills",
+      "position": "MF"
+    }
+  ]
+}

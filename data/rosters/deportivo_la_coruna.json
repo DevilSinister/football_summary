@@ -1,0 +1,139 @@
+{
+  "team_name": "Deportivo La Coruña",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet La Liga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Germán Parreño",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Adrià Altimira",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Arnau Comas",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Lucas Noubi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Dani Barcia",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Marc Casadó",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Pierre-Emerick Aubameyang",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Diego Villares",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Zakaria Eddahchouri",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Yeremay Hernández",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "David Mella",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Giacomo Quagliata",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Leo Román",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Riki Rodríguez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Miguel Loureiro",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Lorenzo Amatucci",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Angeliño",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Jonathan Asp Jensen",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Luismi Cruz",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "José María Giménez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Mario Soriano",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Bright Ede",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Ximo Navarro",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Adama Traoré",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Álvaro Fernández",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Bil Nsongo",
+      "position": "FW"
+    }
+  ]
+}

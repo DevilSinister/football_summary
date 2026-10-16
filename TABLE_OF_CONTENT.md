@@ -2,7 +2,7 @@
 
 This document is the practical table of contents for the current Footy AI codebase. It explains the user journey, the video-analysis pipeline, API endpoints, storage locations, database records, and the responsibility of each important source file.
 
-> **Current implementation:** the web application uses the goal-focused `PipelineConfig.short_clip()` profile. The command-line entry point can still run the broader/full profile. Files named `main(v1).py`, `main(v2).py`, `event_detector(v1).py`, and `event_detector(v2).py` are historical versions and are not part of the active web request path.
+> **Current implementation:** the web application uses the goal-focused `PipelineConfig.short_clip()` profile. The command-line entry point can still run the broader/full profile. The historical `main(v1).py`, `main(v2).py`, `event_detector(v1).py`, `event_detector(v2).py`, `event_logic(V1).py` and the unused camera-movement, speed/distance and view-transformer packages were deleted on 2026-10-14 (recoverable from git history).
 
 ## Contents
 
@@ -561,10 +561,12 @@ This index covers active entry points and the important reusable internals. Smal
 | --- | --- |
 | `models/best.pt` | Primary player/goalkeeper/referee detection; fallback ball class |
 | `models/ball_detector_best.pt` | Dedicated ball detector, used when the file exists |
-| `models/final_model_80.pth` | Legacy event LSTM/CNN weights; not loaded by short web profile |
-| `models/Football_field.pt` | Pitch-related model asset present in the repository, but the active constant currently expects `models/football_field_best.pt`; pitch calibration is disabled in web jobs |
+| `models/checkpoint_088.pt` + `models/config.json` | E2E-Spot action-spotting model (RegNetY-200MF + GSM + BiGRU, SoccerNet-v2, 17 classes in sorted order, 2 fps); `spotting/`; on in both profiles, `--no-spotting` disables |
+| `models/reid/osnet_x1_0_msmt17.pt` | OSNet person re-ID embedder for enrolled players; `identity/`; `--no-reid` disables |
+| `models/final_model_80.pth` | Legacy event LSTM; off in every profile, `--legacy-event-model` opts in (its goal score is noise) |
+| `models/Football_field.pt` | Pitch keypoint model; off by default (`DEFAULT_PITCH_MODEL = "none"`), opt in with `--pitch-model models/Football_field.pt`; untrustworthy at the goal end |
 
-Model file names are case- and path-sensitive on some operating systems. `main.py::DEFAULT_PITCH_MODEL` currently points at `models/football_field_best.pt`; verify or rename/configure the intended pitch weights before enabling the full pitch profile.
+Model file names are case- and path-sensitive on some operating systems.
 
 ### Roster files
 
@@ -736,18 +738,11 @@ These are retained for research, compatibility, or a future full-analysis profil
 
 | Path/component | Status |
 | --- | --- |
-| `event_detector.py`, `event_logic.py`, `model.py` | Current legacy learned-event stack; loaded only when `use_legacy_event_model=True` |
-| `main(v1).py`, `main(v2).py` | Historical entry points; do not edit for current web behavior |
-| `event_detector(v1).py`, `event_detector(v2).py`, `event_logic(V1).py` | Historical event implementations |
+| `event_detector.py`, `event_logic.py` | Legacy LSTM event stack; loaded only with `--legacy-event-model` |
 | `pitch/` | Available to full profile; disabled for web speed and because rejected homographies were not useful |
 | `track_events/fouls.py`, `track_events/cards.py` | Maintained and tested, but disabled in web profile |
 | pass/cross/penalty branches in `TrackEventDetector` | Maintained for full profile; disabled when `goal_only=True` |
-| `camera_movement_estimator/` | Earlier/full analytics support, not called by current `process_video()` path |
-| `speed_and_distance_estimator/` | Earlier/full analytics support, not called by current web path |
-| `view_transformer/` | Earlier perspective analytics support, not called by current web path |
-| `development_and_analysis/` | Experiments and notebooks, not production runtime |
 | `training/` | Model-training material, not production runtime |
-| `stubs/` | Cached/development data, not the live web workflow |
 
 ## 17. Where to make common changes
 

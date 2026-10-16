@@ -15,6 +15,7 @@ from scorer_identifier import (
     fuse_scorer,
     live_candidate,
     match_caption,
+    match_caption_teams,
     read_caption_candidates,
     squad_for,
 )
@@ -160,6 +161,66 @@ class CaptionReaderTests(unittest.TestCase):
 
     def test_no_squad_means_no_reads(self):
         self.assertEqual(read_caption_candidates("missing.mp4", 0, 25.0, lambda r: [], []), [])
+
+
+# Levante-Sevilla (2026-10-16): both squads have a Romero.
+LEV_SEV = {
+    1: [{"jersey_no": 9, "name": "Iván Romero", "position": "FW"},
+        {"jersey_no": 4, "name": "Adrián de la Fuente", "position": "DF"},
+        {"jersey_no": 3, "name": "Ifeanyi Ndukwe", "position": "DF"}],
+    2: [{"jersey_no": 16, "name": "Isaac Romero", "position": "FW"},
+        {"jersey_no": 1, "name": "Odysseas Vlachodimos", "position": "GK"},
+        {"jersey_no": 11, "name": "Félix Correia", "position": "FW"}],
+}
+
+
+class BothSquadsTests(unittest.TestCase):
+    def test_a_full_name_picks_the_right_romero_across_both_squads(self):
+        # The kit said Sevilla scored; the caption named Levante's Romero.
+        found = match_caption_teams(["IVÁN ROMERO", "MIN. 56"], LEV_SEV, team_id=2)
+        self.assertEqual([(team, p["jersey_no"]) for team, p, _ in found], [(1, 9)])
+
+    def test_a_shared_surname_alone_falls_back_to_the_goals_team(self):
+        found = match_caption_teams(["ROMERO"], LEV_SEV, team_id=2)
+        self.assertEqual([(team, p["jersey_no"]) for team, p, _ in found], [(2, 16)])
+
+    def test_fusion_keeps_the_team_of_a_caption_from_the_other_squad(self):
+        candidates = [
+            ScorerCandidate(16, 0.9, "live"),
+            ScorerCandidate(9, 6.0, "caption", "Iván Romero", team_id=1),
+        ]
+        fused = fuse_scorer(candidates, LEV_SEV[2], LEV_SEV, team_id=2)
+        self.assertEqual((fused["team_id"], fused["jersey_number"], fused["player_name"]), (1, 9, "Iván Romero"))
+        self.assertFalse(fused["unconfirmed"])
+        self.assertIn("2:16", fused["scorer_alternatives"])
+
+    def test_fusion_without_squads_still_works_on_one_squad(self):
+        fused = fuse_scorer([ScorerCandidate(11, 3.0, "caption")], SQUAD)
+        self.assertEqual((fused["team_id"], fused["jersey_number"]), (0, 11))
+
+
+class CaptionLeadTests(unittest.TestCase):
+    """Levante-Sevilla full run (2026-10-16): both captions were right and left unconfirmed."""
+
+    def test_a_caption_well_ahead_of_one_commentary_vote_is_confirmed(self):
+        # Ndukwe: caption 6.0 vs commentary "De la Fuente" 2.8, both defenders.
+        candidates = [ScorerCandidate(4, 2.786, "commentary", team_id=1),
+                      ScorerCandidate(3, 6.0, "caption", "Ifeanyi Ndukwe", team_id=1)]
+        fused = fuse_scorer(candidates, LEV_SEV[1], LEV_SEV, team_id=1)
+        self.assertEqual((fused["jersey_number"], fused["player_name"]), (3, "Ifeanyi Ndukwe"))
+        self.assertFalse(fused["unconfirmed"])
+
+    def test_the_other_squads_caption_ahead_is_confirmed_too(self):
+        candidates = [ScorerCandidate(2, 0.39, "celebration"),
+                      ScorerCandidate(16, 3.238, "commentary", team_id=2),
+                      ScorerCandidate(9, 6.0, "caption", "Iván Romero", team_id=1)]
+        fused = fuse_scorer(candidates, LEV_SEV[2], LEV_SEV, team_id=2)
+        self.assertEqual((fused["team_id"], fused["jersey_number"], fused["unconfirmed"]), (1, 9, False))
+
+    def test_a_caption_only_narrowly_ahead_stays_unconfirmed(self):
+        candidates = [ScorerCandidate(4, 2.5, "commentary", team_id=1),
+                      ScorerCandidate(3, 3.0, "caption", team_id=1)]
+        self.assertTrue(fuse_scorer(candidates, LEV_SEV[1], LEV_SEV, team_id=1)["unconfirmed"])
 
 
 if __name__ == "__main__":

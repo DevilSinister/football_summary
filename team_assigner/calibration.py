@@ -32,6 +32,11 @@ MAX_VALUE = 235
 # white/black/grey strip, and only its chromatic pixels define the kit colour.
 CHROMA_SATURATION = 60
 
+# Lab channel weights for kit comparison (see team_assigner.py for the
+# measurements behind them). Defined here so upload-stage clustering and the
+# match run compare kits in the same space.
+KIT_FEATURE_WEIGHTS = np.asarray([0.5, 3.0, 1.0], dtype=float)
+
 
 @dataclass
 class TeamSample:
@@ -212,8 +217,12 @@ def cluster_team_samples(
         )
 
     colors = np.asarray([sample.color for sample in normalized], dtype=np.float32)
+    # Cluster in the same weighted Lab space the match run uses to match kits
+    # (team_assigner.kit_feature). Clustering raw BGR split lit and shaded
+    # players of one kit while the run then compared kits on the red-green axis.
+    features = np.asarray([bgr_to_lab(color) * KIT_FEATURE_WEIGHTS for color in colors], dtype=np.float32)
     model = KMeans(n_clusters=2, init="k-means++", n_init=10, random_state=7)
-    labels = model.fit_predict(colors)
+    labels = model.fit_predict(features)
     if len(set(int(label) for label in labels)) < 2:
         raise ValueError("The two team kits could not be separated in this video.")
 
@@ -226,12 +235,12 @@ def cluster_team_samples(
             "One of the two kits was seen too few times to be identified reliably."
         )
 
+    # A cluster's colour is the median colour of its members: a colour that
+    # was actually observed, not a mean pulled between lit and shaded shirts.
+    centers_bgr = [np.median(colors[grouped[label]], axis=0) for label in range(2)]
     if min_separation > 0.0:
         separation = float(
-            np.linalg.norm(
-                bgr_to_lab(model.cluster_centers_[0])
-                - bgr_to_lab(model.cluster_centers_[1])
-            )
+            np.linalg.norm(bgr_to_lab(centers_bgr[0]) - bgr_to_lab(centers_bgr[1]))
         )
         if separation < min_separation:
             raise ValueError(
@@ -241,10 +250,11 @@ def cluster_team_samples(
     centers_rgb: list[list[int]] = []
     representatives: list[TeamSample] = []
     for label in range(2):
-        center = model.cluster_centers_[label]
+        center = centers_bgr[label]
         candidates = grouped[label]
         distances = {
-            index: float(np.linalg.norm(colors[index] - center)) for index in candidates
+            index: float(np.linalg.norm(features[index] - model.cluster_centers_[label]))
+            for index in candidates
         }
         # Stay reasonably near the cluster centre, then prefer the crop that
         # shows the player best. Ranking on colour distance alone is how a

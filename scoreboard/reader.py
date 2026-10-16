@@ -2,28 +2,35 @@
 
 Reading a whole strip of the frame costs 2-4 s per OCR call on this CPU at
 480p, so the graphic is located once (``scan``) and afterwards only its own
-small region is read (``locked``). If it stays unreadable for a minute - a
-long replay, a different graphic - the reader goes back to scanning.
+small region is read (``locked``). If it stays unreadable for 20 s - a
+long replay, a different graphic - the reader goes back to scanning; a region
+read only once (a full-time card that then went away) gets 10 s.
 
+The team codes are those of the first confirmed score, not the first read.
 A new score is believed only after ``confirm_reads`` consecutive reads agree,
 and only a rise of one or two goals for one team counts as goals. Anything
 else (a 0 read as 8, both scores moving at once) is logged, not reported.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple
 from time import perf_counter
 
 import cv2
 import numpy as np
 
-from .parser import Box, ScoreReading, Token, find_codes, parse_tokens
+from .parser import Box, ScoreReading, Token, _edit_distance, find_codes, parse_tokens
 
 OcrFn = Callable[[np.ndarray], List[Tuple[str, float, Box]]]
 
 MIN_TOKEN_CONFIDENCE = 0.5
 # A region locked on team codes alone is given this long to yield a score.
 CODES_ONLY_GRACE_SECONDS = 10.0
+# A locked graphic not read for this long is searched for again. It was 60 s;
+# a LaLiga highlights package opens on a full-time card at the bottom, and the
+# reader stayed on that empty corner for a minute while the real score bug sat
+# top left (Levante-Sevilla, 2026-10-16).
+LOST_AFTER_SECONDS = 20.0
 TOP_STRIP = 0.18      # share of the frame height scanned from the top
 BOTTOM_STRIP = 0.22   # and from the bottom
 
@@ -87,8 +94,13 @@ class ScoreTracker:
     _pending: Optional[Tuple[Tuple[int, int], int, int]] = None  # scores, first frame, count
 
     def observe(self, frame: int, reading: ScoreReading) -> Optional[List[ScoreGoal]]:
-        if self.codes is None:
+        if self.codes is None or (self.state is None and set(reading.codes) != set(self.codes)):
+            # The codes are settled by the first confirmed score, not the first
+            # read: a LaLiga highlights package opens on a full-time card read
+            # once as "LEV 3 3 SEL", and keeping SEL rejected every later
+            # LEV/SEV read of the real graphic (Levante-Sevilla, 2026-10-16).
             self.codes = reading.codes
+            self._pending = None
         elif set(reading.codes) != set(self.codes):
             self.rejected.append((frame, f"other codes {reading.codes}"))
             return None
@@ -150,7 +162,7 @@ class ScoreboardReader:
         expected_codes: Optional[Iterable[str]] = None,
         read_every_seconds: float = 1.0,
         scan_every_seconds: float = 2.0,
-        lost_after_seconds: float = 60.0,
+        lost_after_seconds: float = LOST_AFTER_SECONDS,
         confirm_reads: int = 2,
         burst_every_seconds: float = 0.5,
         burst_duration_seconds: float = 8.0,
@@ -173,6 +185,7 @@ class ScoreboardReader:
         self.layout: Optional[List[Tuple[str, Box]]] = None
         self.last_seen: Optional[int] = None
         self.locked_at: Optional[int] = None
+        self.region_reads = 0
         self._next_frame = 0
         self.ocr_calls = 0
         self.scans = 0
@@ -244,16 +257,29 @@ class ScoreboardReader:
             reading = parse_tokens(tokens, expected)
             if reading is not None:
                 self.scan_misses = 0
-                return reading, None
+                return replace(reading, codes=self._snap(reading.codes)), None
             if codes_only is None:
                 codes_only = find_codes(tokens, expected)
                 if codes_only is not None:
+                    snapped = self._snap([code for code, _ in codes_only])
+                    codes_only = [(code, box) for code, (_, box) in zip(snapped, codes_only)]
                     # Expected team codes are strong enough to lock the region;
                     # do not OCR the other three corners as well.
                     self.scan_misses = 0
                     return None, codes_only
         self.scan_misses += 1
         return None, codes_only
+
+    def _snap(self, codes: Sequence[str]) -> Tuple[str, ...]:
+        """Codes read without the expected list (permissive scans), moved onto an
+        expected code one edit away: "SEL" is SEV when SEV is expected."""
+        if not self.expected:
+            return tuple(codes)
+        snapped = []
+        for code in codes:
+            best = min(self.expected, key=lambda e: _edit_distance(code, e))
+            snapped.append(best if _edit_distance(code, best) <= 1 else code)
+        return tuple(snapped) if len(set(snapped)) == len(snapped) else tuple(codes)
 
     def _read_region(self, frame: np.ndarray) -> Optional[ScoreReading]:
         x1, y1, x2, y2 = self.region
@@ -276,6 +302,7 @@ class ScoreboardReader:
         self.layout = list(layout)
         self.locked_at = frame_number
         self.last_seen = None
+        self.region_reads = 0
 
     # --------------------------------------------------------------- update
     def trigger_burst(self, frame_number: int) -> None:
@@ -308,13 +335,17 @@ class ScoreboardReader:
             reading = self._read_region(frame)
             if reading is None:
                 self._log_rejected_tokens(frame_number, "locked")
-                if self.last_seen is None:
-                    if frame_number - self.locked_at > CODES_ONLY_GRACE_SECONDS * self.fps:
+                if self.region_reads < self.tracker.confirm_reads:
+                    # Locked on codes alone, or on one read of a graphic that
+                    # then vanished (a full-time card): give it a short grace.
+                    since = self.locked_at if self.last_seen is None else self.last_seen
+                    if frame_number - since > CODES_ONLY_GRACE_SECONDS * self.fps:
                         self.region, self.layout = None, None
                 elif frame_number - self.last_seen > self.lost_after:
                     self.region, self.layout = None, None
                 return None
         self.last_seen = frame_number
+        self.region_reads += 1
         return self.tracker.observe(frame_number, reading)
 
     @property

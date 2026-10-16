@@ -1,0 +1,154 @@
+{
+  "team_name": "Torino",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Serie A",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 2,
+      "name": "Nathan Patterson",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Cristiano Biraghi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Eray Cömert",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Emirhan İlkhan",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Zakaria Aboukhlal",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Rolando Mandragora",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Pietro Pellegri",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Nikola Vlašić",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Gaetano Oristanio",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Ricardo Rodriguez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Pietro Comuzzo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Sandro Kulenović",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Giovanni Simeone",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Ché Adams",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Lucas Perri",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Daniel Bragança",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Cesare Casadei",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Saúl Coco",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Diego Mascardi",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Kian Fitz-Jim",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Niccolò Fortini",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Ardian Ismajli",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Rafik Belghali",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 66,
+      "name": "Gvidas Gineitis",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 76,
+      "name": "Lapo Siviero",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Alessio Cacciamani",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 79,
+      "name": "Andrea Luongo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 81,
+      "name": "Franco Israel",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 91,
+      "name": "Duván Zapata",
+      "position": "FW"
+    }
+  ]
+}

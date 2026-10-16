@@ -1,0 +1,139 @@
+{
+  "team_name": "Mexico",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Raul Rangel",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Jorge Sanchez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Cesar Montes",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Edson Alvarez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Johan Vasquez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Erik Lira",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Luis Romo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Alvaro Fidalgo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Raul Jimenez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Alexis Vega",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Santiago Gimenez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Carlos Acevedo",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Guillermo Ochoa",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Armando Gonzalez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Israel Reyes",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Julian Quinones",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Orbelin Pineda",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Obed Vargas",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Gilberto Mora",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Mateo Chavez",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Cesar Huerta",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Guillermo Martinez",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Jesus Gallardo",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Luis Chavez",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Roberto Alvarado",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Brian Gutierrez",
+      "position": "MF"
+    }
+  ]
+}

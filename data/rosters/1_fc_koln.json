@@ -1,0 +1,144 @@
+{
+  "team_name": "1. FC Köln",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Bundesliga",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Marvin Schwäbe",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Joël Schmied",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Julian Pauli",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Timo Hübers",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Tom Krauß",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Ellyes Skhiri",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Luca Waldschmidt",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Ragnar Ache",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Saïd El Mala",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Reigan Heskey",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Gideon Mensah",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Alessio Castro-Montes",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Ísak Bergmann Jóhannesson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Malek El Mala",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Ron-Robert Zieler",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Martin James",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Jahmai Simpson-Pusey",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Paul Okon-Engstler",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Luka Lochoshvili",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Thijs Dallinga",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Sebastian Sebulonsen",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Jan Thielmann",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 30,
+      "name": "Marius Bülter",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Gil Neves",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 33,
+      "name": "Rav van den Berg",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Linton Maina",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 44,
+      "name": "Matthias Köbbing",
+      "position": "GK"
+    }
+  ]
+}

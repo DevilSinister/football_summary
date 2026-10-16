@@ -1,0 +1,139 @@
+{
+  "team_name": "England",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet International Teams",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Jordan Pickford",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 2,
+      "name": "Ezri Konsa",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Nico O'Reilly",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Declan Rice",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "John Stones",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 6,
+      "name": "Marc Guehi",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 7,
+      "name": "Bukayo Saka",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Elliot Anderson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Harry Kane",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 10,
+      "name": "Jude Bellingham",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Marcus Rashford",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 12,
+      "name": "Trevoh Chalobah",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Dean Henderson",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 14,
+      "name": "Jordan Henderson",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Dan Burn",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 16,
+      "name": "Kobbie Mainoo",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Morgan Rogers",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Anthony Gordon",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Ollie Watkins",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Noni Madueke",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 21,
+      "name": "Eberechi Eze",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Ivan Toney",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 23,
+      "name": "James Trafford",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Reece James",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 25,
+      "name": "Djed Spence",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 26,
+      "name": "Jarell Quansah",
+      "position": "DF"
+    }
+  ]
+}

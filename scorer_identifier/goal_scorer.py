@@ -78,15 +78,20 @@ POSITION_PRIOR = {"FW": 1.2, "MF": 1.0, "DF": 0.7, "GK": 0.1}
 # lone read, or one on a defender, shows as "#N (unconfirmed)".
 STRENGTH_FOR_FULL_CONFIDENCE = 2.5
 UNCONFIRMED_BELOW = 0.7
+# A caption-backed winner this many times the runner-up's weight is confirmed.
+CAPTION_LEAD_FACTOR = 1.5
 
 
 @dataclass
 class ScorerCandidate:
     jersey_number: Optional[int]
     weight: float
-    source: str  # "caption", "celebration" or "live"
+    source: str  # "caption", "celebration", "live" or "commentary"
     player_name: Optional[str] = None
     detail: dict = field(default_factory=dict)
+    # The team whose squad the number belongs to; None means the goal's team.
+    # Captions and commentary name players of either squad.
+    team_id: Optional[int] = None
 
 
 # ------------------------------------------------------------------ roster
@@ -194,6 +199,29 @@ def match_caption(lines: Sequence[str], squad: Sequence[dict]) -> List[Tuple[dic
     return found
 
 
+def match_caption_teams(
+    lines: Sequence[str], squads: Dict[int, Sequence[dict]], team_id: int = 0
+) -> List[Tuple[int, dict, float]]:
+    """``(team id, player, score)`` for the players a caption names, from either squad.
+
+    The kit colours that decide the goal's team are often wrong; the caption
+    is not. Both squads are searched together, so a word counts as
+    distinctive only if no player of either team shares it: "ROMERO" alone
+    names nobody when Levante and Sevilla both have one, "IVAN ROMERO" names
+    Levante's. Only when nothing matches across both squads is the goal's own
+    team searched alone, where "ROMERO" is distinctive again.
+    """
+    combined = [
+        {**player, "_team_id": int(tid)}
+        for tid, squad in (squads or {}).items()
+        for player in squad or []
+    ]
+    found = [(int(p["_team_id"]), p, score) for p, score in match_caption(lines, combined)]
+    if not found and team_id and (squads or {}).get(team_id):
+        found = [(int(team_id), p, score) for p, score in match_caption(lines, squads[team_id])]
+    return found
+
+
 OcrFn = Callable[[np.ndarray], Iterable[Tuple[str, float, tuple]]]
 
 
@@ -215,9 +243,17 @@ def read_caption_candidates(
     seconds: float = CAPTION_SECONDS,
     every_seconds: float = CAPTION_EVERY_SECONDS,
     max_reads: int = CAPTION_MAX_READS,
+    squads: Optional[Dict[int, Sequence[dict]]] = None,
+    team_id: int = 0,
 ) -> List[ScorerCandidate]:
-    """Scorer candidates from name captions shown after the goal."""
-    if not squad or ocr_fn is None:
+    """Scorer candidates from name captions shown after the goal.
+
+    With ``squads`` ({team id: squad}) the caption is matched against both
+    teams (``match_caption_teams``) and each candidate carries its team;
+    otherwise only against ``squad``, the goal's team.
+    """
+    squads = {int(t): members for t, members in (squads or {}).items() if members}
+    if (not squad and not squads) or ocr_fn is None:
         return []
     capture = cv2.VideoCapture(video_path)
     if not capture.isOpened():
@@ -229,8 +265,8 @@ def read_caption_candidates(
     if total > 0:
         last = min(last, total - 1)
 
-    votes: Dict[int, List[Tuple[int, float]]] = {}
-    players: Dict[int, dict] = {}
+    votes: Dict[Tuple[int, int], List[Tuple[int, float]]] = {}
+    players: Dict[Tuple[int, int], dict] = {}
     reads = 0
     try:
         for position in range(max(0, int(goal_frame)), last + 1, step):
@@ -247,13 +283,16 @@ def read_caption_candidates(
                     lines.extend(text for text, score, _ in ocr_fn(region) if score >= 0.5)
                 except Exception:
                     continue
-            matches = match_caption(lines, squad)
-            for player, score in matches:
-                number = int(player["jersey_no"])
-                players[number] = player
+            if squads:
+                matches = match_caption_teams(lines, squads, team_id)
+            else:
+                matches = [(0, player, score) for player, score in match_caption(lines, squad)]
+            for match_team, player, score in matches:
+                key = (match_team, int(player["jersey_no"]))
+                players[key] = player
                 # Two names in one frame (scorer and assist without the word
                 # "assist"): each gets half the weight.
-                votes.setdefault(number, []).append((position, score / len(matches)))
+                votes.setdefault(key, []).append((position, score / len(matches)))
             # One name, seen on enough frames: the caption is settled.
             if len(votes) == 1 and any(len(v) >= CAPTION_AGREEING_READS for v in votes.values()):
                 break
@@ -261,7 +300,7 @@ def read_caption_candidates(
         capture.release()
 
     candidates = []
-    for number, seen in votes.items():
+    for (match_team, number), seen in votes.items():
         # Repeated sightings of one caption add up, but only to two frames' worth.
         weight = WEIGHT_CAPTION * sum(sorted((s for _, s in seen), reverse=True)[:CAPTION_AGREEING_READS])
         candidates.append(
@@ -269,8 +308,9 @@ def read_caption_candidates(
                 number,
                 weight,
                 "caption",
-                player_name=players[number]["name"],
+                player_name=players[(match_team, number)]["name"],
                 detail={"frames": [f for f, _ in seen], "best_match": max(s for _, s in seen)},
+                team_id=match_team or None,
             )
         )
     return candidates
@@ -342,42 +382,71 @@ def live_candidate(scorer: Optional[dict], attribution: str = "") -> List[Scorer
     ]
 
 
-def fuse_scorer(candidates: Sequence[ScorerCandidate], squad: Sequence[dict] = ()) -> Optional[dict]:
-    """The best-supported shirt number, its roster name, and a confidence.
+def fuse_scorer(
+    candidates: Sequence[ScorerCandidate],
+    squad: Sequence[dict] = (),
+    squads: Optional[Dict[int, Sequence[dict]]] = None,
+    team_id: int = 0,
+) -> Optional[dict]:
+    """The best-supported (team, shirt number), its roster name, and a confidence.
+
+    ``squad`` is the goal team's squad (``team_id``); ``squads`` adds the other
+    team's, for candidates a caption or the commentary placed there. A
+    candidate without a team is the goal team's. The result's ``team_id`` is
+    the winner's team, which may differ from ``team_id``.
 
     ``None`` when there is no evidence at all.
     """
-    by_number = {int(p["jersey_no"]): p for p in squad or []}
-    totals: Dict[int, float] = {}
-    sources: Dict[int, List[str]] = {}
+    team_id = int(team_id or 0)
+    rosters: Dict[int, Dict[int, dict]] = {
+        int(t): {int(p["jersey_no"]): p for p in members or []} for t, members in (squads or {}).items()
+    }
+    if squad or team_id not in rosters:
+        rosters[team_id] = {int(p["jersey_no"]): p for p in squad or []}
+    totals: Dict[Tuple[int, int], float] = {}
+    sources: Dict[Tuple[int, int], List[str]] = {}
     for candidate in candidates:
         if candidate.jersey_number is None or candidate.weight <= 0:
             continue
-        number = int(candidate.jersey_number)
+        team = int(candidate.team_id) if candidate.team_id else team_id
+        key = (team, int(candidate.jersey_number))
         weight = candidate.weight
-        player = by_number.get(number)
+        by_number = rosters.get(team) or {}
+        player = by_number.get(key[1])
         if by_number and player is None:
             weight *= NOT_IN_SQUAD_FACTOR
         elif player is not None:
             weight *= POSITION_PRIOR.get(str(player.get("position") or "").upper(), 1.0)
-        totals[number] = totals.get(number, 0.0) + weight
-        sources.setdefault(number, []).append(candidate.source)
+        totals[key] = totals.get(key, 0.0) + weight
+        sources.setdefault(key, []).append(candidate.source)
     if not totals:
         return None
 
-    number, best = max(totals.items(), key=lambda item: item[1])
+    key, best = max(totals.items(), key=lambda item: item[1])
     share = best / sum(totals.values())
     strength = min(1.0, best / STRENGTH_FOR_FULL_CONFIDENCE)
     confidence = round(share * (0.5 + 0.5 * strength), 3)
-    player = by_number.get(number)
+    runner_up = max((w for k, w in totals.items() if k != key), default=0.0)
+    if "caption" in sources[key] and best >= CAPTION_LEAD_FACTOR * runner_up:
+        # The caption named all six scorers right on Levante-Sevilla; one
+        # commentary vote against it held the share-based confidence at
+        # 0.63-0.68 and left both "unconfirmed". A clear caption lead decides.
+        confidence = max(confidence, UNCONFIRMED_BELOW)
+    player = (rosters.get(key[0]) or {}).get(key[1])
     unconfirmed = confidence < UNCONFIRMED_BELOW
+
+    def label(k: Tuple[int, int]) -> str:
+        # Same team: the bare number, as before; the other team: "team:number".
+        return str(k[1]) if k[0] == key[0] else f"{k[0]}:{k[1]}"
+
     return {
-        "jersey_number": number,
+        "jersey_number": key[1],
+        "team_id": key[0],
         "player_name": None if unconfirmed else (player or {}).get("name"),
         "scorer_confidence": confidence,
         "unconfirmed": unconfirmed,
-        "scorer_sources": sorted(set(sources[number])),
+        "scorer_sources": sorted(set(sources[key])),
         "scorer_alternatives": {
-            str(n): round(w, 3) for n, w in sorted(totals.items(), key=lambda item: -item[1]) if n != number
+            label(k): round(w, 3) for k, w in sorted(totals.items(), key=lambda item: -item[1]) if k != key
         },
     }

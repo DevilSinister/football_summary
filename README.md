@@ -97,15 +97,101 @@ anything else is logged and ignored.
 The goal's moment and scorer come from the window between the last read of
 the old score and the first read of the new one: a pitch goal-line event if
 there is one, else the latest shot by the scoring team, else the last player of
-that team in possession. While the scoreboard is readable it is the only
-source of goals; when no graphic is found, goals fall back to the track and
-pitch rules.
+that team in possession. Goals the graphic never confirms are kept and marked
+`"scoreboard": "not confirmed"`; see *Goal sources* below.
 
 Codes are matched to the two named teams from, in order: `--team-a-code` /
 `--team-b-code` (the API passes `teams.short_code` and three-letter aliases),
 `data/rosters/*.json`, then spelling ("MCI" in "Man City"). Disable with
 `--no-scoreboard`. Clips without a score graphic - most amateur footage - get
 no scoreboard goals.
+
+## Goal sources and the action-spotting model
+
+Goals come from four sources, merged at the end of `process_video`:
+
+1. **Tracks** (`track_events/detector.py`): a shot whose ball enters the goal
+   frame and vanishes, rests, or is cut away from.
+2. **Spotting** (`spotting/`, `models/checkpoint_088.pt` + `models/config.json`):
+   an E2E-Spot network trained on SoccerNet-v2, run on 2 frames a second of
+   the same decode. Its outputs are in sorted class order (E2E-Spot writes
+   `class.txt` with `sorted()`). On the fixture clips it is good at shots and
+   weak at goals, so a spotted goal counts alone only at >= 0.5, at >= 0.15
+   next to a shot; spotted shots fill in where tracking saw none; spotted
+   kick-offs separate a second goal from a replay. `--no-spotting` disables
+   it; `python -m scripts.eval_spotting --rates 2` re-measures it.
+3. **Scoreboard** (`scoreboard/`): a confirmed score change; the window reaches
+   6 s before the last old-score read because the graphic lags the goal.
+4. **Legacy LSTM** (`event_detector.py`): off; `--legacy-event-model` opts in.
+
+All windows in the event detector are in seconds, not frames: the API analyses
+10-12 frames a second of a 25-60 fps source, and frame counts tuned at 25 fps
+were the reason goals were found on some videos and missed on others.
+
+## Squads from a spreadsheet
+
+```powershell
+.venv\Scripts\python.exe -m scripts.import_squads "$env:USERPROFILE\Downloads\football_squads_2026_27.xlsx" --dry-run
+.venv\Scripts\python.exe -m scripts.import_squads "$env:USERPROFILE\Downloads\football_squads_2026_27.xlsx"
+```
+
+Sheets with `League, Club, Jersey #, Player, Position` (or `Country` for
+national teams) become `data/rosters/*.json` and are seeded into `teams` /
+`players`, including `players.position` (GK/DF/MF/FW). A team already in
+`data/rosters` keeps its scoreboard code and aliases; a shirt number listed
+twice keeps the first player and is reported. Re-running is safe.
+
+## Player names: commentary first, then shirt numbers
+
+Names come from, in order of trust:
+
+1. **Commentary** (`commentary/`, faster-whisper `small`, `models/whisper/`):
+   the audio is transcribed with word times, squad names are matched
+   (misspellings, particles such as "van Dijk", single names such as "Rodri";
+   surnames that are ordinary words need the first name). A spoken name is
+   attached to the player holding the ball when it was said (same team only).
+   Around each goal the scorer is the named player with a scoring word, named
+   last before the goal and repeated after it; the assister a team-mate named
+   with a passing word ("cross from X") or just before the scorer. "Foul by X /
+   on Y" names fouler and fouled. "Ruled out / flag up" is recorded on the goal.
+   `--no-commentary` disables it; `--whisper-model` picks another size.
+2. **Shirt numbers** read from every readable player (not only the ball
+   holder), resolved to names through the squad.
+3. **Detected passes**: the last team-mate pass to the scorer is the assist
+   when the commentary names none.
+4. **Saves**: the keeper is the team's number one from the squad (shirt 1 if a
+   keeper wears it) unless a shirt read or the commentary says otherwise.
+
+Each `occurrences` row stores its `role` (scorer, assister, fouler, ...). Web
+results list goals and fouls; each goal carries its assister.
+
+## Naming players from 1-10 reference images
+
+No network is trained per player. A pretrained person re-ID network (OSNet,
+`models/reid/osnet_x1_0_msmt17.pt`) turns photos into embeddings; each player
+gets a prototype (1-2 images, each with five augmented views) and, once every
+enrolled player of a team has 3+ images, a per-team logistic regression.
+During analysis every tracked player keeps a probability over his team's squad
+(`identity/posterior.py`): appearance every 0.5 s, shirt-number reads, the
+goalkeeper role, one name per player on screen (Hungarian assignment), and
+re-linking of tracklets across camera cuts. A name is attached when its
+probability is >= 0.7. Foot positions are recorded per track in the result's
+`player_tracks` (pitch metres too when a pitch calibration is accepted).
+
+Measured honestly (2026-10-14, 1080p fixture clip, tracklets as labels): the
+pedestrian-trained OSNet picks the right player among team-mates only 32-40%
+of the time, so appearance nudges the belief and shirt numbers decide. A
+football-trained re-ID model (SoccerNet-ReID) is the upgrade path.
+
+```powershell
+.venv\Scripts\python.exe -m scripts.enroll_player --team "Real Madrid" --jersey 7 photo1.jpg photo2.jpg
+```
+
+The API equivalent is `POST /api/players/{player_id}/reference-images`
+(multipart `images`, 1-10 files), with `GET` to list and
+`DELETE /api/players/{player_id}/reference-images/{image_id}`. Images are
+stored in `data/player_gallery/` (git-ignored, not publicly served).
+`--no-reid` disables naming from images.
 
 ## Team and player tables
 
@@ -132,7 +218,7 @@ job flow uses them too, because it calls the same `process_video`.
 | File | What it does | Disable with |
 | --- | --- | --- |
 | `models/ball_detector_best.pt` | single-class ball detector, run at 1280 px on 1080p and 960 px below; replaces the ball class of `models/best.pt` | `--ball-model none` |
-| `models/football_field_best.pt` | 32-keypoint pitch model (pose); every `--pitch-stride` frames (default 5) it fits an image-to-pitch homography in metres | `--pitch-model none` |
+| `models/Football_field.pt` | 32-keypoint pitch model (pose); every `--pitch-stride` frames (default 5) it fits an image-to-pitch homography in metres. **Off by default** (trained with mosaic, wrong at the goal end); opt in with `--pitch-model models/Football_field.pt` | default |
 
 A homography is used only when at least six keypoints agree within a metre
 (`pitch/calibration.py`). When one holds, crosses need a ball from the wide

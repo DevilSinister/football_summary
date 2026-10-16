@@ -1,0 +1,169 @@
+{
+  "team_name": "AJ Auxerre",
+  "aliases": [],
+  "season": "2026-27",
+  "source": "football_squads_2026_27.xlsx, sheet Ligue 1",
+  "needs_review": false,
+  "players": [
+    {
+      "jersey_no": 1,
+      "name": "Paul Nardi",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 3,
+      "name": "Remy Labeau Lascary",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 4,
+      "name": "Axel Tuanzebe",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 5,
+      "name": "Kevin Danois",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 8,
+      "name": "Naouirou Ahamada",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 9,
+      "name": "Cameron Archer",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 11,
+      "name": "Eros Maddy",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 13,
+      "name": "Telli Siwe",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 15,
+      "name": "Christ Makosso",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 17,
+      "name": "Pierre Ekwah",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 18,
+      "name": "Assane Diousse",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 19,
+      "name": "Danny Namaso",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 20,
+      "name": "Sinaly Diomande",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 22,
+      "name": "Fredrik Oppegard",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 23,
+      "name": "Mamadou Diop",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 24,
+      "name": "Bryan Okoh",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 27,
+      "name": "Lamine Sy",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 28,
+      "name": "Romain Faivre",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 29,
+      "name": "Marvin Senaya",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 31,
+      "name": "Ryan Rodin",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 32,
+      "name": "Rayan Mandengue",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 34,
+      "name": "Lamfia Dioubate",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 35,
+      "name": "Elikya Legros",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 36,
+      "name": "Tidiane Devernois",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 37,
+      "name": "Louis Mezerette",
+      "position": "GK"
+    },
+    {
+      "jersey_no": 38,
+      "name": "Alvin Petit Dol",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 45,
+      "name": "Salimou Danfakha",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 46,
+      "name": "Arthur Piedfort",
+      "position": "MF"
+    },
+    {
+      "jersey_no": 49,
+      "name": "Wei Xiangxin",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 77,
+      "name": "Aristide Zossou",
+      "position": "FW"
+    },
+    {
+      "jersey_no": 92,
+      "name": "Clement Akpa",
+      "position": "DF"
+    },
+    {
+      "jersey_no": 93,
+      "name": "Sekou Fofana",
+      "position": "DF"
+    }
+  ]
+}

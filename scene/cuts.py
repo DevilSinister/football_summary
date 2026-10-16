@@ -19,8 +19,9 @@ Measured on the reference clips (Bhattacharyya distance): pans and motion
 above 0.08 with 0.40-0.56 between the frames either side.
 """
 
+from bisect import bisect_right
 from dataclasses import dataclass
-from typing import List, Sequence
+from typing import List, Optional, Sequence
 
 import cv2
 import numpy as np
@@ -113,6 +114,7 @@ class SceneTimeline:
             else:
                 self._transition.update(range(boundary.start, boundary.end + 1))
                 self._scene_starts.add(boundary.end + 1)
+        self._sorted_starts = sorted(self._scene_starts)
 
     def in_transition(self, frame: int) -> bool:
         """Frame is part of a blend of two shots: use nothing from it."""
@@ -121,6 +123,16 @@ class SceneTimeline:
     def starts_scene(self, frame: int) -> bool:
         """First usable frame of a new shot: forget everything tracked so far."""
         return frame in self._scene_starts
+
+    def latest_start_at_or_before(self, frame: int) -> Optional[int]:
+        """The newest scene start not after ``frame``.
+
+        Analysis runs on a subset of frames, so the exact first frame of a shot
+        is usually skipped; and a cut is only found once a few frames after it
+        are decoded. Callers compare this with the last start they acted on.
+        """
+        index = bisect_right(self._sorted_starts, frame)
+        return self._sorted_starts[index - 1] if index else None
 
     def describe(self) -> str:
         if not self.boundaries:

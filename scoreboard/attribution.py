@@ -32,6 +32,11 @@ from .reader import ScoreGoal
 # If the old score was never read (the clip starts mid-replay), look back this far.
 DEFAULT_LOOKBACK_SECONDS = 60.0
 WINDOW_PAD_SECONDS = 1.0
+# The graphic can still show the old score for a few seconds after the ball is
+# in the net: on test.mp4 (POR-EGY, 2026-10-14) it read 0-0 at 13 s with the
+# ball already in the goal, after a shot at 10 s, and first read 1-0 at 14 s.
+# The early edge of the window reaches back this far before the last old read.
+GRAPHIC_LAG_SECONDS = 6.0
 # A shooter read as the other team is credited to the scoring team only when
 # that kit reading was weak. A confident reading means a defender - a block, a
 # deflection - and on the 1080p reference clip crediting him named the wrong
@@ -43,7 +48,7 @@ def _window(goal_event: dict, fps: float) -> Tuple[float, float]:
     details = goal_event.get("details") or {}
     end = int(details.get("scoreboard_frame", goal_event.get("frame", 0)))
     start = details.get("window_start_frame")
-    start = end - DEFAULT_LOOKBACK_SECONDS * fps if start is None else int(start)
+    start = end - DEFAULT_LOOKBACK_SECONDS * fps if start is None else int(start) - GRAPHIC_LAG_SECONDS * fps
     return start - WINDOW_PAD_SECONDS * fps, end + WINDOW_PAD_SECONDS * fps
 
 
@@ -117,7 +122,7 @@ def attribute_goals(
         team_id = code_to_team.get(goal.code, 0)
         team_name = team_names.get(team_id) or goal.code
         if goal.window_start is not None:
-            start = goal.window_start - WINDOW_PAD_SECONDS * fps
+            start = goal.window_start - (GRAPHIC_LAG_SECONDS + WINDOW_PAD_SECONDS) * fps
         else:
             start = goal.frame - DEFAULT_LOOKBACK_SECONDS * fps
         end = goal.frame

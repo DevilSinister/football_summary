@@ -38,6 +38,7 @@ class SeedStats:
     players_renamed: int = 0
     players_unchanged: int = 0
     codes_set: int = 0
+    positions_set: int = 0
     notes: list[str] = field(default_factory=list)
 
     def merge(self, other: "SeedStats") -> None:
@@ -49,12 +50,14 @@ class SeedStats:
         self.players_renamed += other.players_renamed
         self.players_unchanged += other.players_unchanged
         self.codes_set += other.codes_set
+        self.positions_set += other.positions_set
         self.notes.extend(other.notes)
 
     @property
     def wrote_anything(self) -> bool:
         return bool(
             self.teams_created
+            or self.positions_set
             or self.aliases_added
             or self.players_inserted
             or self.players_named
@@ -138,6 +141,7 @@ def _seed_player(db: Session, team: Team, entry: dict, stats: SeedStats, dry_run
         return
 
     jersey_no = int(jersey_no)
+    position = (entry.get("position") or "").strip().upper() or None
     player = db.scalar(
         select(Player).where(Player.team_id == team.team_id, Player.jersey_no == jersey_no)
     )
@@ -145,8 +149,13 @@ def _seed_player(db: Session, team: Team, entry: dict, stats: SeedStats, dry_run
     if player is None:
         stats.players_inserted += 1
         if not dry_run:
-            db.add(Player(team_id=team.team_id, jersey_no=jersey_no, name=name))
+            db.add(Player(team_id=team.team_id, jersey_no=jersey_no, name=name, position=position))
         return
+
+    if position and player.position != position:
+        stats.positions_set += 1
+        if not dry_run:
+            player.position = position
 
     if player.name is None:
         # An empty slot the pipeline created when it read this number off a
