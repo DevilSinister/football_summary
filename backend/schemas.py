@@ -42,5 +42,9 @@ class VideoUrlRequest(BaseModel):
 
 
 class TeamConfirmationRequest(BaseModel):
-    team_1_name: str = Field(min_length=1, max_length=100)
-    team_2_name: str = Field(min_length=1, max_length=100)
+    # The web dropdown sends the database team ids; older app builds send
+    # typed names only. An id wins over a name (processing._confirmed_team_names).
+    team_1_name: str | None = Field(None, max_length=100)
+    team_2_name: str | None = Field(None, max_length=100)
+    team_1_id: int | None = None
+    team_2_id: int | None = None

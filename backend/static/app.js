@@ -99,28 +99,235 @@ async function pollStatus() {
   }
 }
 
+// Teams come from the database so a name can only be picked, never misspelt.
+let teamListPromise = null;
+const selectedTeams = {};
+
+function loadTeams() {
+  if (!teamListPromise) {
+    teamListPromise = request("/api/teams").catch((error) => {
+      teamListPromise = null;
+      throw error;
+    });
+  }
+  return teamListPromise;
+}
+
+function searchKey(value) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function matchTeams(teams, query, excludeId) {
+  const key = searchKey(query);
+  const ranked = [];
+  teams.forEach((team) => {
+    if (team.team_id === excludeId) return;
+    if (!key) {
+      ranked.push([2, team]);
+      return;
+    }
+    const name = searchKey(team.team_name);
+    const spellings = [name, searchKey(team.short_code), ...(team.aliases || []).map(searchKey)];
+    // Spaces are optional: "realmadrid" finds Real Madrid.
+    const compactKey = key.replace(/ /g, "");
+    const compact = spellings.map((spelling) => spelling.replace(/ /g, ""));
+    if (name.startsWith(key) || compact[0].startsWith(compactKey)) ranked.push([0, team]);
+    else if (spellings.some((spelling) => spelling.startsWith(key) || spelling.split(" ").some((word) => word.startsWith(key)))) ranked.push([1, team]);
+    else if (compact.some((spelling) => spelling.includes(compactKey))) ranked.push([2, team]);
+  });
+  ranked.sort((a, b) => a[0] - b[0] || a[1].team_name.localeCompare(b[1].team_name));
+  return ranked.map(([, team]) => team);
+}
+
 function renderTeamCandidates(candidates) {
   const container = document.getElementById("team-candidates");
   container.replaceChildren();
+  Object.keys(selectedTeams).forEach((key) => delete selectedTeams[key]);
   candidates.forEach((candidate) => {
+    const kit = candidate.cluster_id;
+    const images = candidate.sample_images?.length ? candidate.sample_images : [candidate.sample_image];
     const article = document.createElement("article");
     article.className = "team-candidate";
     article.innerHTML = `
-      <img src="${candidate.sample_image}" alt="Representative player for detected team ${candidate.cluster_id}">
+      <div class="sample-frame">
+        <img alt="">
+        <div class="sample-tools">
+          <span class="sample-count" aria-live="polite"></span>
+          <button class="sample-refresh" type="button">
+            <span aria-hidden="true">↻</span> Another player
+          </button>
+        </div>
+      </div>
       <div class="candidate-input">
-        <label class="field">
-          <span>Team name <small class="kit-label">Kit ${candidate.cluster_id}</small></span>
-          <input name="team_${candidate.cluster_id}_name" required maxlength="100" autocomplete="organization" placeholder="e.g. Liverpool">
+        <label class="field" for="team-${kit}-search">
+          <span>Team <small class="kit-label">Kit ${kit}</small></span>
         </label>
+        <div class="combobox">
+          <input id="team-${kit}-search" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
+            aria-controls="team-${kit}-options" autocomplete="off" autocapitalize="words" spellcheck="false"
+            placeholder="Search teams, e.g. Liverpool">
+          <ul id="team-${kit}-options" class="team-options" role="listbox" aria-label="Teams for kit ${kit}" hidden></ul>
+        </div>
       </div>`;
     container.appendChild(article);
+    setupSampleCycler(article, kit, images);
+    setupTeamPicker(article.querySelector(".combobox"), kit);
+  });
+  loadTeams().catch((error) => setError("teams-error", `The team list could not be loaded. ${error.message}`));
+}
+
+function setupSampleCycler(article, kit, images) {
+  const image = article.querySelector("img");
+  const count = article.querySelector(".sample-count");
+  const button = article.querySelector(".sample-refresh");
+  let index = 0;
+  const show = () => {
+    image.src = images[index];
+    image.alt = `Player wearing detected kit ${kit}, image ${index + 1} of ${images.length}`;
+    count.textContent = images.length > 1 ? `${index + 1} / ${images.length}` : "";
+  };
+  if (images.length < 2) {
+    button.hidden = true;
+  } else {
+    button.setAttribute("aria-label", `Show another player wearing kit ${kit}`);
+    button.addEventListener("click", () => {
+      index = (index + 1) % images.length;
+      show();
+    });
+  }
+  show();
+}
+
+function setupTeamPicker(box, kit) {
+  const input = box.querySelector("input");
+  const list = box.querySelector("[role='listbox']");
+  let options = [];
+  let active = -1;
+  const otherKit = kit === 1 ? 2 : 1;
+
+  const close = () => {
+    list.hidden = true;
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+    active = -1;
+  };
+  const choose = (team) => {
+    selectedTeams[kit] = team;
+    input.value = team.team_name;
+    box.classList.add("is-chosen");
+    close();
+    setError("teams-error", "");
+  };
+  const highlight = (index) => {
+    const items = [...list.children];
+    items.forEach((item, position) => item.setAttribute("aria-selected", String(position === index)));
+    active = index;
+    if (items[index]?.id) {
+      input.setAttribute("aria-activedescendant", items[index].id);
+      items[index].scrollIntoView({ block: "nearest" });
+    }
+  };
+  const open = async () => {
+    let teams;
+    try {
+      teams = await loadTeams();
+    } catch {
+      return;
+    }
+    options = matchTeams(teams, input.value, selectedTeams[otherKit]?.team_id).slice(0, 50);
+    list.replaceChildren();
+    if (!options.length) {
+      const empty = document.createElement("li");
+      empty.className = "team-option is-empty";
+      empty.textContent = "No team in the database matches this search.";
+      list.appendChild(empty);
+    }
+    options.forEach((team, position) => {
+      const item = document.createElement("li");
+      item.id = `team-${kit}-option-${team.team_id}`;
+      item.className = "team-option";
+      item.setAttribute("role", "option");
+      item.setAttribute("aria-selected", "false");
+      const name = document.createElement("span");
+      name.textContent = team.team_name;
+      item.appendChild(name);
+      if (team.short_code) {
+        const code = document.createElement("small");
+        code.textContent = team.short_code;
+        item.appendChild(code);
+      }
+      // pointerdown keeps focus in the input, so blur does not close the list first.
+      item.addEventListener("pointerdown", (event) => event.preventDefault());
+      item.addEventListener("click", () => choose(team));
+      item.addEventListener("pointerenter", () => highlight(position));
+      list.appendChild(item);
+    });
+    list.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+    if (options.length && input.value.trim()) highlight(0);
+  };
+
+  input.addEventListener("focus", open);
+  input.addEventListener("input", () => {
+    delete selectedTeams[kit];
+    box.classList.remove("is-chosen");
+    open();
+  });
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      if (list.hidden) {
+        open();
+        return;
+      }
+      if (!options.length) return;
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      highlight((active + step + options.length) % options.length);
+    } else if (event.key === "Enter" && !list.hidden) {
+      event.preventDefault();
+      if (options[active]) choose(options[active]);
+    } else if (event.key === "Escape") {
+      close();
+    }
+  });
+  input.addEventListener("blur", async () => {
+    close();
+    if (selectedTeams[kit]) {
+      input.value = selectedTeams[kit].team_name;
+      return;
+    }
+    // An exact name typed in full counts as picked.
+    const key = searchKey(input.value);
+    if (!key) return;
+    try {
+      const teams = await loadTeams();
+      const exact = teams.find((team) => team.team_id !== selectedTeams[otherKit]?.team_id
+        && [team.team_name, team.short_code, ...(team.aliases || [])].some((spelling) => searchKey(spelling) === key));
+      if (exact) choose(exact);
+    } catch {
+      /* the load error is already shown */
+    }
   });
 }
 
 async function confirmTeams(event) {
   event.preventDefault();
   setError("teams-error", "");
-  const data = new FormData(event.currentTarget);
+  const missing = [1, 2].find((kit) => !selectedTeams[kit]);
+  if (missing) {
+    setError("teams-error", `Choose the team for kit ${missing} from the list.`);
+    document.getElementById(`team-${missing}-search`)?.focus();
+    return;
+  }
+  if (selectedTeams[1].team_id === selectedTeams[2].team_id) {
+    setError("teams-error", "Choose a different team for each kit.");
+    return;
+  }
   const button = event.currentTarget.querySelector("button[type='submit']");
   button.disabled = true;
   button.textContent = "Confirming teams…";
@@ -129,8 +336,10 @@ async function confirmTeams(event) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        team_1_name: data.get("team_1_name"),
-        team_2_name: data.get("team_2_name"),
+        team_1_id: selectedTeams[1].team_id,
+        team_2_id: selectedTeams[2].team_id,
+        team_1_name: selectedTeams[1].team_name,
+        team_2_name: selectedTeams[2].team_name,
       }),
     });
     document.body.dataset.stage = "teams";

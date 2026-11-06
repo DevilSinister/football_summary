@@ -210,6 +210,31 @@ def cluster_team_samples(
     a well-supported result; the defaults stay permissive so this remains a pure,
     independently testable transform.
     """
+    centers_rgb, ranked = rank_team_samples(
+        samples,
+        min_samples=min_samples,
+        min_per_cluster=min_per_cluster,
+        min_separation=min_separation,
+        per_team=1,
+    )
+    return centers_rgb, [choices[0] for choices in ranked]
+
+
+def rank_team_samples(
+    samples: list,
+    min_samples: int = 4,
+    min_per_cluster: int = 1,
+    min_separation: float = 0.0,
+    per_team: int = 6,
+) -> tuple[list[list[int]], list[list]]:
+    """Cluster kit colours into two teams and rank up to ``per_team`` images each.
+
+    The first image of each team is the one ``cluster_team_samples`` shows. The
+    rest are alternatives a person can step through when the first image is
+    misleading - a crop that frames a player of the other team, a referee, or
+    two overlapping players - so that both images can show different teams.
+    Alternatives come from different frames first, for varied evidence.
+    """
     normalized = [_as_sample(item) for item in samples]
     if len(normalized) < max(2, min_samples):
         raise ValueError(
@@ -248,7 +273,7 @@ def cluster_team_samples(
             )
 
     centers_rgb: list[list[int]] = []
-    representatives: list[TeamSample] = []
+    ranked: list[list[TeamSample]] = []
     for label in range(2):
         center = centers_bgr[label]
         candidates = grouped[label]
@@ -261,17 +286,32 @@ def cluster_team_samples(
         # 22x52 px crop used to win.
         cutoff = float(np.percentile(list(distances.values()), 70))
         pool = [index for index in candidates if distances[index] <= cutoff] or candidates
-        best_index = max(
+        ordered = sorted(
             pool,
             key=lambda index: (
-                normalized[index].presentation_score,
-                -distances[index],
+                -normalized[index].presentation_score,
+                distances[index],
             ),
         )
+        # One image per frame first, then fill from frames already used.
+        chosen: list[int] = []
+        used_frames: set[int] = set()
+        for index in ordered:
+            frame_key = id(normalized[index].frame) if normalized[index].frame is not None else index
+            if frame_key not in used_frames:
+                chosen.append(index)
+                used_frames.add(frame_key)
+            if len(chosen) >= per_team:
+                break
+        for index in ordered:
+            if len(chosen) >= per_team:
+                break
+            if index not in chosen:
+                chosen.append(index)
         blue, green, red = np.clip(center, 0, 255).astype(int).tolist()
         centers_rgb.append([red, green, blue])
-        representatives.append(normalized[best_index])
-    return centers_rgb, representatives
+        ranked.append([normalized[index] for index in chosen])
+    return centers_rgb, ranked
 
 
 def render_team_sample(

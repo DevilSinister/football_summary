@@ -20,8 +20,8 @@ from scorer_identifier import format_goal_event
 from team_assigner import (
     TeamAssigner,
     TeamSample,
-    cluster_team_samples,
     crop_sharpness,
+    rank_team_samples,
     kit_color_bgr,
     render_team_sample,
     safe_player_crop,
@@ -61,6 +61,9 @@ CALIBRATION_MAX_FRAMES = 60
 CALIBRATION_MIN_SAMPLES = 40
 CALIBRATION_MIN_PER_CLUSTER = 12
 CALIBRATION_MIN_SEPARATION = 12.0
+# Player images per detected kit: the first plus alternatives the user can
+# step through on the confirmation screen.
+TEAM_SAMPLE_IMAGES_PER_TEAM = 6
 
 # The band of the progress bar that the frame loop reports into.
 PROGRESS_ANALYSIS_START = 15
@@ -220,25 +223,32 @@ def _detect_team_candidates(job_id: str) -> None:
                     )
                 )
 
-        centers_rgb, representatives = cluster_team_samples(
+        centers_rgb, ranked = rank_team_samples(
             samples,
             min_samples=CALIBRATION_MIN_SAMPLES,
             min_per_cluster=CALIBRATION_MIN_PER_CLUSTER,
             min_separation=CALIBRATION_MIN_SEPARATION,
+            per_team=TEAM_SAMPLE_IMAGES_PER_TEAM,
         )
         candidates = []
-        for index, representative in enumerate(representatives, start=1):
+        for index, choices in enumerate(ranked, start=1):
             # A zoomed-out view with the player outlined, at a fixed readable size.
             # Writing the raw box produced 28x46 px files the app then blew up ~25x.
-            image = render_team_sample(representative)
-            image_path = TEAM_SAMPLE_DIR / f"{job_id}-team-{index}.jpg"
-            if not cv2.imwrite(str(image_path), image, [cv2.IMWRITE_JPEG_QUALITY, 92]):
-                raise RuntimeError("A representative player image could not be saved.")
+            # Alternatives let the user step to another player of the same kit
+            # when the first image shows the other team (sample_images).
+            urls = []
+            for choice_index, choice in enumerate(choices):
+                suffix = "" if choice_index == 0 else f"-{choice_index}"
+                image_path = TEAM_SAMPLE_DIR / f"{job_id}-team-{index}{suffix}.jpg"
+                if not cv2.imwrite(str(image_path), render_team_sample(choice), [cv2.IMWRITE_JPEG_QUALITY, 90]):
+                    raise RuntimeError("A representative player image could not be saved.")
+                urls.append(f"/static/team_samples/{image_path.name}")
             candidates.append(
                 {
                     "cluster_id": index,
                     "label": f"Detected team {index}",
-                    "sample_image": f"/static/team_samples/{image_path.name}",
+                    "sample_image": urls[0],
+                    "sample_images": urls,
                 }
             )
         _set_job(
@@ -705,16 +715,43 @@ def submit_url(payload: VideoUrlRequest, background_tasks: BackgroundTasks):
     return {"job_id": job_id, "status": "queued"}
 
 
+def _confirmed_team_names(payload: TeamConfirmationRequest) -> tuple[str, str]:
+    """The stored team names for a confirmation, so no new spelling is created.
+
+    A team id (the web dropdown sends one) must name an existing team. A typed
+    name (older app builds) is mapped to the team it already refers to - literal
+    name, alias or normalised spelling - and kept as typed only when no team
+    matches, so those clients keep working.
+    """
+    names = []
+    with SessionLocal() as db:
+        for team_id, raw_name in (
+            (payload.team_1_id, payload.team_1_name),
+            (payload.team_2_id, payload.team_2_name),
+        ):
+            if team_id is not None:
+                team = db.get(Team, team_id)
+                if team is None:
+                    raise HTTPException(status_code=422, detail="Choose a team from the list.")
+                names.append(team.team_name)
+                continue
+            name = (raw_name or "").strip()
+            if not name:
+                raise HTTPException(status_code=422, detail="Choose a team for each kit.")
+            existing = find_team(db, name)
+            names.append(existing.team_name if existing is not None else name)
+    return names[0], names[1]
+
+
 @router.post("/api/processing/confirm-teams/{job_id}", status_code=202)
 def confirm_teams(
     job_id: str,
     payload: TeamConfirmationRequest,
     background_tasks: BackgroundTasks,
 ):
-    team_1_name = payload.team_1_name.strip()
-    team_2_name = payload.team_2_name.strip()
+    team_1_name, team_2_name = _confirmed_team_names(payload)
     if team_1_name.casefold() == team_2_name.casefold():
-        raise HTTPException(status_code=422, detail="Enter a different name for each team.")
+        raise HTTPException(status_code=422, detail="Choose a different team for each kit.")
     with _jobs_lock:
         job = _jobs.get(job_id)
         if job is None:

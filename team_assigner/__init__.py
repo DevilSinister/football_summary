@@ -4,6 +4,7 @@ from .calibration import (
     cluster_team_samples,
     crop_sharpness,
     kit_color_bgr,
+    rank_team_samples,
     render_team_sample,
     safe_player_crop,
 )
@@ -14,6 +15,7 @@ __all__ = [
     "cluster_team_samples",
     "crop_sharpness",
     "kit_color_bgr",
+    "rank_team_samples",
     "render_team_sample",
     "safe_player_crop",
 ]
