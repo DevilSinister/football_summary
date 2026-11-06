@@ -172,6 +172,25 @@ class PersistMatchTests(unittest.TestCase):
             self.assertIsNone(occurrence.detected_player_name)
             self.assertIsNone(occurrence.player_id)
 
+    def test_match_summary_reports_the_scorer_not_the_assister(self):
+        # Regression: the summary used the LAST occurrence of each event, so a
+        # goal with an assist showed the assister as the scorer.
+        scorer = {"role": "scorer", "track_id": 3, "team_id": 1, "team_name": "Real Madrid", "jersey_number": 7}
+        assister = {"role": "assister", "track_id": 8, "team_id": 1, "team_name": "Real Madrid", "jersey_number": 10}
+        events = [
+            {
+                "event": "goal", "frame": 250, "team_id": 1, "team_name": "Real Madrid",
+                "actors": [dict(scorer), dict(assister)], "scorer": dict(scorer),
+            }
+        ]
+        match_id = processing._persist_match(self._job(), events, fps=25.0)
+        with _fake_database.SessionLocal() as db:
+            summary = processing.get_match_summary(match_id, db)
+        goal = summary["events"][0]
+        self.assertEqual(goal["jerseyNumber"], 7)
+        self.assertEqual(goal["playerName"], "Vinicius")
+        self.assertEqual([row["role"] for row in summary["occurBy"]], ["scorer", "assister"])
+
 
 if __name__ == "__main__":
     unittest.main()

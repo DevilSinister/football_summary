@@ -16,3 +16,5 @@ pyodbc
 python-multipart
 bcrypt
 email-validator
+httpx
+pyyaml

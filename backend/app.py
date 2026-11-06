@@ -10,7 +10,7 @@ from sqlalchemy import select
 from .database import Base, SessionLocal, engine
 from .schema import ensure_schema
 from .models import User
-from .routers import players, processing, teams, users
+from .routers import features, players, processing, teams, users
 
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -37,6 +37,7 @@ app.include_router(users.router)
 app.include_router(processing.router)
 app.include_router(players.router)
 app.include_router(teams.router)
+app.include_router(features.router)
 
 
 @app.on_event("startup")

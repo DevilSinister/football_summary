@@ -1,0 +1,126 @@
+# ===========================================================================
+#  FOOTY AI - FEATURE SWITCHES
+# ===========================================================================
+#
+#  Turn each feature on or off by writing  yes  or  no  after "enabled:".
+#
+#  enabled: yes   -> the analysis does it AND the phone app shows it
+#  enabled: no    -> the analysis skips it AND the phone app hides it
+#
+#  When does a change take effect?
+#    * The NEXT video you analyse uses the new switches. No server restart.
+#    * The phone app reads the switches every time it opens a match, so
+#      showing or hiding an event type also applies to matches analysed before.
+#      (A match analysed while a feature was "no" has nothing stored for it,
+#      so turning it on later does not fill those old matches in.)
+#
+#  app_rebuild_needed:
+#    no  -> just change "enabled" and analyse a video. The installed app
+#           (the 2026-11-06 build or newer) follows the switch on its own.
+#    yes -> the app has no screen for this yet; a developer must change the
+#           Flutter app and build a new APK before you can see it.
+#    This line is information for you. Changing it does nothing.
+#
+#  Accuracy notes say how well each feature was measured. "Unmeasured" means
+#  it has never been checked against footage with known answers.
+#
+#  Spelling matters: keep the two spaces before "enabled:" and write yes / no
+#  in lower case. If a line is broken, that feature falls back to its default
+#  and the server log says so.
+# ===========================================================================
+
+# ---- Goals ----------------------------------------------------------------
+
+detect_goals:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: Finds goals from shots, the broadcast score graphic and the action-spotting model.
+  accuracy: About 7 of 9 known goals found across 5 test clips; no false goals seen.
+
+goal_scorer_name:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: Names the goal scorer from the on-screen caption, commentary and shirt numbers.
+  accuracy: 4 of 4 on one commentated match (the match the rules were tuned on); otherwise unmeasured.
+
+assister_name:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: Names the player who passed to the scorer (last team-mate pass, or commentary).
+  accuracy: Unmeasured.
+
+# ---- Other events ---------------------------------------------------------
+
+detect_shots:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Lists shots on target in the app's Match Events and gives them a highlight clip.
+  accuracy: Unmeasured; some false shots on close-up replays.
+
+detect_saves:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Lists goalkeeper saves in Match Events (no clip; the shot already has one).
+  accuracy: Unmeasured; a goal can be misread as a save when the ball is lost near the keeper.
+
+detect_fouls:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: Finds fouls from player contact and gives each a highlight clip.
+  accuracy: Weak. The one checked foul was probably a false alarm and a real one was missed.
+
+detect_cards:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Finds yellow and red cards shown by the referee.
+  accuracy: Tested on made-up frames only; needs the referee large on screen.
+
+detect_penalties:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Finds penalty kicks.
+  accuracy: Tested on made-up frames only.
+
+detect_crosses:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Finds crosses into the box.
+  accuracy: Unmeasured.
+
+detect_passes:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Lists every pass in Match Events (no clips; a match has hundreds).
+  accuracy: Unmeasured; false passes seen on close-up replays.
+
+passer_name:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Names who passed and who received each pass ("#8 Modric -> #10 Mbappe"). Needs detect_passes. Costs extra analysis time.
+  accuracy: Unmeasured. A name only lasts until the next camera cut.
+
+# ---- Video and evidence sources --------------------------------------------
+
+highlight_clips:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: Cuts a short video clip for each highlight and joins them into a reel.
+  accuracy: Not applicable.
+
+commentary_names:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: Listens to the English commentary to name players. Turning it off saves 1-15 minutes per video.
+  accuracy: 27 names recognised on one match; 4 of 6 scorers right from commentary alone.
+
+read_scoreboard:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: Reads the score graphic on broadcast footage to confirm goals and the final score.
+  accuracy: Read 3 of 6 score changes on a LaLiga highlights package; reliable on UEFA-style graphics.
+
+action_spotting:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: A trained model that spots shots and goals; helps find goals the other rules miss.
+  accuracy: Good at shots, weak at goals; used only alongside other evidence.

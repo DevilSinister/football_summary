@@ -908,6 +908,13 @@ def describe_event(event):
     team = event.get("team_name") or (event.get("scorer") or {}).get("team_name") or "unknown_team"
     actors = {actor.get("role"): actor for actor in event.get("actors") or []}
     if event_type in ("pass", "cross"):
+        named = [
+            actor for actor in (actors.get("passer"), actors.get("receiver"))
+            if actor and (actor.get("jersey_number") is not None or actor.get("player_name"))
+        ]
+        if not named:
+            # Players unnamed (features.yaml passer_name: no, or nothing read).
+            return f"{event_type.upper()} — {team}"
         return (
             f"{event_type.upper()} — {team} — {_actor_label(actors.get('passer'))} "
             f"→ {_actor_label(actors.get('receiver'))}"
@@ -959,6 +966,43 @@ def final_score_by_team(events, scoreboard_reader=None, code_to_team=None):
         if team_id in score:
             score[team_id] += 1
     return score
+
+
+_NAME_FIELDS = ("jersey_number", "player_name", "jersey_confidence", "name_confidence", "identity_source")
+
+
+def _unname(record):
+    """Keep the player's team and track, drop who they are."""
+    for field in _NAME_FIELDS:
+        if field in record:
+            record[field] = None
+    record.pop("unconfirmed", None)
+
+
+def apply_name_switches(events, config):
+    """Apply the features.yaml naming switches to finished events.
+
+    goal_scorer_name: no -> goals keep their team, the scorer is unnamed.
+    assister_name: no    -> the assister is removed from goals.
+    passer_name: no      -> passes and crosses keep their team, players unnamed.
+    """
+    for event in events:
+        kind = str(event.get("event", "")).lower()
+        actors = event.get("actors") or []
+        if kind == "goal":
+            if not config.name_goal_scorer:
+                if event.get("scorer"):
+                    _unname(event["scorer"])
+                for actor in actors:
+                    if actor.get("role") == "scorer":
+                        _unname(actor)
+            if not config.name_assister and actors:
+                event["actors"] = [actor for actor in actors if actor.get("role") != "assister"]
+        elif kind in ("pass", "cross") and not config.name_pass_players:
+            if event.get("scorer"):
+                _unname(event["scorer"])
+            for actor in actors:
+                _unname(actor)
 
 
 def goal_output_events(events, kinds=("goal",)):
@@ -1058,7 +1102,7 @@ def process_video(args, progress_cb=None):
         # Passes are always followed (cheap, rule-based): the last team-mate
         # pass to the scorer is the goal's assist. Goal-only output hides them.
         detect_passes=True,
-        detect_penalties=not config.goal_only,
+        detect_penalties=config.detect_penalties,
     )
     if getattr(args, "no_ocr", False):
         jersey_reader = JerseyReader(debug_dir=None, max_ocr_calls=0)
@@ -1089,7 +1133,7 @@ def process_video(args, progress_cb=None):
         2: parse_code_option(getattr(args, "team_b_code", None)) or expected_codes_for(team_names[2]),
     }
     scoreboard_reader = None
-    if not getattr(args, "no_scoreboard", False):
+    if config.read_scoreboard and not getattr(args, "no_scoreboard", False):
         if jersey_reader._ensure_engine():
             scoreboard_reader = ScoreboardReader(
                 paddle_ocr_fn(jersey_reader.engine),
@@ -1423,6 +1467,10 @@ def process_video(args, progress_cb=None):
     ordered = sorted(pending_events, key=resolution_order)
     with metrics.timer("scorer_ocr"):
         for event in ordered:
+            if not config.name_pass_players and str(event.get("event", "")).lower() in ("pass", "cross"):
+                # features.yaml passer_name: no - the pass is kept, its players
+                # are not named, and no shirt reading is spent on them.
+                continue
             _resolve_identities(scorer_identifier, event, image_dir, url_prefix, identity_tracker)
 
     # Goals: fuse the caption, the celebration close-ups and the live read.
@@ -1438,19 +1486,20 @@ def process_video(args, progress_cb=None):
         if commentary_mentions or commentary_words
         else {}
     )
-    with metrics.timer("scorer_ocr"):
-        _improve_goal_scorers(
-            pending_events,
-            scorer_identifier,
-            args.video,
-            fps,
-            height,
-            caption_ocr,
-            extra_ocr_allowance=(0 if config.goal_only else GOAL_SCORER_OCR_ALLOWANCE),
-            team_squads=team_squads,
-            commentary_roles=commentary_roles,
-            team_names=team_names,
-        )
+    if config.name_goal_scorer:
+        with metrics.timer("scorer_ocr"):
+            _improve_goal_scorers(
+                pending_events,
+                scorer_identifier,
+                args.video,
+                fps,
+                height,
+                caption_ocr,
+                extra_ocr_allowance=(0 if config.goal_only else GOAL_SCORER_OCR_ALLOWANCE),
+                team_squads=team_squads,
+                commentary_roles=commentary_roles,
+                team_names=team_names,
+            )
     # The commentary names the assister, the fouler and the fouled player, and
     # a scorer the fusion left unnamed. Keepers default to the roster's number one.
     if commentary_roles or commentary_mentions:
@@ -1467,22 +1516,27 @@ def process_video(args, progress_cb=None):
     if replays:
         print(f"Goals: {replays} replay(s) of an earlier goal dropped")
     _name_keepers(pending_events, team_squads, team_names)
+    apply_name_switches(pending_events, config)
     for event in pending_events:
         event["description"] = describe_event(event)
 
     # One clip per passage of play, cut at the camera shots, with the source
     # audio; the reel joins them.
-    with metrics.timer("highlights"):
-        highlights = export_highlights(
-            args.video,
-            pending_events,
-            fps,
-            getattr(args, "clip_dir", None),
-            getattr(args, "clip_url_prefix", None),
-            boundaries=scenes.boundaries,
-            total_frames=total_frames,
-            reel=not getattr(args, "no_highlight_reel", False),
-        )
+    if config.highlight_clips:
+        with metrics.timer("highlights"):
+            highlights = export_highlights(
+                args.video,
+                pending_events,
+                fps,
+                getattr(args, "clip_dir", None),
+                getattr(args, "clip_url_prefix", None),
+                boundaries=scenes.boundaries,
+                total_frames=total_frames,
+                reel=not getattr(args, "no_highlight_reel", False),
+            )
+    else:
+        # features.yaml highlight_clips: no - events are stored without clips.
+        highlights = {"clips": [], "reel": None, "encoder": None}
     if highlights["clips"]:
         reel = highlights["reel"]
         print(
@@ -1511,6 +1565,8 @@ def process_video(args, progress_cb=None):
         "score_by_team_id": score_by_team_id,
         "metrics": metrics.summary(),
         "player_tracks": identity_tracker.summary() if identity_tracker is not None else [],
+        # The features.yaml switches this analysis ran with.
+        "features": dict(config.features),
         "commentary": {
             "language": commentary_language,
             "words": len(commentary_words),

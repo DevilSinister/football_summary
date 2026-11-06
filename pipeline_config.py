@@ -32,6 +32,16 @@ class PipelineConfig:
     spotting_min_confidence: float = 0.1
     detect_fouls: bool = True
     detect_cards: bool = True
+    detect_penalties: bool = True
+    read_scoreboard: bool = True
+    highlight_clips: bool = True
+    # Who to name. Off = the event is kept but its players stay unnamed (and,
+    # for passes, no shirt reading or identity work is spent on them).
+    name_goal_scorer: bool = True
+    name_assister: bool = True
+    name_pass_players: bool = True
+    # The features.yaml switches this profile was built from, for the job result.
+    features: tuple = ()
     scoreboard_scan_seconds: float = 2.0
     scoreboard_burst_seconds: float = 0.5
     scoreboard_burst_duration: float = 8.0
@@ -41,7 +51,16 @@ class PipelineConfig:
     debug_ocr: bool = True
 
     @classmethod
-    def short_clip(cls, debug_ocr: bool = False) -> "PipelineConfig":
+    def short_clip(cls, debug_ocr: bool = False, features: Dict[str, bool] | None = None) -> "PipelineConfig":
+        """The profile API (phone app) jobs use, switched by features.yaml.
+
+        ``features`` defaults to the file as it is now, read per job, so an
+        edit applies to the next analysis without restarting the server.
+        """
+        from feature_flags import load_features, visible_event_types
+
+        flags = dict(features) if features is not None else load_features()
+        on = lambda key: bool(flags.get(key, False))  # noqa: E731
         return cls(
             name="short_clip",
             short_clip_fps=12.0,
@@ -49,11 +68,20 @@ class PipelineConfig:
             goal_only=True,
             use_legacy_event_model=False,
             use_pitch_calibration=False,
-            # Owner, 2026-10-15: web results show goals and fouls; foul
-            # detection is rule-based and gets its accuracy pass next.
-            detect_fouls=True,
-            output_events=("goal", "foul"),
-            detect_cards=False,
+            detect_fouls=on("detect_fouls"),
+            # Event types the job returns and stores; the rest stay internal
+            # evidence (passes find the assister, shots and saves the goals).
+            output_events=tuple(visible_event_types(flags)),
+            detect_cards=on("detect_cards"),
+            detect_penalties=on("detect_penalties"),
+            use_commentary=on("commentary_names"),
+            use_spotting=on("action_spotting"),
+            read_scoreboard=on("read_scoreboard"),
+            highlight_clips=on("highlight_clips"),
+            name_goal_scorer=on("goal_scorer_name"),
+            name_assister=on("assister_name"),
+            name_pass_players=on("detect_passes") and on("passer_name"),
+            features=tuple(sorted(flags.items())),
             identity_crops=4,
             # Shirt reading is the second source of names after commentary:
             # every goal and foul participant gets reads, not just the scorer.

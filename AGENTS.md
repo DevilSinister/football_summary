@@ -1,5 +1,17 @@
 # Footy AI agent handoff
 
+## Start here (2026-11-06)
+
+- The Flutter APK (`D:\Projects\footyai\Footy_AI\footy_ai_app`, branch
+  `sinister/experimental`) is the main client. The `backend/static` web page
+  described below is kept but not developed further.
+- Feature switches live in `features.yaml` (read by `feature_flags.py`, used by
+  `PipelineConfig.short_clip` per job and served to the app by
+  `GET /api/features`). Add a switch there rather than hard-coding a flag.
+- `docs/HOW_TO_CHANGE_THINGS.md` is the plain-language map of which file to
+  change; `docs/TECHNICAL_GUIDE.md` is the full developer reference (API,
+  database, pipeline, app). Keep both current when you change behaviour.
+
 ## What changed
 
 - `backend/static/index.html`, `backend/static/app.css`, and

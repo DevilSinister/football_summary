@@ -550,9 +550,8 @@ def _process_job(job_id: str) -> None:
             # homographies are rejected, so it adds substantial latency without
             # contributing usable event evidence. Player and ball tracking remain on.
             pitch_model=None,
-            # Temporarily keep the shared yellow/red card detector out of the
-            # pipeline. Change this to True when card processing is wanted again.
-            detect_cards=False,
+            # Yellow/red cards follow features.yaml (detect_cards).
+            detect_cards=config.detect_cards,
             no_ocr=ocr_engine is None,
             no_scoreboard=ocr_engine is None,
             no_scorer_captions=False,
@@ -630,6 +629,8 @@ def _process_job(job_id: str) -> None:
             "clips": clips_from_events(events),
             "reel": _reel(job_id),
             "pipeline_metrics": pipeline_metrics,
+            # The features.yaml switches this analysis ran with.
+            "features": pipeline_result.get("features", {}),
         }
         _set_job(
             job_id,
@@ -860,7 +861,13 @@ def get_match_summary(match_id: int, db: Session = Depends(get_db)):
     events = db.scalars(select(Event).where(Event.match_id == match_id)).all()
     event_ids = [event.event_id for event in events]
     occurrences = (
-        db.scalars(select(Occurrence).where(Occurrence.event_id.in_(event_ids))).all()
+        # In insertion order: _persist_match writes the primary actor (scorer,
+        # passer, shooter...) first, and readers take the first row as the event's.
+        db.scalars(
+            select(Occurrence)
+            .where(Occurrence.event_id.in_(event_ids))
+            .order_by(Occurrence.occurrence_id)
+        ).all()
         if event_ids
         else []
     )
@@ -868,7 +875,12 @@ def get_match_summary(match_id: int, db: Session = Depends(get_db)):
     teams = db.scalars(select(Team).where(Team.team_id.in_(team_ids))).all() if team_ids else []
     player_ids = [row.player_id for row in occurrences if row.player_id is not None]
     players = db.scalars(select(Player).where(Player.player_id.in_(player_ids))).all() if player_ids else []
-    occurrence_by_event = {row.event_id: row for row in occurrences}
+    # The event's own player is its FIRST occurrence (the primary actor). A dict
+    # comprehension kept the last one, so a goal with an assist reported the
+    # assister as the scorer in events[].jerseyNumber / playerName.
+    occurrence_by_event = {}
+    for row in occurrences:
+        occurrence_by_event.setdefault(row.event_id, row)
     reel = _reel(match.job_id)
     return {
         "match": {
@@ -930,6 +942,8 @@ def get_match_summary(match_id: int, db: Session = Depends(get_db)):
                 "teamConfidence": row.team_confidence,
                 "jerseyConfidence": row.jersey_confidence,
                 "nameConfidence": row.name_confidence,
+                # passer / receiver / scorer / assister / shooter / goalkeeper ...
+                "role": row.role,
             }
             for row in occurrences
         ],
