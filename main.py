@@ -510,7 +510,22 @@ def _apply_commentary(events, words, mentions, fps, team_names, identity_tracker
                     merged = _merge_role(event, role, roles[role], team_names, identity_tracker)
                     if role == "fouler":
                         event["scorer"] = {**(event.get("scorer") or {}), **merged}
+                        if not event.get("team_id"):
+                            # A foul found by spotting alone: the fouler's side.
+                            event["team_id"] = int(roles[role]["team_id"])
+                            event["team_name"] = team_names.get(event["team_id"])
                     details[f"{role}_from"] = "commentary"
+        elif kind in ("yellow_card", "red_card"):
+            # "yellow card for X", "X is booked": foul_roles reads both as the
+            # offender, who is the booked player.
+            booked = foul_roles(seconds, mentions)["fouler"]
+            if booked is not None:
+                merged = _merge_role(event, "player", booked, team_names, identity_tracker)
+                event["scorer"] = {**(event.get("scorer") or {}), **merged}
+                if not event.get("team_id"):
+                    event["team_id"] = int(booked["team_id"])
+                    event["team_name"] = team_names.get(event["team_id"])
+                details["player_from"] = "commentary"
 
 
 def _name_keepers(events, team_squads, team_names):
@@ -1003,6 +1018,11 @@ def apply_name_switches(events, config):
                 _unname(event["scorer"])
             for actor in actors:
                 _unname(actor)
+        elif kind == "foul" and not config.name_foul_players:
+            if event.get("scorer"):
+                _unname(event["scorer"])
+            for actor in actors:
+                _unname(actor)
 
 
 def goal_output_events(events, kinds=("goal",)):
@@ -1145,6 +1165,7 @@ def process_video(args, progress_cb=None):
                 burst_every_seconds=config.scoreboard_burst_seconds,
                 burst_duration_seconds=config.scoreboard_burst_duration,
                 permissive_after_misses=config.scoreboard_permissive_after_misses,
+                accept_one_each=config.score_jump_goals,
             )
         else:
             print(f"Scoreboard reading unavailable: {jersey_reader._engine_error}")
@@ -1360,12 +1381,29 @@ def process_video(args, progress_cb=None):
             cv2.destroyAllWindows()
 
     pending_events.extend(track_events.finish(frame_number))
+    from spotting.match_events import fuse_cards, fuse_fouls, spotted_set_pieces, spotting_classes_for
+
+    set_piece_kinds = [
+        kind for kind, on in (
+            ("corner", config.detect_corners), ("offside", config.detect_offsides),
+            ("free_kick", config.detect_free_kicks), ("substitution", config.detect_substitutions),
+        ) if on
+    ]
+    spotted = []
     if spotter is not None:
         from spotting import USED_CLASSES, fuse_spotted_events
 
         with metrics.timer("spotting"):
             spotter.finish()
-        spotted = spotter.events(min_confidence=config.spotting_min_confidence, classes=USED_CLASSES)
+        # Goal/shot/kick-off classes always; foul, card and set-piece classes
+        # only for the switched-on features (features.yaml).
+        extra = spotting_classes_for({
+            "fouls": config.detect_fouls, "cards": config.detect_cards,
+            **{kind: True for kind in set_piece_kinds},
+        })
+        spotted = spotter.events(
+            min_confidence=config.spotting_min_confidence, classes=tuple(USED_CLASSES) + tuple(extra)
+        )
         before = len(pending_events)
         pending_events = fuse_spotted_events(pending_events, spotted, fps)
         print(
@@ -1373,6 +1411,18 @@ def process_video(args, progress_cb=None):
             + (", ".join(f"{e['event']} {e['confidence']:.2f}@{e['frame'] / fps:.1f}s" for e in spotted) or "nothing")
             + f"; {len(pending_events) - before} event(s) added"
         )
+    # Fouls and cards judged on every kind of evidence: tracks, spotting,
+    # free kicks and cards after them, and the commentary's words.
+    if config.detect_fouls:
+        fouls_before = sum(1 for e in pending_events if e.get("event") == "foul")
+        pending_events = fuse_fouls(pending_events, spotted, fps, commentary_words, config.foul_double_check)
+        fouls_after = sum(1 for e in pending_events if e.get("event") == "foul")
+        print(f"Fouls: {fouls_before} from the tracks -> {fouls_after} kept after checking the other evidence")
+    if config.detect_cards:
+        pending_events = fuse_cards(pending_events, spotted, fps, commentary_words, config.card_double_check)
+    if set_piece_kinds:
+        pending_events.extend(spotted_set_pieces(spotted, fps, set_piece_kinds))
+        pending_events.sort(key=lambda event: int(event.get("frame", 0)))
     commentary_attached = []
     if commentary_mentions:
         from commentary import attach_to_tracks

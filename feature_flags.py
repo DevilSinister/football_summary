@@ -31,20 +31,30 @@ class Feature:
     event_types: Tuple[str, ...] = ()
 
 
-# Order is the order the app lists them in. Defaults are the behaviour before
-# features.yaml existed, so deleting the file changes nothing.
+# Order is the order the app lists them in. Defaults are what a missing or
+# broken features.yaml falls back to: the behaviour before the file existed,
+# plus the 2026-11-07 double checks (foul_double_check, card_double_check),
+# which are on by default.
 FEATURES: Tuple[Feature, ...] = (
     Feature("detect_goals", "Goals", True, ("goal",)),
     Feature("goal_scorer_name", "Goal scorer name", True),
     Feature("assister_name", "Assist name", True),
+    Feature("score_jump_goals", "Two goals in one score change", False),
     Feature("detect_shots", "Shots on target", False, ("shot",)),
     Feature("detect_saves", "Saves", False, ("save",)),
     Feature("detect_fouls", "Fouls", True, ("foul",)),
+    Feature("foul_double_check", "Fouls need two kinds of evidence", True),
+    Feature("fouler_name", "Names of the players in a foul", True),
     Feature("detect_cards", "Yellow and red cards", False, ("yellow_card", "red_card")),
+    Feature("card_double_check", "Cards need two kinds of evidence", True),
     Feature("detect_penalties", "Penalties", False, ("penalty",)),
     Feature("detect_crosses", "Crosses", False, ("cross",)),
     Feature("detect_passes", "Passes", False, ("pass",)),
     Feature("passer_name", "Passer and receiver names", False),
+    Feature("detect_corners", "Corners", False, ("corner",)),
+    Feature("detect_offsides", "Offsides", False, ("offside",)),
+    Feature("detect_free_kicks", "Free kicks", False, ("free_kick",)),
+    Feature("detect_substitutions", "Substitutions", False, ("substitution",)),
     Feature("highlight_clips", "Highlight clips", True),
     Feature("commentary_names", "Names from commentary", True),
     Feature("read_scoreboard", "Score graphic reading", True),

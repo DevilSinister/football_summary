@@ -54,7 +54,7 @@ All the feature switches are in **one file**:
 ### The switches
 
 "Rebuild needed" means a developer must build a new APK before you see the
-change. Every switch below says **No**: the current app (built 6 Nov 2026 or
+change. Every switch below says **No**: the current app (built 7 Nov 2026 or
 later) follows them by itself.
 
 | Switch in `features.yaml` | What it does | On by default? | Rebuild needed? |
@@ -62,14 +62,22 @@ later) follows them by itself.
 | `detect_goals` | Finds goals | Yes | No |
 | `goal_scorer_name` | Names who scored | Yes | No |
 | `assister_name` | Names who gave the assist | Yes | No |
+| `score_jump_goals` | Counts a goal the score graphic shows only as a jump of one for each team. Its time and scorer are a guess | No | No |
 | `detect_shots` | Lists shots on target, with a clip | No | No |
 | `detect_saves` | Lists goalkeeper saves (no clip) | No | No |
 | `detect_fouls` | Finds fouls, with a clip | Yes | No |
+| `foul_double_check` | Reports a foul only when two kinds of evidence agree (contact, the action-spotting model, a free kick or card right after, the commentator). Fewer false fouls | Yes | No |
+| `fouler_name` | Names who committed the foul and who was fouled | Yes | No |
 | `detect_cards` | Finds yellow and red cards | No | No |
+| `card_double_check` | Reports a card only when two kinds of evidence agree, or the model is very sure | Yes | No |
 | `detect_penalties` | Finds penalty kicks | No | No |
 | `detect_crosses` | Finds crosses into the box | No | No |
 | `detect_passes` | Lists every pass (no clips) | No | No |
 | `passer_name` | Names who passed and who received ("#8 Modric → #10 Mbappe"). Only works if `detect_passes` is also yes | No | No |
+| `detect_corners` | Lists corners (from the action-spotting model, no player) | No | No |
+| `detect_offsides` | Lists offsides (from the action-spotting model, no player) | No | No |
+| `detect_free_kicks` | Lists free kicks (from the action-spotting model, no player) | No | No |
+| `detect_substitutions` | Lists substitutions (from the action-spotting model, no player) | No | No |
 | `highlight_clips` | Cuts video clips and a highlight reel | Yes | No |
 | `commentary_names` | Listens to English commentary to name players. Off = faster | Yes | No |
 | `read_scoreboard` | Reads the score graphic on TV footage | Yes | No |
@@ -77,13 +85,14 @@ later) follows them by itself.
 
 Each block in `features.yaml` also has an `accuracy:` line saying how well that
 feature has been tested. Many say "Unmeasured" — treat those results with care.
+The full table with numbers and percentages is in [ACCURACY.md](ACCURACY.md).
 
 ### Where things appear in the app
 
 | Event type | Match Events list (match summary) | Highlights page |
 |---|---|---|
 | Goals, fouls, cards, penalties, crosses, shots | Yes, when switched on | Yes, when switched on (they have clips) |
-| Passes, saves | Yes, when switched on | No — they have no video clips |
+| Passes, saves, corners, offsides, free kicks, substitutions | Yes, when switched on | No — they have no video clips |
 
 ### If you make a typo
 

@@ -84,6 +84,9 @@ class ScoreGoal:
 class ScoreTracker:
     confirm_reads: int = 2
     max_goals_per_change: int = 2
+    # Accept both scores rising by one at once as one goal each (highlight
+    # packages); off = such a change is logged as implausible and re-based.
+    accept_one_each: bool = False
     codes: Optional[Tuple[str, str]] = None
     state: Optional[Dict[str, int]] = None
     last_state_frame: Optional[int] = None
@@ -130,12 +133,21 @@ class ScoreTracker:
             deltas = {code: new[code] - self.state[code] for code in self.codes}
             rises = [code for code, delta in deltas.items() if delta > 0]
             drops = [code for code, delta in deltas.items() if delta < 0]
-            if len(rises) == 1 and not drops and deltas[rises[0]] <= self.max_goals_per_change:
-                code = rises[0]
-                for _ in range(deltas[code]):
-                    goal = ScoreGoal(code, first_frame, self.last_state_frame, dict(self.state), dict(new))
-                    goals.append(goal)
-                    self.goals.append(goal)
+            one_each = (
+                self.accept_one_each
+                and len(rises) == len(self.codes) == 2
+                and not drops
+                and all(deltas[code] == 1 for code in rises)
+            )
+            if (len(rises) == 1 and not drops and deltas[rises[0]] <= self.max_goals_per_change) or one_each:
+                # One each: a highlights package cuts from 0-1 straight to 1-2,
+                # two goals the graphic never showed apart (Levante-Sevilla,
+                # Correia and Ivan Romero). features.yaml score_jump_goals.
+                for code in rises:
+                    for _ in range(deltas[code]):
+                        goal = ScoreGoal(code, first_frame, self.last_state_frame, dict(self.state), dict(new))
+                        goals.append(goal)
+                        self.goals.append(goal)
             elif len(drops) == 1 and not rises:
                 # A goal taken back (VAR). Withdraw the most recent goal for
                 # that team rather than report a score that no longer stands.
@@ -167,6 +179,7 @@ class ScoreboardReader:
         burst_every_seconds: float = 0.5,
         burst_duration_seconds: float = 8.0,
         permissive_after_misses: int = 3,
+        accept_one_each: bool = False,
     ) -> None:
         self.ocr_fn = ocr_fn
         self.fps = max(float(fps), 1.0)
@@ -179,7 +192,7 @@ class ScoreboardReader:
         self.scan_every = max(1, int(round(scan_every_seconds * self.fps)))
         self.lost_after = int(round(lost_after_seconds * self.fps))
         self.scale = upscale_for(self.height)
-        self.tracker = ScoreTracker(confirm_reads=confirm_reads)
+        self.tracker = ScoreTracker(confirm_reads=confirm_reads, accept_one_each=accept_one_each)
 
         self.region: Optional[Tuple[int, int, int, int]] = None
         self.layout: Optional[List[Tuple[str, Box]]] = None

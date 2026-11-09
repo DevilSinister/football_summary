@@ -528,6 +528,20 @@ analysis has no event types and needs no app work).
 
 ---
 
+### 3.8 Switches added 2026-11-07 (fouls, cards, set pieces, score jumps)
+
+| Key | Default | Config field | Code |
+|---|---|---|---|
+| `score_jump_goals` | no | `score_jump_goals` | `ScoreboardReader(accept_one_each=...)` -> `ScoreTracker._accept` counts a one-each rise as two goals; `scoreboard/attribution.attribute_goals` never places two goals of one change on the same attack (`SAME_ATTACK_SECONDS = 10`). |
+| `foul_double_check` | yes | `foul_double_check` | `spotting/match_events.fuse_fouls`: a foul needs two kinds of evidence among tracks, spotting "Foul" (>= `FOUL_SUPPORT` 0.12), "Direct free-kick"/"Penalty" up to 20 s after (>= 0.25), a card up to 60 s after, commentary cue words (`FOUL_WORDS`, -3/+12 s); or spotting "Foul" >= `FOUL_ALONE` 0.5 alone. Off: contact alone is enough. |
+| `fouler_name` | yes | `name_foul_players` | `main.apply_name_switches` unnames foul actors when off. Fouler/fouled come from shirt OCR and `commentary.foul_roles` via `_apply_commentary`; a foul found by spotting alone takes the fouler's team. |
+| `card_double_check` | yes | `card_double_check` | `spotting/match_events.fuse_cards`: spotted "Yellow card"/"Red card"/"Yellow->red card" kept at >= `CARD_ALONE` 0.5, or >= 0.15 with commentary (`CARD_WORDS`) or a foul up to 60 s before; track cards need a second source. A card takes the preceding foul's fouler as `player`; commentary "yellow card for X" names it (`_apply_commentary`). |
+| `detect_corners` / `detect_offsides` / `detect_free_kicks` / `detect_substitutions` | no | same names | `spotting/match_events.spotted_set_pieces`: spotting alone, >= `SET_PIECE_MIN` (0.3, free kick 0.35), one per kind per 8 s, no team or player. Event types `corner`, `offside`, `free_kick`, `substitution`; listed in Match Events, never on the highlights page. |
+
+The spotter keeps the foul, card and set-piece classes only for switched-on
+features (`spotting_classes_for`). Thresholds in `spotting/match_events.py`
+are untuned starting points: no labelled clip contains a foul or card yet.
+
 ## 4. The analysis pipeline
 
 ### 4.1 Job lifecycle
@@ -2197,6 +2211,17 @@ stored).
 
 ## 9. Testing and verification
 
+### 9.0 Measuring accuracy on labelled clips
+
+`scripts/eval_events.py` runs the app-job profile on every clip in
+`data/eval/clips.json` and prints recall, precision, right-team and
+right-player per event type, plus one line per labelled or false event.
+Results are saved in `data/eval/results/<clip>.json` (git-ignored), so
+`--score-only` re-scores in seconds. `--all-on` turns every switch on;
+`--switch key=yes|no` overrides one. Only types listed in a clip's `complete`
+are scored. Matching: within `TOLERANCE` seconds (goal 6, foul 5, card 12),
+same team first, then nearest. Latest numbers: `docs/ACCURACY.md`.
+
 ### 9.1 Backend tests
 
 ```powershell
@@ -2319,6 +2344,8 @@ This inserts a match (and possibly team rows and unnamed player slots) into
 ---
 
 ## 10. Known limits and measured accuracy
+
+The complete numbers-and-percentages table, per event type and building block, is [ACCURACY.md](ACCURACY.md); keep it in step with this section.
 
 Sources: the vault notes `Football Summary/80 - Delivery/Verification Evidence.md`
 (gates 2026-09-14 to 2026-11-06) and `Football Summary/70 - Bugs and Risks/Known Risks and Gaps.md`,

@@ -40,6 +40,17 @@ class PipelineConfig:
     name_goal_scorer: bool = True
     name_assister: bool = True
     name_pass_players: bool = True
+    name_foul_players: bool = True
+    # A foul / card needs two kinds of evidence (spotting/match_events.py).
+    foul_double_check: bool = False
+    card_double_check: bool = False
+    # Set pieces from the spotting model alone.
+    detect_corners: bool = False
+    detect_offsides: bool = False
+    detect_free_kicks: bool = False
+    detect_substitutions: bool = False
+    # Both scores rising by one at once on the graphic = one goal each.
+    score_jump_goals: bool = False
     # The features.yaml switches this profile was built from, for the job result.
     features: tuple = ()
     scoreboard_scan_seconds: float = 2.0
@@ -81,6 +92,14 @@ class PipelineConfig:
             name_goal_scorer=on("goal_scorer_name"),
             name_assister=on("assister_name"),
             name_pass_players=on("detect_passes") and on("passer_name"),
+            name_foul_players=on("fouler_name"),
+            foul_double_check=on("foul_double_check"),
+            card_double_check=on("card_double_check"),
+            detect_corners=on("detect_corners"),
+            detect_offsides=on("detect_offsides"),
+            detect_free_kicks=on("detect_free_kicks"),
+            detect_substitutions=on("detect_substitutions"),
+            score_jump_goals=on("score_jump_goals"),
             features=tuple(sorted(flags.items())),
             identity_crops=4,
             # Shirt reading is the second source of names after commentary:

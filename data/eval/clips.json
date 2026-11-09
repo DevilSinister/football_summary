@@ -1,0 +1,52 @@
+{
+  "about": "Labelled clips for scripts/eval_events.py. 'complete' lists the event types whose every occurrence in the clip is labelled; only those are scored. Times are seconds in the video. Sources: frame contact sheets, broadcast scorer captions and score graphics (vault: Football Summary/80 - Delivery/Verification Evidence.md). Add clips with fouls and cards here to measure them.",
+  "clips": [
+    {
+      "id": "rma_atm_480p",
+      "video": "input_videos/football_1 (2).mp4",
+      "teams": [{"name": "Real Madrid", "color": "#FFFFFF"}, {"name": "Atletico Madrid", "color": "#D71920"}],
+      "complete": ["goal", "card"],
+      "events": [],
+      "notes": "0-0 on the graphic. A saved shot about 5.2 s; a shot off the post in a close-up replay 8-11 s. No card."
+    },
+    {
+      "id": "por_egy",
+      "video": "input_videos/test.mp4",
+      "teams": [{"name": "Portugal", "color": "#C8102E"}, {"name": "Egypt", "color": "#FFFFFF"}],
+      "complete": ["goal"],
+      "events": [{"type": "goal", "t": 12.0, "team": "Portugal"}],
+      "notes": "Graphic 1-0. Scorer not clearly visible, so no player label. Commentator says the goal was ruled out; the graphic keeps 1-0."
+    },
+    {
+      "id": "por_mci_1080p",
+      "video": "input_videos/videoplayback (2).mp4",
+      "teams": [{"name": "Porto", "color": "#1D428A"}, {"name": "Manchester City", "color": "#1C2C5B"}],
+      "complete": ["goal", "card"],
+      "events": [{"type": "goal", "t": 5.5, "team": "Manchester City"}],
+      "notes": "Live goal frames 115-161 (25 fps), replay 184-322, graphic 0-1 by frame 345. Scorer not visible. No card. No audio."
+    },
+    {
+      "id": "fc_mobile_game",
+      "video": "~/Downloads/VID-20261007-WA0001.mp4",
+      "teams": [{"name": "White", "color": "#FFFFFF"}, {"name": "Navy", "color": "#1C2C5B"}],
+      "complete": ["goal"],
+      "events": [{"type": "goal", "t": 3.2, "team": "White"}],
+      "notes": "EA FC Mobile game footage, no score graphic. Not real football; report it separately."
+    },
+    {
+      "id": "levante_sevilla",
+      "video": "~/Downloads/LEVANTE-UD-3-SnapYT.App.mp4",
+      "teams": [{"name": "Levante", "color": "#7A1F3D"}, {"name": "Sevilla", "color": "#F2F2F2"}],
+      "complete": ["goal"],
+      "events": [
+        {"type": "goal", "t": 16.0, "team": "Sevilla", "player": "Robbie Ure"},
+        {"type": "goal", "t": 58.0, "team": "Sevilla", "player": "Félix Correia"},
+        {"type": "goal", "t": 90.0, "team": "Levante", "player": "Iván Romero"},
+        {"type": "goal", "t": 119.0, "team": "Levante", "player": "Adrián de la Fuente"},
+        {"type": "goal", "t": 152.0, "team": "Sevilla", "player": "Isaac Romero"},
+        {"type": "goal", "t": 168.0, "team": "Levante", "player": "Ifeanyi Ndukwe"}
+      ],
+      "notes": "Highlights package 3-3, 1080p50, English commentary. Scorers from the broadcast captions. The commentary mentions no foul or card, so fouls and cards are not labelled."
+    }
+  ]
+}

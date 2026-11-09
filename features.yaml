@@ -16,7 +16,7 @@
 #
 #  app_rebuild_needed:
 #    no  -> just change "enabled" and analyse a video. The installed app
-#           (the 2026-11-06 build or newer) follows the switch on its own.
+#           (the 2026-11-07 build or newer) follows the switch on its own.
 #    yes -> the app has no screen for this yet; a developer must change the
 #           Flutter app and build a new APK before you can see it.
 #    This line is information for you. Changing it does nothing.
@@ -49,6 +49,12 @@ assister_name:
   what_it_does: Names the player who passed to the scorer (last team-mate pass, or commentary).
   accuracy: Unmeasured.
 
+score_jump_goals:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: When the score graphic jumps by one for EACH team between two highlight clips (0-1 to 1-2), adds the goal it would otherwise miss. The goal gets the right team, but its time and scorer are a guess when nothing else saw it.
+  accuracy: Measured 7 Nov 2026 on Levante-Sevilla - the extra Sevilla goal was placed at 77.5 s, the real one was at 58 s (wrong time), so it is off. The final score comes from the graphic either way.
+
 # ---- Other events ---------------------------------------------------------
 
 detect_shots:
@@ -69,11 +75,29 @@ detect_fouls:
   what_it_does: Finds fouls from player contact and gives each a highlight clip.
   accuracy: Weak. The one checked foul was probably a false alarm and a real one was missed.
 
+foul_double_check:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: A foul is only reported when two kinds of evidence agree (player contact, the action-spotting model's "foul", a free kick or card spotted right after, the commentator saying "foul" / "booked"). Off = player contact alone is enough (more fouls, more false ones).
+  accuracy: Unmeasured - no test clip with labelled fouls yet. Contact alone was wrong on the only checked foul.
+
+fouler_name:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: Names who committed the foul and who was fouled (commentary "foul by X", shirt numbers).
+  accuracy: Unmeasured.
+
 detect_cards:
   enabled: no
   app_rebuild_needed: no
   what_it_does: Finds yellow and red cards shown by the referee.
   accuracy: Tested on made-up frames only; needs the referee large on screen.
+
+card_double_check:
+  enabled: yes
+  app_rebuild_needed: no
+  what_it_does: A card is only reported when two kinds of evidence agree (the action-spotting model's card, the referee's raised card, the commentator saying "booked" / "yellow card", a foul just before) or the model is very sure.
+  accuracy: Unmeasured - no test clip contains a card.
 
 detect_penalties:
   enabled: no
@@ -98,6 +122,30 @@ passer_name:
   app_rebuild_needed: no
   what_it_does: Names who passed and who received each pass ("#8 Modric -> #10 Mbappe"). Needs detect_passes. Costs extra analysis time.
   accuracy: Unmeasured. A name only lasts until the next camera cut.
+
+detect_corners:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Lists corner kicks found by the action-spotting model (no player, no clip). Needs the app built 7 Nov 2026 or later.
+  accuracy: Unmeasured.
+
+detect_offsides:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Lists offsides found by the action-spotting model (no player, no clip). Needs the app built 7 Nov 2026 or later.
+  accuracy: Unmeasured; 1 offside spotted on Levante-Sevilla where the commentator said "the offside flag is up".
+
+detect_free_kicks:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Lists free kicks found by the action-spotting model (no player, no clip). Needs the app built 7 Nov 2026 or later.
+  accuracy: Unmeasured.
+
+detect_substitutions:
+  enabled: no
+  app_rebuild_needed: no
+  what_it_does: Lists substitutions found by the action-spotting model (no player, no clip). Needs the app built 7 Nov 2026 or later.
+  accuracy: Unmeasured.
 
 # ---- Video and evidence sources --------------------------------------------
 

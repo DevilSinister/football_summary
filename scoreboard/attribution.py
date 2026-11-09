@@ -37,6 +37,9 @@ WINDOW_PAD_SECONDS = 1.0
 # ball already in the goal, after a shot at 10 s, and first read 1-0 at 14 s.
 # The early edge of the window reaches back this far before the last old read.
 GRAPHIC_LAG_SECONDS = 6.0
+# Two goals of one score change (a one-each jump) cannot both come from
+# evidence this close together: that is one attack.
+SAME_ATTACK_SECONDS = 10.0
 # A shooter read as the other team is credited to the scoring team only when
 # that kit reading was weak. A confident reading means a defender - a block, a
 # deflection - and on the 1080p reference clip crediting him named the wrong
@@ -133,11 +136,30 @@ def attribute_goals(
         moment, participants, attribution, source_event = goal.frame, [], "scoreboard only", None
         detected_by = None
 
+        # A detected goal or shot already given to an earlier score change is
+        # not reused, and neither is anything from the same attack as a goal
+        # of this same change: two goals in one change (a one-each jump) are
+        # two attacks. Levante-Sevilla 2026-11-07: without this, Sevilla's
+        # goal was placed on Levante's attack 0.6 s before Levante's goal.
+        used = {id(e) for e in evidence}
+        same_change = [
+            p for p in produced
+            if (p.get("details") or {}).get("scoreboard_frame") == int(goal.frame)
+        ]
+
+        def free(event: dict) -> bool:
+            return id(event) not in used and not any(
+                abs(int(event.get("frame", 0)) - int(p.get("frame", 0))) <= SAME_ATTACK_SECONDS * fps
+                for p in same_change
+            )
+
         detected = [
             e for e in events
-            if e.get("event") == "goal" and e.get("source") != "scoreboard" and in_window(e)
+            if e.get("event") == "goal" and e.get("source") != "scoreboard" and in_window(e) and free(e)
         ]
-        shots = [e for e in events if e.get("event") == "shot" and in_window(e)]
+        # The scoring team's own detected goal first, when there is one.
+        detected = [e for e in detected if _team_of(e) == team_id] or detected
+        shots = [e for e in events if e.get("event") == "shot" and in_window(e) and free(e)]
         own_shots = [e for e in shots if _team_of(e) in (team_id, 0)]
         weak_other_shots = [
             e for e in shots
@@ -171,7 +193,11 @@ def attribute_goals(
                 source_event.setdefault("details", {})["outcome"] = "goal"
             evidence.append(source_event)
         elif team_id:
-            holders = [s for s in samples if start <= s.frame_number <= end and s.team_id == team_id]
+            holders = [
+                s for s in samples
+                if start <= s.frame_number <= end and s.team_id == team_id
+                and free({"frame": s.frame_number})
+            ]
             if holders:
                 last = max(holders, key=lambda s: s.frame_number)
                 moment = last.frame_number
